@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-namespace App\Models;
-
 use Spatie\Activitylog\Models\Activity as SpatieActivity;
 use Illuminate\Database\Eloquent\Builder;
 use App\Enums\LogLevel;
@@ -24,21 +22,15 @@ class Activity extends SpatieActivity
         'properties',
         'event',
         'batch_uuid',
-        'ip_address',
-        'user_agent',
-        'url',
-        'method',
-        'meta',
     ];
 
     /**
-     * Casts para trabajar correctamente con UUIDs y JSON
+     * Casts para trabajar correctamente con JSON y BIGINT
      */
     protected $casts = [
         'properties' => 'collection',
-        'meta' => 'array',
-        'subject_id' => 'string', // UUID como string
-        'causer_id' => 'string',  // UUID como string
+        'subject_id' => 'integer', // BIGINT como integer
+        'causer_id' => 'integer',  // BIGINT como integer
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -53,10 +45,15 @@ class Activity extends SpatieActivity
         static::creating(function ($activity) {
             // Agregar información de contexto automáticamente
             if (request()) {
-                $activity->ip_address = $activity->ip_address ?? request()->ip();
-                $activity->user_agent = $activity->user_agent ?? request()->userAgent();
-                $activity->url = $activity->url ?? request()->fullUrl();
-                $activity->method = $activity->method ?? request()->method();
+                $activity->properties = $activity->properties ?? collect();
+
+                // Agregar metadata del request
+                $activity->properties = $activity->properties->merge([
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                    'url' => request()->fullUrl(),
+                    'method' => request()->method(),
+                ]);
             }
         });
     }
@@ -200,5 +197,37 @@ class Activity extends SpatieActivity
             'properties' => $properties,
             'log_name' => 'default',
         ]);
+    }
+
+    /**
+     * Obtener IP del usuario desde properties
+     */
+    public function getIpAddressAttribute(): ?string
+    {
+        return $this->properties['ip_address'] ?? null;
+    }
+
+    /**
+     * Obtener User Agent desde properties
+     */
+    public function getUserAgentAttribute(): ?string
+    {
+        return $this->properties['user_agent'] ?? null;
+    }
+
+    /**
+     * Obtener URL desde properties
+     */
+    public function getUrlAttribute(): ?string
+    {
+        return $this->properties['url'] ?? null;
+    }
+
+    /**
+     * Obtener método HTTP desde properties
+     */
+    public function getMethodAttribute(): ?string
+    {
+        return $this->properties['method'] ?? null;
     }
 }

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('countries', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id(); // BIGINT auto-increment
             $table->string('name', 100)->unique();
             $table->string('code', 3)->unique(); // ISO Alpha-2/3
             $table->string('phone_code', 10)->nullable(); // +57
@@ -20,8 +20,8 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
 
             // Auditoría
-            $table->uuid('created_by')->nullable();
-            $table->uuid('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
 
             $table->index('is_active');

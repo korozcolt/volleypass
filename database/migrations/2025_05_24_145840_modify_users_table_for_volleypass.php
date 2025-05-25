@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-                        // Información personal extendida
-            $table->string('document_type', 20)->default('cedula')->after('name'); // cedula, tarjeta_identidad, pasaporte
+            // Información personal extendida
+            $table->string('document_type', 20)->default('cedula')->after('name');
             $table->string('document_number', 20)->unique()->nullable()->after('document_type');
             $table->string('first_name', 100)->nullable()->after('document_number');
             $table->string('last_name', 100)->nullable()->after('first_name');
@@ -22,29 +22,29 @@ return new class extends Migration
             $table->string('phone', 20)->nullable()->after('gender');
             $table->string('phone_secondary', 20)->nullable()->after('phone');
 
-            // Dirección
+            // Dirección - USANDO BIGINT para ser consistente
             $table->text('address')->nullable()->after('phone_secondary');
-            $table->uuid('country_id')->nullable()->after('address');
-            $table->uuid('department_id')->nullable()->after('country_id');
-            $table->uuid('city_id')->nullable()->after('department_id');
+            $table->unsignedBigInteger('country_id')->nullable()->after('address');
+            $table->unsignedBigInteger('department_id')->nullable()->after('country_id');
+            $table->unsignedBigInteger('city_id')->nullable()->after('department_id');
 
             // Información del sistema
-            $table->string('status', 20)->default('pending')->after('city_id'); // usando enum UserStatus
-            $table->uuid('league_id')->nullable()->after('status');
-            $table->uuid('club_id')->nullable()->after('league_id');
-            $table->json('preferences')->nullable()->after('club_id'); // Configuraciones personales
+            $table->string('status', 20)->default('pending')->after('city_id');
+            $table->unsignedBigInteger('league_id')->nullable()->after('status');
+            $table->unsignedBigInteger('club_id')->nullable()->after('league_id');
+            $table->json('preferences')->nullable()->after('club_id');
 
-            // Campos de auditoría
-            $table->uuid('created_by')->nullable()->after('preferences');
-            $table->uuid('updated_by')->nullable()->after('created_by');
-            $table->uuid('deleted_by')->nullable()->after('updated_by');
+            // Campos de auditoría - USANDO BIGINT
+            $table->unsignedBigInteger('created_by')->nullable()->after('preferences');
+            $table->unsignedBigInteger('updated_by')->nullable()->after('created_by');
+            $table->unsignedBigInteger('deleted_by')->nullable()->after('updated_by');
             $table->timestamp('last_login_at')->nullable()->after('deleted_by');
             $table->ipAddress('last_login_ip')->nullable()->after('last_login_at');
 
-            // Agregar soft deletes si no existe
+            // Agregar soft deletes
             $table->softDeletes()->after('last_login_ip');
 
-            // Índices para mejorar performance
+            // Índices
             $table->index('document_number');
             $table->index('status');
             $table->index(['league_id', 'club_id']);

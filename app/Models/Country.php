@@ -9,13 +9,12 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
-use App\Traits\HasUuid;
 use App\Traits\HasSearch;
 
 class Country extends Model implements HasMedia
 {
     use InteractsWithMedia, LogsActivity;
-    use HasUuid, HasSearch;
+    use HasSearch; // SIN HasUuid trait
 
     protected $fillable = [
         'name',

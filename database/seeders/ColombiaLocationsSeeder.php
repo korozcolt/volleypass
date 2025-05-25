@@ -1,10 +1,5 @@
 <?php
 
-// =======================
-// SEEDER PRINCIPAL
-// =======================
-
-// database/seeders/ColombiaLocationsSeeder.php
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -25,17 +20,7 @@ class ColombiaLocationsSeeder extends Seeder
 
         // Verificar que los modelos existan
         if (!class_exists(Country::class)) {
-            $this->command->error('❌ Modelo Country no encontrado. Ejecuta: php artisan make:model Country -m');
-            return;
-        }
-
-        if (!class_exists(Department::class)) {
-            $this->command->error('❌ Modelo Department no encontrado. Ejecuta: php artisan make:model Department -m');
-            return;
-        }
-
-        if (!class_exists(City::class)) {
-            $this->command->error('❌ Modelo City no encontrado. Ejecuta: php artisan make:model City -m');
+            $this->command->error('❌ Modelo Country no encontrado.');
             return;
         }
 
@@ -44,20 +29,20 @@ class ColombiaLocationsSeeder extends Seeder
         try {
             // 1. Crear o encontrar el país Colombia
             $colombia = $this->createColombia();
-            $this->command->info("✅ País Colombia creado/encontrado: {$colombia->name}");
+            $this->command->info("✅ País Colombia creado/encontrado: {$colombia->name} (ID: {$colombia->id})");
 
             // 2. Leer y procesar el CSV
             $csvPath = database_path('data/data_colombia.csv');
 
             if (!file_exists($csvPath)) {
-                throw new Exception("❌ No se encontró el archivo CSV en: {$csvPath}");
+                // Si no existe el CSV, crear datos básicos
+                $this->command->warn("⚠️ No se encontró el archivo CSV. Creando datos básicos...");
+                $this->createBasicData($colombia);
+            } else {
+                $csvData = $this->readCsvFile($csvPath);
+                $this->command->info("📊 Registros encontrados en CSV: " . count($csvData));
+                $this->processLocations($colombia, $csvData);
             }
-
-            $csvData = $this->readCsvFile($csvPath);
-            $this->command->info("📊 Registros encontrados en CSV: " . count($csvData));
-
-            // 3. Procesar departamentos y municipios
-            $this->processLocations($colombia, $csvData);
 
             DB::commit();
 
@@ -85,6 +70,60 @@ class ColombiaLocationsSeeder extends Seeder
                 'is_active' => true,
             ]
         );
+    }
+
+    /**
+     * Crear datos básicos si no existe CSV
+     */
+    private function createBasicData(Country $colombia): void
+    {
+        // Crear Sucre
+        $sucre = Department::firstOrCreate(
+            [
+                'country_id' => $colombia->id,
+                'code' => '70'
+            ],
+            [
+                'name' => 'Sucre',
+                'is_active' => true,
+            ]
+        );
+
+        // Crear Sincelejo
+        City::firstOrCreate(
+            [
+                'department_id' => $sucre->id,
+                'code' => '70001'
+            ],
+            [
+                'name' => 'Sincelejo',
+                'postal_code' => '700001',
+                'is_active' => true,
+            ]
+        );
+
+        // Crear otras ciudades importantes de Sucre
+        $cities = [
+            ['name' => 'Corozal', 'code' => '70215'],
+            ['name' => 'Tolú', 'code' => '70820'],
+            ['name' => 'San Marcos', 'code' => '70742'],
+            ['name' => 'Majagual', 'code' => '70429'],
+        ];
+
+        foreach ($cities as $cityData) {
+            City::firstOrCreate(
+                [
+                    'department_id' => $sucre->id,
+                    'code' => $cityData['code']
+                ],
+                [
+                    'name' => $cityData['name'],
+                    'is_active' => true,
+                ]
+            );
+        }
+
+        $this->command->info("✅ Datos básicos creados para Sucre");
     }
 
     /**

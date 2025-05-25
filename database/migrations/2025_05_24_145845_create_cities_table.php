@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cities', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('department_id');
+            $table->id(); // BIGINT auto-increment
+            $table->unsignedBigInteger('department_id');
             $table->string('name', 100);
-            $table->string('code', 10)->nullable(); // Código DANE o similar
+            $table->string('code', 10)->nullable();
             $table->string('postal_code', 20)->nullable();
             $table->boolean('is_active')->default(true);
 
             // Auditoría
-            $table->uuid('created_by')->nullable();
-            $table->uuid('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
 
             // Foreign keys

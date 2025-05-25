@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\MediaLibrary\HasMedia;
@@ -22,7 +23,7 @@ class User extends Authenticatable implements HasMedia
 {
     use HasFactory, Notifiable, SoftDeletes;
     use HasRoles, InteractsWithMedia, LogsActivity; // Spatie traits
-    use HasUuid, HasSearch, HasValidation; // Nuestros traits personalizados
+    use HasSearch, HasValidation; // Nuestros traits personalizados (SIN HasUuid)
 
     protected $fillable = [
         'name',
@@ -146,6 +147,24 @@ class User extends Authenticatable implements HasMedia
         return $this->belongsTo(Club::class);
     }
 
+    // Relación jugadora (si es jugadora)
+    public function player(): HasOne
+    {
+        return $this->hasOne(Player::class);
+    }
+
+    // Relación entrenador (si es entrenador)
+    public function coach(): HasOne
+    {
+        return $this->hasOne(Coach::class);
+    }
+
+    // Relación médico deportivo (si es médico)
+    public function sportsDoctor(): HasOne
+    {
+        return $this->hasOne(SportsDoctor::class);
+    }
+
     // =======================
     // ACCESSORS MEJORADOS CON SPATIE
     // =======================
@@ -176,28 +195,41 @@ class User extends Authenticatable implements HasMedia
     }
 
     // =======================
-    // MÉTODOS DE SPATIE PERMISSION CON TEAMS
+    // MÉTODOS DE ROLES ESPECÍFICOS
     // =======================
 
-    public function hasRoleInLeague(string $role, $league = null): bool
+    public function isPlayer(): bool
     {
-        $league = $league ?? $this->league;
-        return $this->hasRole($role, $league);
+        return $this->hasRole('Player');
     }
 
-    public function assignRoleInLeague(string $role, $league = null): void
+    public function isCoach(): bool
     {
-        $league = $league ?? $this->league;
-        $this->assignRole($role, $league);
+        return $this->hasRole('Coach');
+    }
+
+    public function isClubDirector(): bool
+    {
+        return $this->hasRole('ClubDirector');
+    }
+
+    public function isLeagueAdmin(): bool
+    {
+        return $this->hasRole('LeagueAdmin');
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasRole('SuperAdmin');
     }
 
     public function canAccessClub($club): bool
     {
-        if ($this->hasRole('SuperAdmin')) {
+        if ($this->isSuperAdmin()) {
             return true;
         }
 
-        if ($this->hasRole('LeagueAdmin') && $this->league_id === $club->league_id) {
+        if ($this->isLeagueAdmin() && $this->league_id === $club->league_id) {
             return true;
         }
 
@@ -223,6 +255,20 @@ class User extends Authenticatable implements HasMedia
         return $query->where('club_id', $clubId);
     }
 
+    public function scopePlayers($query)
+    {
+        return $query->whereHas('roles', function ($q) {
+            $q->where('name', 'Player');
+        });
+    }
+
+    public function scopeCoaches($query)
+    {
+        return $query->whereHas('roles', function ($q) {
+            $q->where('name', 'Coach');
+        });
+    }
+
     // =======================
     // MÉTODOS ADICIONALES
     // =======================
@@ -239,5 +285,15 @@ class User extends Authenticatable implements HasMedia
     {
         $this->addMediaFromRequest('avatar')
             ->toMediaCollection('avatar');
+    }
+
+    public function getPlayerProfile(): ?Player
+    {
+        return $this->player;
+    }
+
+    public function createPlayerProfile(array $data): Player
+    {
+        return $this->player()->create($data);
     }
 }

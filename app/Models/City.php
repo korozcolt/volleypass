@@ -7,13 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
-use App\Traits\HasUuid;
 use App\Traits\HasSearch;
 
 class City extends Model
 {
     use LogsActivity;
-    use HasUuid, HasSearch;
+    use HasSearch; // SIN HasUuid trait
 
     protected $fillable = [
         'department_id',

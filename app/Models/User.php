@@ -14,7 +14,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
-use App\Traits\HasUuid;
 use App\Traits\HasSearch;
 use App\Traits\HasValidation;
 use App\Enums\UserStatus;
@@ -23,7 +22,7 @@ class User extends Authenticatable implements HasMedia
 {
     use HasFactory, Notifiable, SoftDeletes;
     use HasRoles, InteractsWithMedia, LogsActivity; // Spatie traits
-    use HasSearch, HasValidation; // Nuestros traits personalizados (SIN HasUuid)
+    use HasSearch, HasValidation; // Nuestros traits personalizados
 
     protected $fillable = [
         'name',
@@ -67,6 +66,20 @@ class User extends Authenticatable implements HasMedia
     }
 
     protected $searchable = ['name', 'email', 'first_name', 'last_name', 'document_number'];
+
+    // =======================
+    // EVENTOS DEL MODELO
+    // =======================
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Crear perfil automáticamente al crear usuario
+        static::created(function ($user) {
+            $user->profile()->create([]);
+        });
+    }
 
     // =======================
     // SPATIE ACTIVITY LOG CONFIGURATION
@@ -147,6 +160,12 @@ class User extends Authenticatable implements HasMedia
         return $this->belongsTo(Club::class);
     }
 
+    // NUEVA RELACIÓN: Perfil extendido
+    public function profile(): HasOne
+    {
+        return $this->hasOne(UserProfile::class);
+    }
+
     // Relación jugadora (si es jugadora)
     public function player(): HasOne
     {
@@ -165,13 +184,28 @@ class User extends Authenticatable implements HasMedia
         return $this->hasOne(SportsDoctor::class);
     }
 
+    // Clubes que dirige (si es director)
+    public function directedClubs()
+    {
+        return $this->hasMany(Club::class, 'director_id');
+    }
+
     // =======================
-    // ACCESSORS MEJORADOS CON SPATIE
+    // ACCESSORS MEJORADOS
     // =======================
 
     public function getFullNameAttribute(): string
     {
         return trim("{$this->first_name} {$this->last_name}") ?: $this->name;
+    }
+
+    public function getDisplayNameAttribute(): string
+    {
+        // Si tiene perfil con nickname, usar ese
+        if ($this->profile && $this->profile->nickname) {
+            return $this->profile->nickname;
+        }
+        return $this->full_name;
     }
 
     public function getAgeAttribute(): ?int
@@ -192,6 +226,23 @@ class User extends Authenticatable implements HasMedia
     public function getAvatarThumbAttribute(): ?string
     {
         return $this->getFirstMediaUrl('avatar', 'thumb');
+    }
+
+    public function getLocationAttribute(): string
+    {
+        $parts = [];
+
+        if ($this->city) {
+            $parts[] = $this->city->name;
+        }
+        if ($this->department) {
+            $parts[] = $this->department->name;
+        }
+        if ($this->country) {
+            $parts[] = $this->country->name;
+        }
+
+        return implode(', ', $parts);
     }
 
     // =======================
@@ -223,6 +274,20 @@ class User extends Authenticatable implements HasMedia
         return $this->hasRole('SuperAdmin');
     }
 
+    public function isSportsDoctor(): bool
+    {
+        return $this->hasRole('SportsDoctor');
+    }
+
+    public function isVerifier(): bool
+    {
+        return $this->hasRole('Verifier');
+    }
+
+    // =======================
+    // MÉTODOS DE AUTORIZACIÓN
+    // =======================
+
     public function canAccessClub($club): bool
     {
         if ($this->isSuperAdmin()) {
@@ -234,6 +299,29 @@ class User extends Authenticatable implements HasMedia
         }
 
         return $this->club_id === $club->id;
+    }
+
+    public function canManagePlayer(Player $player): bool
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
+        if ($this->isLeagueAdmin() && $this->league_id === $player->currentClub?->league_id) {
+            return true;
+        }
+
+        if ($this->isClubDirector() && $this->club_id === $player->current_club_id) {
+            return true;
+        }
+
+        // La jugadora puede gestionar su propio perfil
+        return $this->id === $player->user_id;
+    }
+
+    public function canVerifyCards(): bool
+    {
+        return $this->hasAnyRole(['SuperAdmin', 'LeagueAdmin', 'Verifier']);
     }
 
     // =======================
@@ -269,8 +357,20 @@ class User extends Authenticatable implements HasMedia
         });
     }
 
+    public function scopeClubDirectors($query)
+    {
+        return $query->whereHas('roles', function ($q) {
+            $q->where('name', 'ClubDirector');
+        });
+    }
+
+    public function scopeWithProfile($query)
+    {
+        return $query->with('profile');
+    }
+
     // =======================
-    // MÉTODOS ADICIONALES
+    // MÉTODOS DE GESTIÓN DE PERFIL
     // =======================
 
     public function updateLastLogin(): void
@@ -287,13 +387,111 @@ class User extends Authenticatable implements HasMedia
             ->toMediaCollection('avatar');
     }
 
-    public function getPlayerProfile(): ?Player
-    {
-        return $this->player;
-    }
-
     public function createPlayerProfile(array $data): Player
     {
+        // Asignar rol de jugadora si no lo tiene
+        if (!$this->hasRole('Player')) {
+            $this->assignRole('Player');
+        }
+
         return $this->player()->create($data);
+    }
+
+    public function createCoachProfile(array $data): Coach
+    {
+        if (!$this->hasRole('Coach')) {
+            $this->assignRole('Coach');
+        }
+
+        return $this->coach()->create($data);
+    }
+
+    // =======================
+    // MÉTODOS DE VALIDACIÓN
+    // =======================
+
+    public function hasCompleteProfile(): bool
+    {
+        return !empty($this->first_name) &&
+               !empty($this->last_name) &&
+               !empty($this->document_number) &&
+               !empty($this->birth_date) &&
+               !empty($this->phone) &&
+               $this->profile !== null;
+    }
+
+    public function canBeActivated(): bool
+    {
+        return $this->hasCompleteProfile() &&
+               $this->email_verified_at !== null &&
+               $this->status !== UserStatus::Blocked;
+    }
+
+    public function needsProfileCompletion(): array
+    {
+        $missing = [];
+
+        if (empty($this->first_name)) $missing[] = 'Nombre';
+        if (empty($this->last_name)) $missing[] = 'Apellido';
+        if (empty($this->document_number)) $missing[] = 'Número de documento';
+        if (empty($this->birth_date)) $missing[] = 'Fecha de nacimiento';
+        if (empty($this->phone)) $missing[] = 'Teléfono';
+        if (!$this->profile) $missing[] = 'Perfil extendido';
+        if (!$this->email_verified_at) $missing[] = 'Verificación de email';
+
+        return $missing;
+    }
+
+    // =======================
+    // MÉTODOS DE ESTADÍSTICAS
+    // =======================
+
+    public function getActivitySummary(): array
+    {
+        $activities = $this->activities()
+            ->where('created_at', '>=', now()->subDays(30))
+            ->get();
+
+        return [
+            'total_activities' => $activities->count(),
+            'recent_logins' => $activities->where('description', 'like', '%login%')->count(),
+            'profile_updates' => $activities->where('description', 'like', '%updated%')->count(),
+            'last_activity' => $activities->first()?->created_at,
+        ];
+    }
+
+    // =======================
+    // MÉTODOS DE UTILIDAD
+    // =======================
+
+    public function getRoleDisplayName(): string
+    {
+        $roleNames = $this->roles->pluck('name')->toArray();
+
+        return match(true) {
+            in_array('SuperAdmin', $roleNames) => 'Super Administrador',
+            in_array('LeagueAdmin', $roleNames) => 'Administrador de Liga',
+            in_array('ClubDirector', $roleNames) => 'Director de Club',
+            in_array('SportsDoctor', $roleNames) => 'Médico Deportivo',
+            in_array('Coach', $roleNames) => 'Entrenador',
+            in_array('Player', $roleNames) => 'Jugadora',
+            in_array('Verifier', $roleNames) => 'Verificador',
+            default => 'Usuario'
+        };
+    }
+
+    public function getPermissionLevel(): int
+    {
+        $roles = $this->roles->pluck('name')->toArray();
+
+        if (in_array('SuperAdmin', $roles)) return 10;
+        if (in_array('LeagueAdmin', $roles)) return 8;
+        if (in_array('ClubDirector', $roles)) return 6;
+        if (in_array('SportsDoctor', $roles)) return 5;
+        if (in_array('Coach', $roles)) return 4;
+        if (in_array('Verifier', $roles)) return 3;
+        if (in_array('Player', $roles)) return 1;
+
+        return 0;
     }
 }

@@ -11,14 +11,13 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
-use App\Traits\HasUuid;
 use App\Traits\HasSearch;
 use App\Enums\UserStatus;
 
 class League extends Model implements HasMedia
 {
     use SoftDeletes, InteractsWithMedia, LogsActivity;
-    use HasSearch; // SIN HasUuid
+    use HasSearch;
 
     protected $fillable = [
         'name',
@@ -111,6 +110,32 @@ class League extends Model implements HasMedia
         return $this->hasMany(Tournament::class);
     }
 
+    // Obtener todas las jugadoras de la liga
+    public function players()
+    {
+        return $this->hasManyThrough(
+            Player::class,
+            Club::class,
+            'league_id', // Foreign key en clubs
+            'current_club_id', // Foreign key en players
+            'id', // Local key en leagues
+            'id' // Local key en clubs
+        );
+    }
+
+    // Obtener todos los entrenadores de la liga
+    public function coaches()
+    {
+        return $this->hasManyThrough(
+            Coach::class,
+            Club::class,
+            'league_id',
+            'club_id',
+            'id',
+            'id'
+        );
+    }
+
     // =======================
     // ACCESSORS
     // =======================
@@ -127,11 +152,39 @@ class League extends Model implements HasMedia
 
     public function getActivePlayersCountAttribute(): int
     {
-        return User::whereHas('club', function ($query) {
-            $query->where('league_id', $this->id);
-        })->whereHas('roles', function ($query) {
-            $query->where('name', 'Player');
-        })->count();
+        return $this->players()
+            ->whereHas('user', function($query) {
+                $query->where('status', UserStatus::Active);
+            })
+            ->count();
+    }
+
+    public function getTotalUsersCountAttribute(): int
+    {
+        return $this->users()->where('status', UserStatus::Active)->count();
+    }
+
+    public function getEstablishedYearsAttribute(): ?int
+    {
+        return $this->foundation_date ?
+            $this->foundation_date->diffInYears(now()) : null;
+    }
+
+    public function getFullLocationAttribute(): string
+    {
+        $parts = [];
+
+        if ($this->city) {
+            $parts[] = $this->city->name;
+        }
+        if ($this->department) {
+            $parts[] = $this->department->name;
+        }
+        if ($this->country) {
+            $parts[] = $this->country->name;
+        }
+
+        return implode(', ', $parts);
     }
 
     // =======================
@@ -148,8 +201,13 @@ class League extends Model implements HasMedia
         return $query->where('department_id', $departmentId);
     }
 
+    public function scopeInCountry($query, $countryId)
+    {
+        return $query->where('country_id', $countryId);
+    }
+
     // =======================
-    // MÉTODOS
+    // MÉTODOS DE CONFIGURACIÓN
     // =======================
 
     public function getConfiguration(string $key, $default = null)
@@ -162,5 +220,68 @@ class League extends Model implements HasMedia
         $configurations = $this->configurations ?? [];
         data_set($configurations, $key, $value);
         $this->update(['configurations' => $configurations]);
+    }
+
+    // =======================
+    // MÉTODOS DE GESTIÓN
+    // =======================
+
+    public function addClub(array $clubData): Club
+    {
+        $clubData['league_id'] = $this->id;
+        return Club::create($clubData);
+    }
+
+    public function canRegisterClubs(): bool
+    {
+        return $this->is_active && $this->status === UserStatus::Active;
+    }
+
+    // =======================
+    // MÉTODOS DE ESTADÍSTICAS
+    // =======================
+
+    public function getClubsStatsByStatus(): array
+    {
+        return $this->clubs()
+            ->selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
+    }
+
+    public function getPlayersStatsByCategory(): array
+    {
+        return $this->players()
+            ->join('users', 'players.user_id', '=', 'users.id')
+            ->where('users.status', UserStatus::Active)
+            ->selectRaw('category, COUNT(*) as count')
+            ->groupBy('category')
+            ->pluck('count', 'category')
+            ->toArray();
+    }
+
+    public function getPlayersStatsByGender(): array
+    {
+        return $this->players()
+            ->join('users', 'players.user_id', '=', 'users.id')
+            ->where('users.status', UserStatus::Active)
+            ->join('users as u', 'players.user_id', '=', 'u.id')
+            ->selectRaw('u.gender, COUNT(*) as count')
+            ->groupBy('u.gender')
+            ->pluck('count', 'u.gender')
+            ->toArray();
+    }
+
+    public function getRegistrationTrends(int $months = 12): array
+    {
+        return $this->players()
+            ->join('users', 'players.user_id', '=', 'users.id')
+            ->where('players.created_at', '>=', now()->subMonths($months))
+            ->selectRaw('DATE_FORMAT(players.created_at, "%Y-%m") as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('count', 'month')
+            ->toArray();
     }
 }

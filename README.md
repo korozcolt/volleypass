@@ -5,379 +5,399 @@
 ![VolleyPass Logo](https://i.ibb.co/99TJDJRZ/logo-volley-pass-black-back.png)
 
 **Plataforma Integral de Gestión para Ligas de Voleibol**
+*Sistema de Digitalización y Carnetización Deportiva*
 
-[![Laravel](https://img.shields.io/badge/Laravel-10.x-red.svg)](https://laravel.com)
-[![PHP](https://img.shields.io/badge/PHP-8.2+-blue.svg)](https://php.net)
-[![Filament](https://img.shields.io/badge/Filament-3.x-yellow.svg)](https://filamentphp.com)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
+[![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
+[![Livewire](https://img.shields.io/badge/Livewire-3.x-4E56A6?style=for-the-badge&logo=livewire&logoColor=white)](https://livewire.laravel.com)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
 
-*Sistema de carnetización digital y gestión deportiva para la Liga de Voleibol de Sucre*
-
----
-
-**Desarrollado por:** [Kristian Orozco](https://github.com/korozcolt)  
-**Auspiciado por:** [Club Athletic Sincelejo](https://www.instagram.com/athletic_sincelejo/)
+[🚀 Demo](#) • [📖 Documentación](#) • [🐛 Reportar Bug](#) • [💡 Solicitar Feature](#)
 
 </div>
 
+---
+
 ## 📋 Tabla de Contenidos
 
-- [Descripción del Proyecto](#-descripción-del-proyecto)
-- [Características Principales](#-características-principales)
-- [Estado del Desarrollo](#-estado-del-desarrollo)
-- [Arquitectura del Sistema](#️-arquitectura-del-sistema)
-- [Dependencias de Terceros](#-dependencias-de-terceros)
-- [Instalación](#-instalación)
-- [Uso](#-uso)
-- [Roadmap](#-roadmap)
-- [Contribución](#-contribución)
-- [Licencia](#-licencia)
+- [📖 Acerca del Proyecto](#-acerca-del-proyecto)
+- [✨ Características](#-características)
+- [🏗️ Arquitectura](#-arquitectura)
+- [🛠️ Tecnologías](#-tecnologías)
+- [⚙️ Instalación](#-instalación)
+- [🚀 Inicio Rápido](#-inicio-rápido)
+- [📊 Estado del Proyecto](#-estado-del-proyecto)
+- [🤝 Contribuir](#-contribuir)
+- [📄 Licencia](#-licencia)
 
-## 🎯 Descripción del Proyecto
+---
 
-**VolleyPass Sucre** es una plataforma integral diseñada para digitalizar y modernizar la gestión de la Liga de Voleibol de Sucre, Colombia. El sistema permite el registro, verificación y gestión completa de jugadoras, entrenadores y clubes, garantizando transparencia, eficiencia y control en torneos oficiales.
+## 📖 Acerca del Proyecto
 
-### 🌟 Objetivos Principales
+**VolleyPass Sucre** es una plataforma integral diseñada para digitalizar y modernizar la gestión de la Liga de Voleibol de Sucre, Colombia. El sistema centraliza el registro, verificación y gestión de jugadoras, entrenadores y clubes, garantizando transparencia, eficiencia y control en torneos oficiales.
 
-- **Digitalizar** el proceso de carnetización deportiva
-- **Centralizar** la información de jugadoras y equipos técnicos
-- **Automatizar** verificaciones en competencias oficiales
-- **Generar** estadísticas y reportes avanzados
-- **Garantizar** transparencia en el deporte organizado
+### 🎯 Objetivo Principal
 
-## ✨ Características Principales
+Reemplazar el sistema tradicional de carnets físicos por una solución digital robusta que permita:
 
-### 🏅 Gestión Deportiva
-- **Registro completo** de jugadoras por categorías de edad
-- **Sistema de clubes y ligas** con jerarquía organizacional
-- **Gestión de entrenadores** y personal técnico
-- **Control de transferencias** entre clubes
+- ✅ **Control centralizado** de jugadoras y documentación
+- ✅ **Verificación instantánea** en partidos mediante códigos QR
+- ✅ **Historial deportivo y médico** completo
+- ✅ **Transparencia** en el cumplimiento de normativas
+- ✅ **Estadísticas avanzadas** para desarrollo deportivo
 
-### 🏥 Módulo Médico
-- **Certificados médicos** con validación automática
-- **Historial de lesiones** y recuperaciones
-- **Estados de aptitud** médica en tiempo real
-- **Alertas automáticas** por vencimientos
+### 👥 Beneficiarios
 
-### 🎫 Carnetización Digital
-- **Carnets digitales** con códigos QR únicos
-- **Verificación instantánea** en competencias
-- **Estados dinámicos** (Activo, Vencido, Suspendido)
-- **Historial completo** de validaciones
+- **Jugadoras y entrenadores** de la Liga de Voleibol de Sucre
+- **Directivos de clubes** y ligas departamentales
+- **Organizadores de torneos** y verificadores oficiales
+- **Federaciones deportivas** y patrocinadores
 
-### 📊 Estadísticas y Reportes
-- **Estadísticas individuales** por jugadora
-- **Métricas por equipo** y temporada
-- **Ranking automático** por categorías
-- **Reportes exportables** en Excel/PDF
+---
 
-### 🔐 Sistema de Seguridad
-- **Roles granulares** por nivel organizacional
-- **Permisos específicos** por módulo
-- **Auditoría completa** de todas las acciones
-- **Autenticación robusta** con múltiples niveles
+## ✨ Características
 
-## 📈 Estado del Desarrollo
+### 🏗️ **Fase 1: Infraestructura Base** ✅ *Completada*
 
-### ✅ Completado (25%)
+<details>
+<summary><strong>🔐 Sistema de Usuarios Multi-Rol</strong></summary>
 
-#### **Fase 1: Fundamentos**
-- [x] **Arquitectura base** definida y validada
-- [x] **27 Enumerables** completos con interfaces Filament
-- [x] **10 Traits especializados** para funcionalidades comunes
-- [x] **Sistema de ubicaciones** (Colombia: 32 departamentos, 1100+ municipios)
-- [x] **Dependencias de terceros** instaladas y configuradas
-- [x] **Base de datos** estructurada con migraciones
+- **SuperAdmin**: Acceso total al sistema
+- **LeagueAdmin**: Administrador de liga departamental
+- **ClubDirector**: Director de club deportivo
+- **Player**: Jugadora registrada
+- **Coach**: Entrenador certificado
+- **SportsDoctor**: Médico deportivo
+- **Verifier**: Verificador de carnets en partidos
 
-#### **Enumerables Implementados**
-- [x] Estados de usuario (UserStatus, CardStatus, DocumentStatus)
-- [x] Roles del sistema (UserRole, AccessLevel)
-- [x] Deportivos (PlayerPosition, PlayerCategory, Gender)
-- [x] Competencias (TournamentType, TournamentStatus, MatchStatus)
-- [x] Médicos (MedicalStatus, InjuryType, InjurySeverity)
-- [x] Documentos (DocumentType, DocumentFormat)
-- [x] Estadísticas (StatisticType, AwardType)
-- [x] Sistema (NotificationType, LogLevel, PaymentStatus)
-- [x] Configuración (ConfigurationType, Priority)
+</details>
 
-#### **Traits Desarrollados**
-- [x] `HasUuid` - Identificadores únicos
-- [x] `HasSearch` - Búsquedas avanzadas
-- [x] `HasValidation` - Validaciones específicas colombianas
-- [x] `HasStatus` - Gestión de estados
-- [x] `HasTimestamps` - Auditoría de cambios
-- [x] `HasPermissions` - Control de acceso
-- [x] `EnumHelpers` - Utilidades para enumerables
+<details>
+<summary><strong>🏛️ Jerarquía Organizacional</strong></summary>
 
-### 🔄 En Progreso (15%)
-
-#### **Fase 1 Extendida: Integración con Spatie**
-- [ ] **Migración a Spatie ActivityLog** (en proceso)
-- [ ] **Configuración de Spatie Permission** con teams
-- [ ] **Integración de Spatie MediaLibrary** para archivos
-- [ ] **Actualización de modelos** base con nuevas funcionalidades
-
-### ⏳ Planificado (60%)
-
-#### **Fase 2: Organización Deportiva (20%)**
-- [ ] Modelos de Liga y Club
-- [ ] Sistema de roles y permisos
-- [ ] Perfiles extendidos de usuario
-- [ ] Gestión de archivos multimedia
-
-#### **Fase 3: Usuarios Deportivos (25%)**
-- [ ] Modelo completo de Jugadoras
-- [ ] Sistema de documentación
-- [ ] Validaciones específicas de voleibol
-- [ ] Upload funcional de archivos
-
-#### **Fase 4: Módulo Médico y Carnetización (20%)**
-- [ ] Sistema médico integral
-- [ ] Carnetización digital con QR
-- [ ] Validaciones médicas automatizadas
-- [ ] Estados y transiciones médicas
-
-#### **Fase 5: Competencias y Estadísticas (30%)**
-- [ ] Sistema completo de torneos
-- [ ] Gestión de partidos y equipos
-- [ ] Estadísticas avanzadas
-- [ ] Algoritmos de ranking
-
-#### **Fase 6: Servicios Avanzados (25%)**
-- [ ] Sistema de verificación QR
-- [ ] Gestión de transferencias
-- [ ] Notificaciones automáticas
-- [ ] Sistema de pagos
-
-#### **Fase 7: Interfaz Administrativa (30%)**
-- [ ] Dashboard completo en Filament
-- [ ] Resources para todos los modelos
-- [ ] Widgets y estadísticas
-- [ ] Sistema de permisos en UI
-
-#### **Fase 8: Frontend Público (25%)**
-- [ ] Portal para jugadoras
-- [ ] Sistema de consulta de carnets
-- [ ] APIs públicas
-- [ ] Aplicación móvil (futuro)
-
-## 🏗️ Arquitectura del Sistema
-
-### **Stack Tecnológico**
-- **Backend:** Laravel 10.x + PHP 8.2+
-- **Frontend Admin:** Filament 3.x
-- **Base de Datos:** MySQL 8.0+
-- **Cache:** Redis (recomendado)
-- **Files:** Almacenamiento local/S3
-
-### **Patrones de Diseño**
-- **Repository Pattern** para acceso a datos
-- **Service Pattern** para lógica de negocio
-- **Observer Pattern** para auditoría
-- **Strategy Pattern** para validaciones
-
-### **Estructura de Datos**
 ```
-Country -> Department -> City
-    ↓         ↓         ↓
-   League -> Club -> User -> Player
-    ↓         ↓       ↓
-Tournament -> Team -> Statistics
+Liga (Departamental)
+└── Clubes
+    ├── Jugadoras
+    ├── Entrenadores
+    └── Equipos por Categoría
+        ├── Mini (8-10 años)
+        ├── Pre-Mini (11-12 años)
+        ├── Infantil (13-14 años)
+        ├── Cadete (15-16 años)
+        ├── Juvenil (17-18 años)
+        ├── Mayores (19+ años)
+        └── Masters (35+ años)
 ```
 
-## 📦 Dependencias de Terceros
+</details>
 
-### **Spatie Ecosystem**
-| Paquete | Versión | Propósito |
-|---------|---------|-----------|
-| [spatie/laravel-permission](https://github.com/spatie/laravel-permission) | ^6.0 | Sistema de roles y permisos |
-| [spatie/laravel-medialibrary](https://github.com/spatie/laravel-medialibrary) | ^11.0 | Gestión de archivos multimedia |
-| [spatie/laravel-activitylog](https://github.com/spatie/laravel-activitylog) | ^4.0 | Auditoría y logs de actividad |
-| [spatie/laravel-backup](https://github.com/spatie/laravel-backup) | ^8.0 | Respaldos automatizados |
-| [spatie/image-optimizer](https://github.com/spatie/image-optimizer) | ^1.0 | Optimización de imágenes |
-| [spatie/laravel-responsecache](https://github.com/spatie/laravel-responsecache) | ^7.0 | Cache de respuestas HTTP |
-| [spatie/laravel-settings](https://github.com/spatie/laravel-settings) | ^3.0 | Configuraciones dinámicas |
+<details>
+<summary><strong>🌍 Ubicaciones Geográficas</strong></summary>
 
-### **Funcionalidades Especializadas**
-| Paquete | Versión | Propósito |
-|---------|---------|-----------|
-| [simplesoftwareio/simple-qrcode](https://github.com/SimpleSoftwareIO/simple-qrcode) | ^4.0 | Generación de códigos QR |
-| [intervention/image](https://github.com/Intervention/image) | ^3.0 | Manipulación de imágenes |
-| [maatwebsite/excel](https://github.com/SpartnerNL/Laravel-Excel) | ^3.0 | Exportación Excel/CSV |
-| [laravel-notification-channels/fcm](https://github.com/laravel-notification-channels/fcm) | ^4.0 | Notificaciones push |
+- **Colombia completa**: 32 departamentos, 1,100+ municipios
+- **Integración nativa** con códigos DANE
+- **Búsquedas inteligentes** por ubicación
 
-### **Herramientas de Desarrollo**
-| Paquete | Versión | Propósito |
-|---------|---------|-----------|
-| [laravel/telescope](https://github.com/laravel/telescope) | ^4.0 | Debugging y monitoreo |
-| [barryvdh/laravel-ide-helper](https://github.com/barryvdh/laravel-ide-helper) | ^2.0 | Autocompletado IDE |
-| [barryvdh/laravel-debugbar](https://github.com/barryvdh/laravel-debugbar) | ^3.0 | Debug toolbar |
+</details>
 
-## 🚀 Instalación
+### 🚀 **Fase 2: Carnetización Digital** *En Desarrollo*
 
-### **Requisitos del Sistema**
-- PHP 8.2 o superior
-- Composer 2.x
-- Node.js 18+ y NPM
-- MySQL 8.0+ o PostgreSQL 13+
-- Redis (opcional, recomendado)
+- 📄 **Gestión de Documentos**: Cédula, certificados médicos, fotografías
+- 🆔 **Carnets Digitales**: Generación automática con códigos QR únicos
+- 📱 **Verificación Móvil**: App para verificadores en tiempo real
+- 🏥 **Módulo Médico**: Estados de aptitud y alertas de vencimiento
 
-### **Instalación Paso a Paso**
+### 🏆 **Fase 3: Gestión Avanzada** *Planeada*
+
+- 📊 **Estadísticas Deportivas**: Rendimiento y rankings
+- 🏆 **Torneos y Competencias**: Gestión completa de eventos
+- 🏅 **Sistema de Reconocimientos**: MVP, selecciones, awards
+- 💰 **Gestión de Pagos**: Inscripciones y cuotas
+
+---
+
+## 🏗️ Arquitectura
+
+### 🗂️ Estructura del Proyecto
+
+```
+volleypass/
+├── 📁 app/
+│   ├── 📁 Enums/           # Estados y tipos de datos
+│   ├── 📁 Http/
+│   │   └── 📁 Controllers/ # Controladores principales
+│   ├── 📁 Models/          # Modelos Eloquent
+│   │   ├── User.php        # Usuario con roles
+│   │   ├── UserProfile.php # Perfil extendido
+│   │   ├── League.php      # Liga deportiva
+│   │   ├── Club.php        # Club deportivo
+│   │   ├── Player.php      # Jugadora
+│   │   └── ...
+│   ├── 📁 Traits/          # Funcionalidades reutilizables
+│   └── 📁 Providers/       # Service providers
+├── 📁 config/              # Configuraciones
+├── 📁 database/
+│   ├── 📁 migrations/      # Migraciones de BD
+│   ├── 📁 seeders/         # Datos iniciales
+│   └── 📁 factories/       # Factories para testing
+├── 📁 resources/
+│   └── 📁 views/           # Vistas Blade + Livewire
+└── 📁 routes/              # Definición de rutas
+```
+
+### 🔄 Flujo de Datos
+
+```mermaid
+graph TD
+    A[Usuario] --> B[Autenticación]
+    B --> C{Rol}
+    C -->|SuperAdmin| D[Acceso Total]
+    C -->|LeagueAdmin| E[Gestión Liga]
+    C -->|ClubDirector| F[Gestión Club]
+    C -->|Player| G[Perfil Personal]
+    
+    E --> H[Clubes de la Liga]
+    F --> I[Jugadoras del Club]
+    G --> J[Datos Personales]
+    
+    H --> K[Base de Datos]
+    I --> K
+    J --> K
+```
+
+---
+
+## 🛠️ Tecnologías
+
+### 🚀 Core Framework
+- **[Laravel 11.x](https://laravel.com)** - Framework PHP moderno
+- **[Livewire 3.x](https://livewire.laravel.com)** - Componentes reactivos
+- **[Volt](https://livewire.laravel.com/docs/volt)** - Sintaxis simplificada
+
+### 📦 Paquetes Principales
+- **[Spatie Permission](https://spatie.be/docs/laravel-permission)** - Roles y permisos
+- **[Spatie Media Library](https://spatie.be/docs/laravel-medialibrary)** - Gestión de archivos
+- **[Spatie Activity Log](https://spatie.be/docs/laravel-activitylog)** - Auditoría
+- **[Simple QR Code](https://www.simplesoftwareio.com/simple-qrcode)** - Generación QR
+
+### 🗃️ Base de Datos
+- **[MySQL 8.0+](https://mysql.com)** - Base de datos relacional
+- **[Redis](https://redis.io)** - Cache y sesiones *(opcional)*
+
+### 🛠️ Desarrollo
+- **[Laravel Telescope](https://laravel.com/docs/telescope)** - Debugging
+- **[Laravel Debugbar](https://github.com/barryvdh/laravel-debugbar)** - Debug bar
+- **[PHPStan](https://phpstan.org)** - Análisis estático *(planeado)*
+
+---
+
+## ⚙️ Instalación
+
+### 📋 Prerequisitos
 
 ```bash
-# 1. Clonar el repositorio
-git clone https://github.com/korozcolt/volleypass-sucre.git
-cd volleypass-sucre
+# Verificar versiones requeridas
+php --version    # PHP 8.2+
+composer --version # Composer 2.x
+mysql --version    # MySQL 8.0+
+node --version     # Node.js 18+ (opcional)
+```
 
-# 2. Instalar dependencias PHP
+### 🚀 Instalación Completa
+
+#### 1️⃣ Clonar el Repositorio
+
+```bash
+git clone https://github.com/tu-usuario/volleypass.git
+cd volleypass
+```
+
+#### 2️⃣ Instalar Dependencias
+
+```bash
+# Dependencias PHP
 composer install
 
-# 3. Instalar dependencias Node.js
-npm install
+# Dependencias Node.js (opcional)
+npm install && npm run build
+```
 
-# 4. Configurar archivo de entorno
+#### 3️⃣ Configurar Entorno
+
+```bash
+# Copiar archivo de configuración
 cp .env.example .env
+
+# Generar clave de aplicación
 php artisan key:generate
 
-# 5. Configurar base de datos en .env
+# Crear enlace de almacenamiento
+php artisan storage:link
+```
+
+#### 4️⃣ Configurar Base de Datos
+
+```bash
+# Editar .env con tus credenciales de BD
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=volleypass
-DB_USERNAME=root
-DB_PASSWORD=
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_password
+```
 
-# 6. Ejecutar migraciones y seeders
+#### 5️⃣ Ejecutar Migraciones y Seeders
+
+```bash
+# Crear todas las tablas y datos iniciales
 php artisan migrate:fresh --seed
+```
 
-# 7. Crear enlace de storage
-php artisan storage:link
+#### 6️⃣ Configurar Permisos
 
-# 8. Compilar assets
-npm run build
+```bash
+# Permisos de almacenamiento
+chmod -R 755 storage bootstrap/cache
+```
 
-# 9. Iniciar servidor de desarrollo
+---
+
+## 🚀 Inicio Rápido
+
+### 🖥️ Servidor de Desarrollo
+
+```bash
+# Iniciar servidor
 php artisan serve
+
+# Acceder a la aplicación
+# http://localhost:8000
 ```
 
-### **Configuración Adicional**
+### 👤 Usuarios de Prueba
+
+El seeder crea automáticamente usuarios de ejemplo:
+
+| Email | Contraseña | Rol |
+|-------|------------|-----|
+| `admin@volleypass.com` | `password` | SuperAdmin |
+| `liga@volleypass.com` | `password` | LeagueAdmin |
+| `club@volleypass.com` | `password` | ClubDirector |
+
+### 🧪 Verificar Instalación
 
 ```bash
-# Configurar permisos de storage
-chmod -R 775 storage/
-chmod -R 775 bootstrap/cache/
+# Ejecutar tests
+php artisan test
 
-# Configurar cache (opcional)
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+# Verificar configuración
+php artisan config:show
+
+# Comprobar rutas
+php artisan route:list
 ```
 
-## 💡 Uso
+### 📊 Telescope (Debugging)
 
-### **Acceso Administrativo**
-```
-URL: http://localhost:8000/admin
-Usuario: admin@volleypass.com (será creado en seeders)
-```
-
-### **Gestión de Jugadoras**
-1. **Registro:** Admin/Club Director registra jugadora
-2. **Documentación:** Upload de documentos requeridos
-3. **Validación Médica:** Doctor deportivo aprueba certificado
-4. **Carnetización:** Sistema genera carnet digital con QR
-5. **Verificación:** Scan QR en competencias oficiales
-
-### **Comandos Artisan Personalizados**
 ```bash
-# Generar carnets masivos
-php artisan volleypass:generate-cards
-
-# Verificar documentos vencidos
-php artisan volleypass:check-expired-docs
-
-# Backup automático
-php artisan backup:run
-
-# Limpiar logs antiguos
-php artisan activitylog:clean
+# Acceder a Telescope
+# http://localhost:8000/telescope
 ```
 
-## 🗺️ Roadmap
+---
 
-### **Q2 2025 - Fase Fundacional**
-- [x] Arquitectura base y dependencias
-- [ ] Sistema de organizaciones (Ligas/Clubes)
-- [ ] Gestión básica de usuarios
+## 📊 Estado del Proyecto
 
-### **Q3 2025 - Core Deportivo**
-- [ ] Registro completo de jugadoras
-- [ ] Sistema médico integral
-- [ ] Carnetización digital funcional
+### ✅ **Fase 1 - Infraestructura Base** (Completada)
 
-### **Q4 2025 - Competencias**
-- [ ] Gestión de torneos
-- [ ] Sistema de estadísticas
-- [ ] Verificación QR en tiempo real
+| Componente | Estado | Progreso |
+|------------|--------|----------|
+| 🔐 Sistema de Autenticación | ✅ Completado | 100% |
+| 👥 Gestión de Roles | ✅ Completado | 100% |
+| 🏛️ Estructura Organizacional | ✅ Completado | 100% |
+| 🌍 Ubicaciones Geográficas | ✅ Completado | 100% |
+| 📦 Integración Spatie | ✅ Completado | 100% |
+| 📝 Sistema de Logging | ✅ Completado | 100% |
 
-### **Q1 2026 - Expansión**
-- [ ] APIs públicas
-- [ ] Dashboard analítico avanzado
-- [ ] Aplicación móvil
+### 🚧 **Fase 2 - Carnetización Digital** (En Desarrollo)
 
-### **Futuro**
-- [ ] Integración con otras disciplinas deportivas
-- [ ] IA para análisis de rendimiento
-- [ ] Blockchain para certificación de logros
+| Componente | Estado | Progreso |
+|------------|--------|----------|
+| 📄 Gestión de Documentos | 🚧 En desarrollo | 0% |
+| 🆔 Carnets Digitales | ⏳ Pendiente | 0% |
+| 📱 Códigos QR | ⏳ Pendiente | 0% |
+| 🔍 Sistema de Verificación | ⏳ Pendiente | 0% |
 
-## 🤝 Contribución
+### 📅 **Roadmap**
 
-### **Guía de Contribución**
+- **Q1 2025**: Completar Fase 2 (Carnetización)
+- **Q2 2025**: Fase 3 (Gestión Avanzada)
+- **Q3 2025**: Móvil App (React Native)
+- **Q4 2025**: Integración con otras ligas
 
-1. **Fork** el repositorio
-2. **Crea** una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
-3. **Commit** tus cambios (`git commit -am 'Agrega nueva funcionalidad'`)
-4. **Push** a la rama (`git push origin feature/nueva-funcionalidad`)
+---
+
+## 🤝 Contribuir
+
+¡Las contribuciones son bienvenidas! Este proyecto sigue las mejores prácticas de desarrollo.
+
+### 📝 Guías de Contribución
+
+1. **Fork** el proyecto
+2. **Crea** una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. **Commit** tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. **Push** a la rama (`git push origin feature/AmazingFeature`)
 5. **Abre** un Pull Request
 
-### **Estándares de Código**
-- **PSR-12** para PHP
-- **PHPStan Level 8** para análisis estático
-- **Tests unitarios** obligatorios para nuevas funcionalidades
-- **Documentación** en código y README
+### 🧪 Testing
 
-### **Estructura de Commits**
-```
-tipo(scope): descripción
+```bash
+# Ejecutar todos los tests
+php artisan test
 
-feat(player): agregar validación de edad por categoría
-fix(cards): corregir generación de QR duplicados
-docs(readme): actualizar guía de instalación
+# Tests con cobertura
+php artisan test --coverage
 ```
+
+### 📋 Estándares de Código
+
+- **PSR-12** para estilo de código PHP
+- **Laravel conventions** para nombres y estructura
+- **Eloquent** preferido sobre Query Builder
+- **Comentarios en español** para lógica de negocio
+
+---
+
+## 📞 Soporte
+
+- 📧 **Email**: admin@volleypass.com
+- 📱 **WhatsApp**: +57 300 123 4567
+- 🌐 **Website**: [volleypass.sucre.gov.co](#)
+- 📋 **Issues**: [GitHub Issues](#)
+
+---
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detalles.
+Este proyecto está licenciado bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detalles.
 
-## 👨‍💻 Desarrollador
+---
 
-**Kristian Orozco**
-- GitHub: [@korozcolt](https://github.com/korozcolt)
-- LinkedIn: [Kristian Orozco](https://linkedin.com/in/korozcolt)
-- Email: ing.korozco@gmail.com
+## 🙏 Agradecimientos
 
-## 🏆 Auspicio
-
-**Club Athletic Sincelejo**
-- Instagram: [@athletic_sincelejo](https://www.instagram.com/athletic_sincelejo/)
-- Ubicación: Sincelejo, Sucre, Colombia
+- **Liga de Voleibol de Sucre** - Por confiar en esta solución
+- **Gobernación de Sucre** - Por el apoyo institucional
+- **Comunidad Laravel** - Por las excelentes herramientas
+- **Spatie** - Por los paquetes de alta calidad
 
 ---
 
 <div align="center">
 
-**¿Te gusta el proyecto? ¡Dale una ⭐!**
+**🏐 Desarrollado con ❤️ para el voleibol sucreño**
 
-[🐛 Reportar Bug](../../issues) · [✨ Solicitar Feature](../../issues) · [📖 Documentación](../../wiki)
+[⬆️ Volver arriba](#-volleypass-sucre)
 
 </div>

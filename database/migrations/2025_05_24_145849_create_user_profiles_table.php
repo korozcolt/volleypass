@@ -41,9 +41,9 @@ return new class extends Migration
             $table->boolean('show_email')->default(false);
             $table->boolean('show_address')->default(false);
 
-            $table->string('whatsapp_number', 20)->nullable()->after('phone_secondary');
-            $table->string('fcm_token', 255)->nullable()->after('whatsapp_number');
-            $table->json('app_settings')->nullable()->after('fcm_token');
+            $table->string('whatsapp_number', 20)->nullable();
+            $table->string('fcm_token', 255)->nullable();
+            $table->json('app_settings')->nullable();
 
             // Auditoría
             $table->unsignedBigInteger('created_by')->nullable();

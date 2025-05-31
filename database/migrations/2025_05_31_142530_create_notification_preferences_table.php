@@ -22,9 +22,14 @@ return new class extends Migration
             $table->json('metadata')->nullable();
             $table->timestamps();
 
+            // Foreign key
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unique(['user_id', 'channel', 'notification_type']);
-            $table->index(['user_id', 'is_enabled']);
+
+            // Unique constraint con nombre personalizado más corto
+            $table->unique(['user_id', 'channel', 'notification_type'], 'notif_prefs_user_channel_type_unique');
+
+            // Índice regular
+            $table->index(['user_id', 'is_enabled'], 'notif_prefs_user_enabled_idx');
         });
     }
 

@@ -1,24 +1,18 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 use App\Jobs\ProcessCardExpiryNotifications;
 use App\Jobs\ProcessMedicalCertificateExpiry;
 use App\Jobs\GenerateStatisticsReport;
 use App\Jobs\CleanupOldLogs;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schedule;
-
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+use Illuminate\Support\Facades\Artisan;
 
 // ==============================================
-// DEFINICIÓN DE COMMANDS
+// COMMANDS CORREGIDOS
 // ==============================================
 
-// Command: Enviar notificaciones de vencimiento
 Artisan::command('volleypass:send-expiry-notifications
                   {--days=30 : Días antes del vencimiento para notificar}
                   {--type=all : Tipo de notificación (cards, medical, all)}',
@@ -49,7 +43,6 @@ Artisan::command('volleypass:send-expiry-notifications
     })
     ->purpose('Enviar notificaciones de vencimiento de carnets y certificados médicos');
 
-// Command: Generar carnets de temporada
 Artisan::command('volleypass:generate-season-cards
                   {season? : Año de la temporada}
                   {--all : Incluir jugadoras no elegibles}',
@@ -69,7 +62,6 @@ Artisan::command('volleypass:generate-season-cards
 
             $this->info('Job de generación de carnets encolado exitosamente');
             $this->info('Puedes seguir el progreso en los logs');
-
             return 0;
 
         } catch (\Exception $e) {
@@ -79,7 +71,6 @@ Artisan::command('volleypass:generate-season-cards
     })
     ->purpose('Generar carnets para una nueva temporada');
 
-// Command: Limpiar logs antiguos
 Artisan::command('volleypass:cleanup-logs
                   {--qr-days=365 : Días a mantener logs QR}
                   {--activity-days=180 : Días a mantener activity logs}
@@ -104,7 +95,6 @@ Artisan::command('volleypass:cleanup-logs
 
         try {
             CleanupOldLogs::dispatch($qrDays, $activityDays);
-
             $this->info('Job de limpieza encolado exitosamente');
             return 0;
 
@@ -115,7 +105,6 @@ Artisan::command('volleypass:cleanup-logs
     })
     ->purpose('Limpiar logs antiguos del sistema');
 
-// Command: Generar reportes
 Artisan::command('volleypass:generate-report
                   {type=weekly : Tipo de reporte (daily, weekly, monthly)}
                   {--email= : Email para enviar el reporte}',
@@ -143,8 +132,33 @@ Artisan::command('volleypass:generate-report
     })
     ->purpose('Generar reportes estadísticos del sistema');
 
+Artisan::command('volleypass:test-notifications
+                  {user_id : ID del usuario}',
+    function () {
+        $userId = $this->argument('user_id');
+
+        try {
+            $exitCode = Artisan::call('volleypass:test-notifications', [
+                'user_id' => $userId
+            ]);
+
+            if ($exitCode === 0) {
+                $this->info('Notificación de prueba enviada exitosamente');
+            } else {
+                $this->error('Error enviando notificación de prueba');
+            }
+
+            return $exitCode;
+
+        } catch (\Exception $e) {
+            $this->error("Error: {$e->getMessage()}");
+            return 1;
+        }
+    })
+    ->purpose('Probar envío de notificaciones');
+
 // ==============================================
-// DEFINICIÓN DE SCHEDULES
+// SCHEDULES CORREGIDOS
 // ==============================================
 
 // Notificaciones de vencimiento - todos los días a las 8:00 AM
@@ -158,7 +172,8 @@ Schedule::command('volleypass:send-expiry-notifications')
     })
     ->onFailure(function () {
         Log::error('Error procesando notificaciones de vencimiento');
-    });
+    })
+    ->name('daily-expiry-notifications');
 
 // Verificar certificados médicos vencidos - diario a las 6:00 AM
 Schedule::job(new ProcessMedicalCertificateExpiry())
@@ -195,14 +210,6 @@ Schedule::command('volleypass:cleanup-logs --force')
     ->timezone('America/Bogota')
     ->name('monthly-logs-cleanup');
 
-// Backup automático - todos los días a las 3:00 AM
-Schedule::command('backup:run')
-    ->dailyAt('03:00')
-    ->withoutOverlapping()
-    ->onOneServer()
-    ->timezone('America/Bogota')
-    ->emailOutputOnFailure('admin@volleypass.sucre.gov.co');
-
 // Verificación cada 5 minutos de carnets críticos por vencer (solo los que vencen en 3 días)
 Schedule::job(new ProcessCardExpiryNotifications(3))
     ->everyFiveMinutes()
@@ -213,13 +220,21 @@ Schedule::job(new ProcessCardExpiryNotifications(3))
 
 // Estadísticas diarias para dashboard - cada hora en horario laboral
 Schedule::call(function () {
-    Cache::put('daily_stats', [
-        'active_cards' => \App\Models\PlayerCard::where('status', 'active')->count(),
-        'verifications_today' => \App\Models\QrScanLog::whereDate('scanned_at', today())->count(),
-        'expiring_cards' => \App\Models\PlayerCard::where('status', 'active')
-            ->where('expires_at', '<=', now()->addDays(30))->count(),
-        'generated_at' => now()->toISOString(),
-    ], 3600); // Cache por 1 hora
+    try {
+        $stats = [
+            'active_cards' => \App\Models\PlayerCard::where('status', 'active')->count(),
+            'verifications_today' => \App\Models\QrScanLog::whereDate('scanned_at', today())->count(),
+            'expiring_cards' => \App\Models\PlayerCard::where('status', 'active')
+                ->where('expires_at', '<=', now()->addDays(30))->count(),
+            'generated_at' => now()->toISOString(),
+        ];
+
+        Cache::put('daily_stats', $stats, 3600); // Cache por 1 hora
+        Log::info('Dashboard stats updated', $stats);
+
+    } catch (\Exception $e) {
+        Log::error('Error updating dashboard stats: ' . $e->getMessage());
+    }
 })
     ->hourly()
     ->between('07:00', '19:00')

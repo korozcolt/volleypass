@@ -8,9 +8,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use App\Models\PlayerCard;
 use App\Models\User;
-use App\Notifications\CardExpiryNotification;
 use Carbon\Carbon;
 
 class ProcessCardExpiryNotifications implements ShouldQueue
@@ -38,10 +38,6 @@ class ProcessCardExpiryNotifications implements ShouldQueue
                     now()->addDays($this->daysBeforeExpiry - 1),
                     now()->addDays($this->daysBeforeExpiry + 1)
                 ])
-                ->whereDoesntHave('notifications', function($query) {
-                    $query->where('type', 'card_expiry')
-                          ->where('created_at', '>=', now()->subDays(7)); // No notificar si ya se notificó en la semana
-                })
                 ->get();
 
             $notificationsSent = 0;
@@ -82,26 +78,41 @@ class ProcessCardExpiryNotifications implements ShouldQueue
     private function sendExpiryNotification(PlayerCard $card): void
     {
         $daysLeft = $card->expires_at->diffInDays(now());
+        $playerUser = $card->player->user;
 
-        // Notificar a la jugadora
-        $card->player->user->notify(new CardExpiryNotification($card, $daysLeft));
+        // Enviar email básico usando Mail facade
+        Mail::send('emails.card-expiry', [
+            'player_name' => $playerUser->full_name,
+            'card_number' => $card->card_number,
+            'expires_at' => $card->expires_at->format('d/m/Y'),
+            'days_left' => $daysLeft,
+            'club_name' => $card->player->currentClub?->name,
+        ], function($message) use ($playerUser, $daysLeft) {
+            $message->to($playerUser->email, $playerUser->full_name)
+                    ->subject("🏐 Carnet VolleyPass vence en {$daysLeft} días");
+        });
 
-        // Notificar al director del club
+        // Notificar al director del club si existe
         if ($card->player->currentClub && $card->player->currentClub->director) {
-            $card->player->currentClub->director->notify(
-                new CardExpiryNotification($card, $daysLeft, 'director')
-            );
+            $director = $card->player->currentClub->director;
+
+            Mail::send('emails.card-expiry-director', [
+                'director_name' => $director->full_name,
+                'player_name' => $playerUser->full_name,
+                'card_number' => $card->card_number,
+                'expires_at' => $card->expires_at->format('d/m/Y'),
+                'days_left' => $daysLeft,
+                'club_name' => $card->player->currentClub->name,
+            ], function($message) use ($director, $daysLeft, $playerUser) {
+                $message->to($director->email, $director->full_name)
+                        ->subject("🏐 Carnet de {$playerUser->full_name} vence en {$daysLeft} días");
+            });
         }
 
-        // Registrar la notificación
-        $card->notifications()->create([
-            'type' => 'card_expiry',
-            'title' => 'Carnet próximo a vencer',
-            'message' => "El carnet vence en {$daysLeft} días",
-            'data' => [
-                'days_left' => $daysLeft,
-                'expires_at' => $card->expires_at->toISOString()
-            ]
+        Log::info('Notificación de vencimiento enviada', [
+            'card_id' => $card->id,
+            'player_email' => $playerUser->email,
+            'days_left' => $daysLeft
         ]);
     }
 

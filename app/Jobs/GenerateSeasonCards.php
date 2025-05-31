@@ -10,21 +10,21 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use App\Models\Player;
 use App\Models\PlayerCard;
-use App\Services\CardGenerationService;
+use App\Models\MedicalCertificate;
 
 class GenerateSeasonCards implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
-    public int $timeout = 600; // 10 minutos
+    public int $timeout = 600;
 
     public function __construct(
         private int $season,
         private bool $onlyEligible = true
     ) {}
 
-    public function handle(CardGenerationService $cardService): void
+    public function handle(): void
     {
         Log::info('Iniciando generación de carnets para temporada', [
             'season' => $this->season
@@ -66,8 +66,8 @@ class GenerateSeasonCards implements ShouldQueue
                         continue;
                     }
 
-                    // Generar carnet
-                    $card = $cardService->generateCardForPlayer($player, $this->season);
+                    // Generar carnet directamente
+                    $card = $this->generateCardForPlayer($player);
                     $cardsGenerated++;
 
                     Log::info('Carnet generado', [
@@ -105,9 +105,52 @@ class GenerateSeasonCards implements ShouldQueue
     private function hasValidMedicalCertificate(Player $player): bool
     {
         return $player->medicalCertificates()
-            ->current()
             ->where('status', 'approved')
-            ->where('expires_at', '>', now()->addMonths(3)) // Válido por al menos 3 meses
+            ->where('is_current', true)
+            ->where('expires_at', '>', now()->addMonths(3))
             ->exists();
+    }
+
+    private function generateCardForPlayer(Player $player): PlayerCard
+    {
+        // Obtener certificado médico actual
+        $medicalCertificate = $player->medicalCertificates()
+            ->where('status', 'approved')
+            ->where('is_current', true)
+            ->orderBy('expires_at', 'desc')
+            ->first();
+
+        // Generar número de carnet
+        $cardNumber = $this->generateCardNumber($player);
+
+        // Crear carnet
+        $card = PlayerCard::create([
+            'player_id' => $player->id,
+            'card_number' => $cardNumber,
+            'status' => 'active',
+            'issued_at' => now(),
+            'expires_at' => now()->addYear(), // Válido por 1 año
+            'season' => $this->season,
+            'medical_status' => $medicalCertificate?->medical_status ?? 'fit',
+            'medical_check_date' => $medicalCertificate?->issue_date,
+            'medical_approved_by' => $medicalCertificate?->reviewed_by,
+            'issued_by' => 1, // Sistema automático
+            'version' => 1,
+        ]);
+
+        // Generar código QR
+        $card->qr_code = hash('sha256', $card->card_number . $card->player_id . now()->timestamp);
+        $card->verification_token = hash('sha256', $card->qr_code . 'verification');
+        $card->save();
+
+        return $card;
+    }
+
+    private function generateCardNumber(Player $player): string
+    {
+        $clubCode = str_pad($player->current_club_id, 3, '0', STR_PAD_LEFT);
+        $sequence = PlayerCard::where('season', $this->season)->count() + 1;
+
+        return "VP-{$this->season}-{$clubCode}-" . str_pad($sequence, 4, '0', STR_PAD_LEFT);
     }
 }

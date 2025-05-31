@@ -8,8 +8,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use App\Models\MedicalCertificate;
-use App\Notifications\MedicalCertificateExpiryNotification;
 
 class ProcessMedicalCertificateExpiry implements ShouldQueue
 {
@@ -53,24 +53,46 @@ class ProcessMedicalCertificateExpiry implements ShouldQueue
 
         foreach ($certificates as $certificate) {
             try {
-                // Notificar a la jugadora
-                $certificate->player->user->notify(
-                    new MedicalCertificateExpiryNotification($certificate, $days)
-                );
+                $playerUser = $certificate->player->user;
+
+                // Enviar email usando Mail facade
+                Mail::send('emails.medical-expiry', [
+                    'player_name' => $playerUser->full_name,
+                    'doctor_name' => $certificate->doctor_name,
+                    'expires_at' => $certificate->expires_at->format('d/m/Y'),
+                    'days_left' => $days,
+                    'medical_status' => $certificate->medical_status->getLabel(),
+                ], function($message) use ($playerUser, $days) {
+                    $message->to($playerUser->email, $playerUser->full_name)
+                            ->subject("🏥 Certificado médico vence en {$days} días");
+                });
 
                 // Notificar al director del club
                 if ($certificate->player->currentClub?->director) {
-                    $certificate->player->currentClub->director->notify(
-                        new MedicalCertificateExpiryNotification($certificate, $days, 'director')
-                    );
+                    $director = $certificate->player->currentClub->director;
+
+                    Mail::send('emails.medical-expiry-director', [
+                        'director_name' => $director->full_name,
+                        'player_name' => $playerUser->full_name,
+                        'doctor_name' => $certificate->doctor_name,
+                        'expires_at' => $certificate->expires_at->format('d/m/Y'),
+                        'days_left' => $days,
+                        'club_name' => $certificate->player->currentClub->name,
+                    ], function($message) use ($director, $days, $playerUser) {
+                        $message->to($director->email, $director->full_name)
+                                ->subject("🏥 Certificado médico de {$playerUser->full_name} vence en {$days} días");
+                    });
                 }
 
                 // Marcar como notificado
-                $certificate->sendExpiryNotification();
+                $certificate->update([
+                    'expiry_notification_sent' => true,
+                    'expiry_notification_at' => now(),
+                ]);
 
                 Log::info('Notificación médica enviada', [
                     'certificate_id' => $certificate->id,
-                    'player_name' => $certificate->player->user->full_name,
+                    'player_name' => $playerUser->full_name,
                     'days_left' => $days
                 ]);
 

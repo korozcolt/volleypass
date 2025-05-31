@@ -8,11 +8,12 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 use App\Models\QrScanLog;
 use App\Models\PlayerCard;
 use App\Models\Player;
 use App\Models\MedicalCertificate;
-use App\Services\ReportGenerationService;
 use Carbon\Carbon;
 
 class GenerateStatisticsReport implements ShouldQueue
@@ -23,11 +24,11 @@ class GenerateStatisticsReport implements ShouldQueue
     public int $timeout = 600;
 
     public function __construct(
-        private string $reportType = 'weekly', // daily, weekly, monthly
+        private string $reportType = 'weekly',
         private ?string $notifyEmail = null
     ) {}
 
-    public function handle(ReportGenerationService $reportService): void
+    public function handle(): void
     {
         Log::info('Generando reporte estadístico', [
             'report_type' => $this->reportType
@@ -37,16 +38,16 @@ class GenerateStatisticsReport implements ShouldQueue
             $period = $this->getReportPeriod();
             $statistics = $this->generateStatistics($period);
 
-            // Generar reporte
-            $report = $reportService->generateStatisticsReport($statistics, $this->reportType);
+            // Generar reporte en formato array
+            $report = $this->buildReport($statistics);
+
+            // Guardar reporte en storage
+            $this->saveReport($report);
 
             // Enviar por email si se especifica
             if ($this->notifyEmail) {
-                $reportService->sendReportByEmail($report, $this->notifyEmail);
+                $this->sendReportByEmail($report);
             }
-
-            // Guardar reporte en storage
-            $reportService->saveReport($report, $this->reportType);
 
             Log::info('Reporte estadístico generado exitosamente', [
                 'report_type' => $this->reportType,
@@ -128,8 +129,11 @@ class GenerateStatisticsReport implements ShouldQueue
     private function getMedicalStats(): array
     {
         return [
-            'valid_certificates' => MedicalCertificate::current()->valid()->count(),
-            'expiring_certificates' => MedicalCertificate::current()
+            'valid_certificates' => MedicalCertificate::where('status', 'approved')
+                ->where('is_current', true)
+                ->where('expires_at', '>', now())->count(),
+            'expiring_certificates' => MedicalCertificate::where('status', 'approved')
+                ->where('is_current', true)
                 ->where('expires_at', '<=', now()->addDays(30))->count(),
             'expired_certificates' => MedicalCertificate::where('status', 'expired')->count(),
             'certificates_by_status' => MedicalCertificate::selectRaw('medical_status, count(*) as count')
@@ -141,12 +145,13 @@ class GenerateStatisticsReport implements ShouldQueue
     private function getPlayerStats(): array
     {
         return [
-            'total_active_players' => Player::active()->count(),
-            'eligible_players' => Player::active()->where('is_eligible', true)->count(),
-            'players_by_category' => Player::active()
+            'total_active_players' => Player::where('status', 'active')->count(),
+            'eligible_players' => Player::where('status', 'active')
+                ->where('is_eligible', true)->count(),
+            'players_by_category' => Player::where('status', 'active')
                 ->selectRaw('category, count(*) as count')
                 ->groupBy('category')->pluck('count', 'category')->toArray(),
-            'players_by_position' => Player::active()
+            'players_by_position' => Player::where('status', 'active')
                 ->selectRaw('position, count(*) as count')
                 ->groupBy('position')->pluck('count', 'position')->toArray(),
         ];
@@ -187,5 +192,50 @@ class GenerateStatisticsReport implements ShouldQueue
             ->orderBy('date')
             ->pluck('count', 'date')
             ->toArray();
+    }
+
+    private function buildReport(array $statistics): array
+    {
+        return [
+            'report_type' => $this->reportType,
+            'generated_at' => now()->toISOString(),
+            'period' => $this->getReportPeriod(),
+            'summary' => [
+                'total_verifications' => $statistics['verification_stats']['total_verifications'],
+                'success_rate' => $this->calculateSuccessRate($statistics['verification_stats']),
+                'active_cards' => $statistics['card_stats']['total_active_cards'],
+                'eligible_players' => $statistics['player_stats']['eligible_players'],
+            ],
+            'detailed_stats' => $statistics,
+        ];
+    }
+
+    private function calculateSuccessRate(array $verificationStats): float
+    {
+        $total = $verificationStats['total_verifications'];
+        if ($total === 0) return 0;
+
+        $successful = $verificationStats['successful_verifications'];
+        return round(($successful / $total) * 100, 2);
+    }
+
+    private function saveReport(array $report): void
+    {
+        $filename = "reports/volleypass-{$this->reportType}-" . now()->format('Y-m-d') . '.json';
+        Storage::put($filename, json_encode($report, JSON_PRETTY_PRINT));
+
+        Log::info("Reporte guardado en: {$filename}");
+    }
+
+    private function sendReportByEmail(array $report): void
+    {
+        Mail::send('emails.statistics-report', [
+            'report_type' => $this->reportType,
+            'summary' => $report['summary'],
+            'period' => $report['period'],
+        ], function($message) {
+            $message->to($this->notifyEmail)
+                    ->subject("📊 Reporte VolleyPass - " . ucfirst($this->reportType));
+        });
     }
 }

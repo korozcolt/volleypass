@@ -1,46 +1,67 @@
 <?php
 
 return [
+    /*
+    |--------------------------------------------------------------------------
+    | Rate Limiting
+    |--------------------------------------------------------------------------
+    |
+    | Configuración para limitar el número de notificaciones por usuario
+    |
+    */
+    'rate_limiting' => [
+        'per_user_per_hour' => env('NOTIFY_RATE_LIMIT_HOUR', 10),
+        'per_user_per_day' => env('NOTIFY_RATE_LIMIT_DAY', 50),
+        'emergency_override' => env('NOTIFY_EMERGENCY_OVERRIDE', true),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Channels Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configuración de canales de notificación disponibles
+    |
+    */
     'channels' => [
         'mail' => [
-            'driver' => 'mail',
-            'from' => [
-                'address' => env('MAIL_FROM_ADDRESS', 'noreply@volleypass.sucre.gov.co'),
-                'name' => env('MAIL_FROM_NAME', 'VolleyPass Sucre'),
-            ],
-            'templates' => [
-                'card_expiry' => 'emails.card-expiry',
-                'medical_expiry' => 'emails.medical-expiry',
-                'document_approved' => 'emails.document-approved',
-                'registration_welcome' => 'emails.welcome',
-            ]
+            'enabled' => true,
+            'from_address' => env('MAIL_FROM_ADDRESS', 'noreply@volleypass.sucre.gov.co'),
+            'from_name' => env('MAIL_FROM_NAME', 'VolleyPass Sucre'),
+        ],
+        'database' => [
+            'enabled' => true,
         ],
         'sms' => [
-            'driver' => 'sms',
-            'provider' => env('SMS_PROVIDER', 'twilio'), // twilio, nexmo, local
-            'from' => env('SMS_FROM', 'VolleyPass'),
+            'enabled' => env('SMS_ENABLED', false),
+            'provider' => env('SMS_PROVIDER', 'twilio'),
         ],
         'push' => [
-            'driver' => 'fcm',
-            'server_key' => env('FCM_SERVER_KEY'),
-            'sender_id' => env('FCM_SENDER_ID'),
+            'enabled' => env('PUSH_ENABLED', false),
+            'fcm_server_key' => env('FCM_SERVER_KEY'),
         ],
-        'whatsapp' => [
-            'driver' => 'whatsapp',
-            'api_url' => env('WHATSAPP_API_URL'),
-            'token' => env('WHATSAPP_TOKEN'),
-        ]
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Templates
+    |--------------------------------------------------------------------------
+    |
+    | Configuración de plantillas de notificación
+    |
+    */
     'templates' => [
-        'default_language' => 'es',
-        'fallback_language' => 'es',
-        'cache_templates' => true,
+        'card_expiry' => [
+            'subject' => '🏐 Carnet VolleyPass por vencer',
+            'template' => 'emails.card-expiry',
+        ],
+        'medical_expiry' => [
+            'subject' => '🏥 Certificado médico por vencer',
+            'template' => 'emails.medical-expiry',
+        ],
+        'document_approved' => [
+            'subject' => '✅ Documento aprobado - VolleyPass',
+            'template' => 'emails.document-approved',
+        ],
     ],
-
-    'rate_limiting' => [
-        'per_user_per_day' => 50,
-        'per_user_per_hour' => 10,
-        'emergency_override' => true,
-    ]
 ];

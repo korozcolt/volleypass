@@ -86,7 +86,7 @@ abstract class BaseVolleyPassNotification extends Notification implements Should
     abstract protected function getDetailMessage(): string;
 
     // ===============================================
-    // MÉTODOS IMPLEMENTADOS
+    // MÉTODOS IMPLEMENTADOS - CORREGIDOS
     // ===============================================
 
     protected function getGreeting($notifiable): string
@@ -98,7 +98,10 @@ abstract class BaseVolleyPassNotification extends Notification implements Should
             default => 'Buenas noches'
         };
 
-        return "{$greeting}, {$notifiable->first_name ?? $notifiable->name}";
+        // ✅ CORREGIDO: Usar operador ternario en lugar de null coalescing
+        $name = $notifiable->first_name ? $notifiable->first_name : $notifiable->name;
+
+        return "{$greeting}, {$name}";
     }
 
     protected function hasAction(): bool

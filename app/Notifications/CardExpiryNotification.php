@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+namespace App\Notifications;
+
 use App\Models\PlayerCard;
 use App\Enums\NotificationType;
 use App\Enums\Priority;
@@ -15,9 +17,8 @@ class CardExpiryNotification extends BaseVolleyPassNotification
     {
         $this->card = $card;
         $this->daysLeft = $daysLeft;
-        $this->type = NotificationType::Card_Renewal;
+        $this->type = NotificationType::Card_Expiry;
 
-        // Prioridad según días restantes
         $this->priority = match(true) {
             $daysLeft <= 3 => Priority::Urgent,
             $daysLeft <= 7 => Priority::High,
@@ -61,27 +62,23 @@ class CardExpiryNotification extends BaseVolleyPassNotification
 
     protected function getDetailMessage(): string
     {
-        $playerName = $this->data['player_name'];
-        $cardNumber = $this->data['card_number'];
-        $expiresAt = $this->data['expires_at'];
-
-        return "Jugadora: {$playerName}\nNúmero de carnet: {$cardNumber}\nFecha de vencimiento: {$expiresAt}";
+        return sprintf(
+            "Jugadora: %s\nNúmero de carnet: %s\nFecha de vencimiento: %s",
+            $this->data['player_name'],
+            $this->data['card_number'],
+            $this->data['expires_at']
+        );
     }
 
     protected function getActionText(): string
     {
-        return $this->recipientRole === 'director'
-            ? 'Gestionar Renovación'
-            : 'Ver Mi Carnet';
+        return 'Ver Dashboard VolleyPass';
     }
 
     protected function getActionUrl($notifiable): string
     {
-        if ($this->recipientRole === 'director') {
-            return route('admin.cards.renew', $this->card->id);
-        }
-
-        return route('player.card.show', $this->card->id);
+        // Usar ruta que SÍ existe
+        return route('dashboard');
     }
 
     protected function getAdditionalData(): array

@@ -41,11 +41,11 @@ class DocumentApprovedNotification extends BaseVolleyPassNotification
 
     protected function getActionText(): string
     {
-        return 'Ver Estado de Documentos';
+        return 'Ver Dashboard';
     }
 
     protected function getActionUrl($notifiable): string
     {
-        return route('player.documents.index');
+        return route('dashboard');
     }
 }

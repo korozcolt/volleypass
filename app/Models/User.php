@@ -89,12 +89,18 @@ class User extends Authenticatable implements HasMedia
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 'email', 'first_name', 'last_name',
-                'document_number', 'status', 'league_id', 'club_id'
+                'name',
+                'email',
+                'first_name',
+                'last_name',
+                'document_number',
+                'status',
+                'league_id',
+                'club_id'
             ])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn(string $eventName) => match($eventName) {
+            ->setDescriptionForEvent(fn(string $eventName) => match ($eventName) {
                 'created' => 'Usuario registrado en el sistema',
                 'updated' => 'Información de usuario actualizada',
                 'deleted' => 'Usuario eliminado del sistema',
@@ -413,18 +419,18 @@ class User extends Authenticatable implements HasMedia
     public function hasCompleteProfile(): bool
     {
         return !empty($this->first_name) &&
-               !empty($this->last_name) &&
-               !empty($this->document_number) &&
-               !empty($this->birth_date) &&
-               !empty($this->phone) &&
-               $this->profile !== null;
+            !empty($this->last_name) &&
+            !empty($this->document_number) &&
+            !empty($this->birth_date) &&
+            !empty($this->phone) &&
+            $this->profile !== null;
     }
 
     public function canBeActivated(): bool
     {
         return $this->hasCompleteProfile() &&
-               $this->email_verified_at !== null &&
-               $this->status !== UserStatus::Blocked;
+            $this->email_verified_at !== null &&
+            $this->status !== UserStatus::Blocked;
     }
 
     public function needsProfileCompletion(): array
@@ -468,7 +474,7 @@ class User extends Authenticatable implements HasMedia
     {
         $roleNames = $this->roles->pluck('name')->toArray();
 
-        return match(true) {
+        return match (true) {
             in_array('SuperAdmin', $roleNames) => 'Super Administrador',
             in_array('LeagueAdmin', $roleNames) => 'Administrador de Liga',
             in_array('ClubDirector', $roleNames) => 'Director de Club',
@@ -493,5 +499,62 @@ class User extends Authenticatable implements HasMedia
         if (in_array('Player', $roles)) return 1;
 
         return 0;
+    }
+
+    public function hasAppInstalled(): bool
+    {
+        // Verificar si tiene token FCM o dispositivo registrado
+        return !empty($this->fcm_token) ||
+            $this->profile?->metadata['has_mobile_app'] ?? false;
+    }
+
+    public function prefersWhatsApp(): bool
+    {
+        // Verificar preferencias o si tiene WhatsApp configurado
+        return !empty($this->whatsapp_number) ||
+            $this->notificationPreferences()
+            ->where('channel', 'whatsapp')
+            ->where('is_enabled', true)
+            ->exists();
+    }
+
+    public function getWhatsappNumberAttribute(): ?string
+    {
+        // Buscar número de WhatsApp en preferencias o profile
+        return $this->profile?->metadata['whatsapp_number'] ??
+            $this->phone;
+    }
+
+    public function getFcmTokenAttribute(): ?string
+    {
+        // Token FCM almacenado en preferencias
+        return $this->profile?->metadata['fcm_token'] ?? null;
+    }
+
+    /**
+     * Relación con preferencias de notificación
+     */
+    public function notificationPreferences()
+    {
+        return $this->hasMany(NotificationPreference::class);
+    }
+
+    /**
+     * Obtener canales preferidos para un tipo de notificación
+     */
+    public function getPreferredChannels(string $notificationType): array
+    {
+        $preferences = $this->notificationPreferences()
+            ->where('notification_type', $notificationType)
+            ->where('is_enabled', true)
+            ->pluck('channel')
+            ->toArray();
+
+        // Siempre incluir email como fallback
+        if (empty($preferences)) {
+            return ['mail'];
+        }
+
+        return $preferences;
     }
 }

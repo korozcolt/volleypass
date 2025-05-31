@@ -6,7 +6,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\URL;
 use App\Enums\NotificationType;
 use App\Enums\Priority;
 
@@ -27,28 +26,12 @@ abstract class BaseVolleyPassNotification extends Notification implements Should
     }
 
     /**
-     * Canales de notificación según el tipo y destinatario
+     * Canales de notificación - SOLO EMAIL para empezar
      */
     public function via($notifiable): array
     {
-        $channels = ['mail']; // Siempre email por defecto
-
-        // Agregar SMS para notificaciones urgentes
-        if ($this->priority === Priority::Urgent) {
-            $channels[] = 'sms';
-        }
-
-        // Agregar push para usuarios con app móvil
-        if ($notifiable->hasAppInstalled()) {
-            $channels[] = 'push';
-        }
-
-        // WhatsApp para Colombia (muy popular)
-        if ($notifiable->prefersWhatsApp()) {
-            $channels[] = 'whatsapp';
-        }
-
-        return $channels;
+        // Por ahora solo email - funcional garantizado
+        return ['mail', 'database'];
     }
 
     /**
@@ -67,11 +50,9 @@ abstract class BaseVolleyPassNotification extends Notification implements Should
             $message->action($this->getActionText(), $this->getActionUrl($notifiable));
         }
 
-        // Agregar datos específicos
-        if (!empty($this->getAdditionalData())) {
-            foreach ($this->getAdditionalData() as $line) {
-                $message->line($line);
-            }
+        // Agregar datos adicionales
+        foreach ($this->getAdditionalData() as $line) {
+            $message->line($line);
         }
 
         return $message
@@ -80,54 +61,7 @@ abstract class BaseVolleyPassNotification extends Notification implements Should
     }
 
     /**
-     * SMS notification
-     */
-    public function toSms($notifiable): string
-    {
-        return sprintf(
-            "[VolleyPass] %s. %s %s",
-            $this->getMainMessage(),
-            $this->hasAction() ? $this->getActionText() : '',
-            $this->hasAction() ? $this->getActionUrl($notifiable) : ''
-        );
-    }
-
-    /**
-     * Push notification
-     */
-    public function toPush($notifiable): array
-    {
-        return [
-            'title' => 'VolleyPass Sucre',
-            'body' => $this->getMainMessage(),
-            'icon' => asset('images/volleypass-icon.png'),
-            'click_action' => $this->getActionUrl($notifiable),
-            'data' => [
-                'type' => $this->type->value,
-                'priority' => $this->priority->value,
-                'timestamp' => now()->toISOString(),
-            ]
-        ];
-    }
-
-    /**
-     * WhatsApp notification
-     */
-    public function toWhatsApp($notifiable): array
-    {
-        return [
-            'to' => $notifiable->whatsapp_number,
-            'body' => sprintf(
-                "🏐 *VolleyPass Sucre*\n\n%s\n\n%s\n\n_%s_",
-                $this->getMainMessage(),
-                $this->getDetailMessage(),
-                'Mensaje automático - No responder'
-            )
-        ];
-    }
-
-    /**
-     * Database storage for notification history
+     * Database storage
      */
     public function toArray($notifiable): array
     {
@@ -144,7 +78,7 @@ abstract class BaseVolleyPassNotification extends Notification implements Should
     }
 
     // ===============================================
-    // MÉTODOS ABSTRACTOS (implementar en cada notificación)
+    // MÉTODOS ABSTRACTOS
     // ===============================================
 
     abstract protected function getSubject(): string;
@@ -152,7 +86,7 @@ abstract class BaseVolleyPassNotification extends Notification implements Should
     abstract protected function getDetailMessage(): string;
 
     // ===============================================
-    // MÉTODOS CON IMPLEMENTACIÓN POR DEFECTO
+    // MÉTODOS IMPLEMENTADOS
     // ===============================================
 
     protected function getGreeting($notifiable): string

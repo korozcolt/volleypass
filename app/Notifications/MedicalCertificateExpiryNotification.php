@@ -15,7 +15,7 @@ class MedicalCertificateExpiryNotification extends BaseVolleyPassNotification
     {
         $this->certificate = $certificate;
         $this->daysLeft = $daysLeft;
-        $this->type = NotificationType::Medical_Checkup;
+        $this->type = NotificationType::Medical_Expiry;
 
         $this->priority = match(true) {
             $daysLeft <= 3 => Priority::Urgent,
@@ -56,12 +56,12 @@ class MedicalCertificateExpiryNotification extends BaseVolleyPassNotification
 
     protected function getActionText(): string
     {
-        return 'Agendar Cita Médica';
+        return 'Ir a Dashboard';
     }
 
     protected function getActionUrl($notifiable): string
     {
-        return route('player.medical.schedule');
+        return route('dashboard');
     }
 
     protected function getAdditionalData(): array

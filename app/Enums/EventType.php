@@ -5,9 +5,12 @@ namespace App\Enums;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 use Filament\Support\Contracts\HasIcon;
+use App\Traits\EnumHelpers;
 
 enum EventType: string implements HasLabel, HasColor, HasIcon
 {
+    use EnumHelpers;
+
     case Match = 'match';
     case Tournament = 'tournament';
     case Training = 'training';

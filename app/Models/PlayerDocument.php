@@ -194,7 +194,7 @@ class PlayerDocument extends Model implements HasMedia
     // MÉTODOS DE NEGOCIO
     // =======================
 
-    public function approve(User $reviewer, string $notes = null): bool
+    public function approve(User $reviewer, ?string $notes = null): bool
     {
         if (!$this->status->canTransitionTo(DocumentStatus::Approved)) {
             throw new \Exception("No se puede aprobar un documento en estado {$this->status->getLabel()}");
@@ -209,7 +209,7 @@ class PlayerDocument extends Model implements HasMedia
         ]);
     }
 
-    public function reject(User $reviewer, string $reason, string $notes = null): bool
+    public function reject(User $reviewer, string $reason, ?string $notes = null): bool
     {
         if (!$this->status->canTransitionTo(DocumentStatus::Rejected)) {
             throw new \Exception("No se puede rechazar un documento en estado {$this->status->getLabel()}");

@@ -6,9 +6,9 @@ use App\Jobs\ProcessCardExpiryNotifications;
 use App\Jobs\ProcessMedicalCertificateExpiry;
 use App\Jobs\GenerateStatisticsReport;
 use App\Jobs\CleanupOldLogs;
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schedule;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());

@@ -675,17 +675,17 @@ Este proyecto está licenciado bajo la **Licencia MIT**. Ver [LICENSE](LICENSE) 
 
 ### 🌟 **Stats del Proyecto**
 
-![GitHub Stars](https://img.shields.io/github/stars/volleypass/volleypass?style=social)
-![GitHub Forks](https://img.shields.io/github/forks/volleypass/volleypass?style=social)
-![GitHub Issues](https://img.shields.io/github/issues/volleypass/volleypass)
-![GitHub Contributors](https://img.shields.io/github/contributors/volleypass/volleypass)
+![GitHub Stars](https://img.shields.io/github/stars/korozcolt/volleypass?style=social)
+![GitHub Forks](https://img.shields.io/github/forks/korozcolt/volleypass?style=social)
+![GitHub Issues](https://img.shields.io/github/issues/korozcolt/volleypass)
+![GitHub Contributors](https://img.shields.io/github/contributors/korozcolt/volleypass)
 
 ### 📊 **Métricas de Desarrollo**
 
-![Lines of Code](https://img.shields.io/tokei/lines/github/volleypass/volleypass?label=Lines%20of%20Code)
-![PHP Version](https://img.shields.io/packagist/php-v/volleypass/volleypass?label=PHP%20Version)
+![Lines of Code](https://img.shields.io/tokei/lines/github/korozcolt/volleypass?label=Lines%20of%20Code)
+![PHP Version](https://img.shields.io/packagist/php-v/korozcolt/volleypass?label=PHP%20Version)
 ![Laravel Version](https://img.shields.io/badge/Laravel-12.x-FF2D20)
-![Last Commit](https://img.shields.io/github/last-commit/volleypass/volleypass)
+![Last Commit](https://img.shields.io/github/last-commit/korozcolt/volleypass)
 
 [⬆️ Volver arriba](#-volleypass-sucre)
 

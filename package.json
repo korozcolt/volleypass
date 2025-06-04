@@ -7,6 +7,7 @@
     },
     "dependencies": {
         "@rollup/rollup-win32-x64-msvc": "^4.41.0",
+        "@rollup/rollup-linux-x64-gnu": "4.9.5",
         "@tailwindcss/vite": "^4.0.7",
         "autoprefixer": "^10.4.20",
         "axios": "^1.7.4",

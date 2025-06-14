@@ -48,7 +48,7 @@ jobs:
           mkdir -p "$RELEASE_DIR"
           cd "$RELEASE_DIR"
 
-          # Clonar repositorio (RAMA MAIN)
+          # Clonar repositorio
           echo "Clonando repositorio..."
           git clone --branch main --single-branch --depth 1 "$REPO_URL" .
 
@@ -56,10 +56,11 @@ jobs:
           echo "Instalando dependencias PHP..."
           composer install --no-dev --optimize-autoloader --no-interaction
 
-          # Instalar dependencias Node.js si existen
+          # Instalar dependencias Node.js (TODAS las dependencias incluyendo dev)
           if [[ -f "package.json" ]]; then
             echo "Instalando dependencias Node.js..."
-            npm ci --production
+            npm ci
+            echo "Compilando assets..."
             npm run build
           fi
 

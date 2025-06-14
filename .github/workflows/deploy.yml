@@ -1,7 +1,8 @@
 # ============================================================================
-# GITHUB ACTION ROBUSTO PARA VOLLEYPASS (RAMA MAIN)
+# GITHUB ACTION FINAL PARA VOLLEYPASS (RAMA MAIN)
 # Archivo: .github/workflows/deploy.yml
 # Repositorio: korozcolt/volleypass
+# Con corrección para problema de enlace simbólico
 # ============================================================================
 
 name: Deploy VolleyPass to Kronnos.dev
@@ -41,7 +42,7 @@ jobs:
           TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           RELEASE_DIR="/var/deployments/releases/$APP_DOMAIN/$TIMESTAMP"
 
-          echo "=== INICIANDO DEPLOYMENT VOLLEYPASS ROBUSTO ==="
+          echo "=== INICIANDO DEPLOYMENT VOLLEYPASS FINAL ==="
           echo "Timestamp: $TIMESTAMP"
 
           # Crear directorio de release
@@ -73,19 +74,15 @@ jobs:
             echo "Copiando .env desde configuración compartida..."
             cp "$ENV_SOURCE" .env
 
-            # Verificar que el archivo .env es válido
-            echo "Verificando archivo .env..."
-
             # Verificar que contiene DB_CONNECTION=mysql
             if grep -q "DB_CONNECTION=mysql" .env; then
               echo "✅ Configuración MySQL detectada"
             else
               echo "❌ No se encontró configuración MySQL, corrigiendo..."
-              # Forzar configuración MySQL
               sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
               sed -i 's/DB_DATABASE=.*/DB_DATABASE=volleypass_db/' .env
               sed -i 's/DB_USERNAME=.*/DB_USERNAME=laravel/' .env
-              sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=Kr0nn0s2024#Laravel/' .env
+              sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=Kronnos2024Laravel/' .env
             fi
 
             # Asegurar que APP_KEY existe y es válida
@@ -104,7 +101,7 @@ jobs:
             sed -i 's/DB_PORT=.*/DB_PORT=3306/' .env
             sed -i 's/DB_DATABASE=.*/DB_DATABASE=volleypass_db/' .env
             sed -i 's/DB_USERNAME=.*/DB_USERNAME=laravel/' .env
-            sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=Kr0nn0s2024#Laravel/' .env
+            sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=Kronnos2024Laravel/' .env
 
             # Generar APP_KEY
             php artisan key:generate --force
@@ -119,39 +116,26 @@ jobs:
           # Comandos Laravel - ORDEN CORRECTO
           echo "Ejecutando comandos Laravel..."
 
-          # 1. Limpiar caches existentes
+          # 1. Limpiar caches existentes (algunos pueden fallar si no hay tablas)
           echo "Limpiando caches..."
           php artisan config:clear || true
-          php artisan cache:clear || true
           php artisan view:clear || true
           php artisan route:clear || true
 
-          # 2. Verificar configuración
-          echo "Verificando configuración de base de datos..."
-          if ! php artisan config:show database.connections.mysql.database 2>/dev/null | grep -q "volleypass_db"; then
-            echo "Problema con configuración, regenerando..."
-            php artisan config:clear
-          fi
-
-          # 3. Probar conexión a base de datos
-          echo "Probando conexión a base de datos..."
-          if ! php artisan migrate:status >/dev/null 2>&1; then
-            echo "Problema de conexión a BD, verificando credenciales..."
-            # Mostrar error específico
-            php artisan migrate:status || echo "Error de conexión detectado"
-          fi
-
-          # 4. Ejecutar migraciones primero
+          # 2. Ejecutar migraciones PRIMERO
           echo "Ejecutando migraciones..."
           php artisan migrate --force
 
-          # 5. Cachear configuración después de migraciones exitosas
+          # 3. Ahora que las tablas existen, limpiar cache de datos
+          php artisan cache:clear || true
+
+          # 4. Cachear configuración después de migraciones exitosas
           echo "Cacheando configuración..."
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
 
-          # 6. Crear enlaces de storage
+          # 5. Crear enlaces de storage
           echo "Creando enlaces de storage..."
           php artisan storage:link
 
@@ -161,10 +145,30 @@ jobs:
           sudo chmod -R 755 "$RELEASE_DIR"
           sudo chmod -R 775 "$RELEASE_DIR/storage" "$RELEASE_DIR/bootstrap/cache"
 
-          # Activar nueva versión
+          # Activar nueva versión - CORREGIDO PARA MANEJAR DIRECTORIOS
           echo "Activando nueva versión..."
-          sudo rm -f "/var/www/$APP_DOMAIN"
+
+          # Si existe y es directorio, eliminarlo recursivamente
+          if [[ -d "/var/www/$APP_DOMAIN" ]] && [[ ! -L "/var/www/$APP_DOMAIN" ]]; then
+            echo "Eliminando directorio existente..."
+            sudo rm -rf "/var/www/$APP_DOMAIN"
+          elif [[ -L "/var/www/$APP_DOMAIN" ]]; then
+            echo "Eliminando enlace simbólico existente..."
+            sudo rm -f "/var/www/$APP_DOMAIN"
+          fi
+
+          # Crear enlace simbólico
+          echo "Creando enlace simbólico..."
           sudo ln -sf "$RELEASE_DIR" "/var/www/$APP_DOMAIN"
+
+          # Verificar que el enlace se creó correctamente
+          if [[ -L "/var/www/$APP_DOMAIN" ]]; then
+            echo "✅ Enlace simbólico creado exitosamente"
+            echo "Apunta a: $(readlink /var/www/$APP_DOMAIN)"
+          else
+            echo "❌ Error: No se pudo crear enlace simbólico"
+            exit 1
+          fi
 
           # Recargar servicios
           echo "Recargando servicios..."

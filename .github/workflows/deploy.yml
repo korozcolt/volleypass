@@ -1,5 +1,5 @@
 # ============================================================================
-# GITHUB ACTION PARA VOLLEYPASS (RAMA MAIN)
+# GITHUB ACTION MEJORADO PARA VOLLEYPASS (RAMA MAIN)
 # Archivo: .github/workflows/deploy.yml
 # Repositorio: korozcolt/volleypass
 # ============================================================================
@@ -64,21 +64,56 @@ jobs:
             npm run build
           fi
 
-          # Configurar .env
+          # Configurar .env - MEJORADO
           echo "Configurando .env..."
           if [[ -f "/var/www/shared/configs/$APP_DOMAIN.env" ]]; then
+            echo "Copiando .env desde configuración compartida..."
             cp "/var/www/shared/configs/$APP_DOMAIN.env" .env
+
+            # Verificar que el archivo .env es válido
+            if php -r "file_exists('.env') && parse_ini_file('.env') ? exit(0) : exit(1);"; then
+              echo "✅ Archivo .env válido"
+            else
+              echo "❌ Archivo .env inválido, generando uno nuevo..."
+              cp .env.example .env
+              php artisan key:generate --force
+            fi
           else
+            echo "No se encontró .env compartido, usando .env.example..."
             cp .env.example .env
+            php artisan key:generate --force
           fi
+
+          # Mostrar información del .env para depuración
+          echo "APP_KEY configurada:"
+          grep "APP_KEY=" .env || echo "No APP_KEY encontrada"
 
           # Comandos Laravel
           echo "Ejecutando comandos Laravel..."
-          php artisan key:generate --force
+
+          # Verificar configuración antes de continuar
+          echo "Verificando configuración..."
+          if ! php artisan config:show app.key >/dev/null 2>&1; then
+            echo "Regenerando APP_KEY..."
+            php artisan key:generate --force
+          fi
+
+          # Limpiar caches antes de configurar
+          php artisan config:clear
+          php artisan cache:clear
+          php artisan view:clear
+          php artisan route:clear
+
+          # Configurar Laravel
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
+
+          # Ejecutar migraciones
+          echo "Ejecutando migraciones..."
           php artisan migrate --force
+
+          # Crear enlaces de storage
           php artisan storage:link
 
           # Permisos
@@ -96,11 +131,19 @@ jobs:
           echo "Recargando servicios..."
           sudo systemctl reload nginx php8.3-fpm
 
-          # Limpiar releases antiguos
+          # Limpiar releases antiguos (mantener últimos 3)
           echo "Limpiando releases antiguos..."
           cd "/var/deployments/releases/$APP_DOMAIN"
           ls -t | tail -n +4 | xargs -r rm -rf
 
           echo "=== DEPLOYMENT COMPLETADO ==="
           echo "VolleyPass actualizado exitosamente en https://$APP_DOMAIN"
+          echo "Verificando aplicación..."
+
+          # Verificación final
+          if curl -s -I "https://$APP_DOMAIN" | grep -q "200 OK"; then
+            echo "✅ Aplicación respondiendo correctamente"
+          else
+            echo "⚠️  Aplicación puede necesitar unos minutos para estabilizarse"
+          fi
         EOF

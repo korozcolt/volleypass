@@ -1,0 +1,99 @@
+name: Deploy VolleyPass to Kronnos.dev
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy VolleyPass to Production
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Add server to known hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H 208.109.235.177 >> ~/.ssh/known_hosts
+
+    - name: Deploy to server
+      run: |
+        ssh -o StrictHostKeyChecking=no kronnos@208.109.235.177 << 'EOF'
+          set -e
+
+          # Variables
+          REPO_URL="https://github.com/korozcolt/volleypass.git"
+          APP_DOMAIN="volleypass.kronnos.dev"
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+          RELEASE_DIR="/var/deployments/releases/$APP_DOMAIN/$TIMESTAMP"
+
+          echo "=== INICIANDO DEPLOYMENT VOLLEYPASS ==="
+          echo "Timestamp: $TIMESTAMP"
+
+          # Crear directorio de release
+          mkdir -p "$RELEASE_DIR"
+          cd "$RELEASE_DIR"
+
+          # Clonar repositorio
+          echo "Clonando repositorio..."
+          git clone --branch master --single-branch --depth 1 "$REPO_URL" .
+
+          # Instalar dependencias PHP
+          echo "Instalando dependencias PHP..."
+          composer install --no-dev --optimize-autoloader --no-interaction
+
+          # Instalar dependencias Node.js si existen
+          if [[ -f "package.json" ]]; then
+            echo "Instalando dependencias Node.js..."
+            npm ci --production
+            npm run build
+          fi
+
+          # Configurar .env
+          echo "Configurando .env..."
+          if [[ -f "/var/www/shared/configs/$APP_DOMAIN.env" ]]; then
+            cp "/var/www/shared/configs/$APP_DOMAIN.env" .env
+          else
+            cp .env.example .env
+          fi
+
+          # Comandos Laravel
+          echo "Ejecutando comandos Laravel..."
+          php artisan key:generate --force
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+          php artisan migrate --force
+          php artisan storage:link
+
+          # Permisos
+          echo "Estableciendo permisos..."
+          sudo chown -R webapps:www-data "$RELEASE_DIR"
+          sudo chmod -R 755 "$RELEASE_DIR"
+          sudo chmod -R 775 "$RELEASE_DIR/storage" "$RELEASE_DIR/bootstrap/cache"
+
+          # Activar nueva versión
+          echo "Activando nueva versión..."
+          sudo rm -f "/var/www/$APP_DOMAIN"
+          sudo ln -sf "$RELEASE_DIR" "/var/www/$APP_DOMAIN"
+
+          # Recargar servicios
+          echo "Recargando servicios..."
+          sudo systemctl reload nginx php8.3-fpm
+
+          # Limpiar releases antiguos
+          echo "Limpiando releases antiguos..."
+          cd "/var/deployments/releases/$APP_DOMAIN"
+          ls -t | tail -n +4 | xargs -r rm -rf
+
+          echo "=== DEPLOYMENT COMPLETADO ==="
+          echo "VolleyPass actualizado exitosamente en https://$APP_DOMAIN"
+        EOF

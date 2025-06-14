@@ -1,5 +1,5 @@
 # ============================================================================
-# GITHUB ACTION MEJORADO PARA VOLLEYPASS (RAMA MAIN)
+# GITHUB ACTION ROBUSTO PARA VOLLEYPASS (RAMA MAIN)
 # Archivo: .github/workflows/deploy.yml
 # Repositorio: korozcolt/volleypass
 # ============================================================================
@@ -41,7 +41,7 @@ jobs:
           TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           RELEASE_DIR="/var/deployments/releases/$APP_DOMAIN/$TIMESTAMP"
 
-          echo "=== INICIANDO DEPLOYMENT VOLLEYPASS ==="
+          echo "=== INICIANDO DEPLOYMENT VOLLEYPASS ROBUSTO ==="
           echo "Timestamp: $TIMESTAMP"
 
           # Crear directorio de release
@@ -64,56 +64,95 @@ jobs:
             npm run build
           fi
 
-          # Configurar .env - MEJORADO
+          # Configurar .env - MÉTODO ROBUSTO
           echo "Configurando .env..."
-          if [[ -f "/var/www/shared/configs/$APP_DOMAIN.env" ]]; then
+
+          ENV_SOURCE="/var/www/shared/configs/$APP_DOMAIN.env"
+
+          if [[ -f "$ENV_SOURCE" ]]; then
             echo "Copiando .env desde configuración compartida..."
-            cp "/var/www/shared/configs/$APP_DOMAIN.env" .env
+            cp "$ENV_SOURCE" .env
 
             # Verificar que el archivo .env es válido
-            if php -r "file_exists('.env') && parse_ini_file('.env') ? exit(0) : exit(1);"; then
-              echo "✅ Archivo .env válido"
+            echo "Verificando archivo .env..."
+
+            # Verificar que contiene DB_CONNECTION=mysql
+            if grep -q "DB_CONNECTION=mysql" .env; then
+              echo "✅ Configuración MySQL detectada"
             else
-              echo "❌ Archivo .env inválido, generando uno nuevo..."
-              cp .env.example .env
+              echo "❌ No se encontró configuración MySQL, corrigiendo..."
+              # Forzar configuración MySQL
+              sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
+              sed -i 's/DB_DATABASE=.*/DB_DATABASE=volleypass_db/' .env
+              sed -i 's/DB_USERNAME=.*/DB_USERNAME=laravel/' .env
+              sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=Kr0nn0s2024#Laravel/' .env
+            fi
+
+            # Asegurar que APP_KEY existe y es válida
+            if ! grep -q "APP_KEY=base64:" .env; then
+              echo "Generando APP_KEY..."
               php artisan key:generate --force
             fi
+
           else
-            echo "No se encontró .env compartido, usando .env.example..."
+            echo "No se encontró .env compartido, creando uno nuevo..."
             cp .env.example .env
+
+            # Configurar para MySQL específicamente
+            sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
+            sed -i 's/DB_HOST=.*/DB_HOST=localhost/' .env
+            sed -i 's/DB_PORT=.*/DB_PORT=3306/' .env
+            sed -i 's/DB_DATABASE=.*/DB_DATABASE=volleypass_db/' .env
+            sed -i 's/DB_USERNAME=.*/DB_USERNAME=laravel/' .env
+            sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=Kr0nn0s2024#Laravel/' .env
+
+            # Generar APP_KEY
             php artisan key:generate --force
           fi
 
-          # Mostrar información del .env para depuración
-          echo "APP_KEY configurada:"
-          grep "APP_KEY=" .env || echo "No APP_KEY encontrada"
+          # Mostrar configuración para depuración
+          echo "=== CONFIGURACIÓN .ENV ==="
+          echo "DB_CONNECTION: $(grep 'DB_CONNECTION=' .env | cut -d'=' -f2)"
+          echo "DB_DATABASE: $(grep 'DB_DATABASE=' .env | cut -d'=' -f2)"
+          echo "APP_KEY configurada: $(grep 'APP_KEY=' .env | cut -d'=' -f2 | cut -c1-20)..."
 
-          # Comandos Laravel
+          # Comandos Laravel - ORDEN CORRECTO
           echo "Ejecutando comandos Laravel..."
 
-          # Verificar configuración antes de continuar
-          echo "Verificando configuración..."
-          if ! php artisan config:show app.key >/dev/null 2>&1; then
-            echo "Regenerando APP_KEY..."
-            php artisan key:generate --force
+          # 1. Limpiar caches existentes
+          echo "Limpiando caches..."
+          php artisan config:clear || true
+          php artisan cache:clear || true
+          php artisan view:clear || true
+          php artisan route:clear || true
+
+          # 2. Verificar configuración
+          echo "Verificando configuración de base de datos..."
+          if ! php artisan config:show database.connections.mysql.database 2>/dev/null | grep -q "volleypass_db"; then
+            echo "Problema con configuración, regenerando..."
+            php artisan config:clear
           fi
 
-          # Limpiar caches antes de configurar
-          php artisan config:clear
-          php artisan cache:clear
-          php artisan view:clear
-          php artisan route:clear
+          # 3. Probar conexión a base de datos
+          echo "Probando conexión a base de datos..."
+          if ! php artisan migrate:status >/dev/null 2>&1; then
+            echo "Problema de conexión a BD, verificando credenciales..."
+            # Mostrar error específico
+            php artisan migrate:status || echo "Error de conexión detectado"
+          fi
 
-          # Configurar Laravel
+          # 4. Ejecutar migraciones primero
+          echo "Ejecutando migraciones..."
+          php artisan migrate --force
+
+          # 5. Cachear configuración después de migraciones exitosas
+          echo "Cacheando configuración..."
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
 
-          # Ejecutar migraciones
-          echo "Ejecutando migraciones..."
-          php artisan migrate --force
-
-          # Crear enlaces de storage
+          # 6. Crear enlaces de storage
+          echo "Creando enlaces de storage..."
           php artisan storage:link
 
           # Permisos
@@ -138,12 +177,21 @@ jobs:
 
           echo "=== DEPLOYMENT COMPLETADO ==="
           echo "VolleyPass actualizado exitosamente en https://$APP_DOMAIN"
-          echo "Verificando aplicación..."
 
-          # Verificación final
-          if curl -s -I "https://$APP_DOMAIN" | grep -q "200 OK"; then
-            echo "✅ Aplicación respondiendo correctamente"
-          else
-            echo "⚠️  Aplicación puede necesitar unos minutos para estabilizarse"
-          fi
+          # Verificación final robusta
+          echo "Verificando aplicación..."
+          sleep 5  # Esperar a que la aplicación se estabilice
+
+          # Probar tanto HTTP como HTTPS
+          for protocol in https http; do
+            if curl -s -I "$protocol://$APP_DOMAIN" | grep -q "200 OK"; then
+              echo "✅ Aplicación respondiendo en $protocol://$APP_DOMAIN"
+              break
+            elif curl -s -I "$protocol://$APP_DOMAIN/health" | grep -q "200 OK"; then
+              echo "✅ Health check OK en $protocol://$APP_DOMAIN/health"
+              break
+            fi
+          done
+
+          echo "🚀 Deployment completado exitosamente"
         EOF

@@ -1,8 +1,14 @@
+# ============================================================================
+# GITHUB ACTION PARA VOLLEYPASS (RAMA MAIN)
+# Archivo: .github/workflows/deploy.yml
+# Repositorio: korozcolt/volleypass
+# ============================================================================
+
 name: Deploy VolleyPass to Kronnos.dev
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -42,9 +48,9 @@ jobs:
           mkdir -p "$RELEASE_DIR"
           cd "$RELEASE_DIR"
 
-          # Clonar repositorio
+          # Clonar repositorio (RAMA MAIN)
           echo "Clonando repositorio..."
-          git clone --branch master --single-branch --depth 1 "$REPO_URL" .
+          git clone --branch main --single-branch --depth 1 "$REPO_URL" .
 
           # Instalar dependencias PHP
           echo "Instalando dependencias PHP..."

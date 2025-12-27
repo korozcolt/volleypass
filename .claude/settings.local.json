@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(cd:*)",
+      "Bash(flutter pub get:*)",
+      "Bash(flutter analyze:*)",
+      "Bash(flutter test:*)",
+      "Bash(flutter pub run:*)",
+      "Bash(flutter run:*)",
+      "Bash(flutter clean:*)",
+      "Bash(flutter devices:*)",
+      "Bash(xcrun simctl list:*)",
+      "Bash(xcrun simctl boot:*)",
+      "Bash(open:*)",
+      "Bash(xcrun simctl shutdown:*)",
+      "Bash(r)",
+      "Bash(find:*)"
+    ]
+  }
+}

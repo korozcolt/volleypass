@@ -10,6 +10,7 @@ import '../../../../shared/theme/app_text_styles.dart';
 import '../../../../shared/theme/app_spacing.dart';
 import '../providers/auth_providers.dart';
 import '../state/auth_state.dart';
+import '../widgets/app_drawer.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -31,16 +32,8 @@ class DashboardPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('VolleyPass'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              _showLogoutDialog(context, ref);
-            },
-            tooltip: 'Cerrar Sesión',
-          ),
-        ],
       ),
+      drawer: const AppDrawer(),
       body: user == null
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(

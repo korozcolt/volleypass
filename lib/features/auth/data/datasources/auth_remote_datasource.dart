@@ -54,13 +54,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         },
       );
 
-      final apiResponse = ApiResponse.fromResponse(response);
-
-      if (apiResponse.success && apiResponse.data != null) {
+      // El endpoint de login devuelve directamente el token y usuario,
+      // no usa el formato estándar {success, data}
+      if (response.statusCode == 200 || response.statusCode == 201) {
         AppLogger.info('AuthRemoteDataSource: Login successful');
-        return LoginResponseModel.fromJson(apiResponse.data!);
+        return LoginResponseModel.fromJson(response.data as Map<String, dynamic>);
       } else {
-        throw ApiException(message: apiResponse.message ?? 'Login falló');
+        // Extraer mensaje de error si existe
+        final errorData = response.data as Map<String, dynamic>?;
+        final errorMessage = errorData?['message'] as String? ??
+                           errorData?['error'] as String? ??
+                           'Login falló';
+        throw ApiException(
+          message: errorMessage,
+          statusCode: response.statusCode,
+          data: response.data,
+        );
       }
     } on DioException catch (e) {
       AppLogger.error('AuthRemoteDataSource: DioException during login', error: e);

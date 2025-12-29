@@ -48,6 +48,23 @@ class User extends Equatable {
     return name;
   }
 
+  /// Obtiene las iniciales del usuario
+  String get initials {
+    final parts = fullName.split(' ');
+    if (parts.length >= 2) {
+      return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
+    } else if (parts.isNotEmpty) {
+      return parts[0].substring(0, parts[0].length > 1 ? 2 : 1).toUpperCase();
+    }
+    return 'U';
+  }
+
+  /// Obtiene el rol principal del usuario
+  String get primaryRole {
+    if (roles.isEmpty) return 'Usuario';
+    return roles.first;
+  }
+
   @override
   List<Object?> get props => [
         id,

@@ -89,7 +89,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
             // Subtítulo
             Text(
-              'Sistema de Verificación',
+              'Sistema de Gestión de Volleyball',
               style: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.textOnDarkSecondary,
               ),

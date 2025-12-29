@@ -28,6 +28,22 @@ class ApiEndpoints {
   static String revokeToken(int tokenId) => '/auth/tokens/$tokenId';
 
   // ============================================================================
+  // DASHBOARDS
+  // ============================================================================
+
+  /// Dashboard unificado (detecta rol automáticamente)
+  static const dashboard = '/dashboard';
+
+  /// Dashboard de SuperAdmin
+  static const adminDashboard = '/admin/dashboard';
+
+  /// Dashboard de League Admin
+  static const leagueDashboard = '/league/dashboard';
+
+  /// Dashboard de Club Admin/Coach
+  static const clubDashboard = '/club/dashboard';
+
+  // ============================================================================
   // VERIFICACIÓN QR
   // ============================================================================
 

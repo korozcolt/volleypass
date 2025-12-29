@@ -324,7 +324,8 @@ Las siguientes funcionalidades NO estarán en el MVP y se considerarán para ver
    - Login
    - Dashboard básico
 
-2. **Sprint 2** (Verificación Core)
+2. **Sprint 2** (Navegación y Verificación Core)
+   - Menú Lateral con permisos por roles ✅
    - QR Scanner
    - Resultado Verificación
    - Detalles Jugador

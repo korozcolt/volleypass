@@ -1,8 +1,8 @@
 # VolleyPass API - Documentación Completa para Desarrollo Móvil
 
 > **Versión:** 1.0.0
-> **Última actualización:** Diciembre 26, 2024
-> **Base URL:** `https://volleypass.test/api/v1`
+> **Última actualización:** Diciembre 28, 2024
+> **Base URL:** `https://volleypass.test/api/v1` o `https://volleypass-new.test/api/v1`
 > **Autenticación:** Laravel Sanctum (Bearer Tokens)
 
 ---
@@ -11,16 +11,17 @@
 
 1. [Información General](#información-general)
 2. [Autenticación](#autenticación)
-3. [Endpoints Públicos](#endpoints-públicos)
-4. [Endpoints Autenticados](#endpoints-autenticados)
-5. [Sistema de Verificación QR](#sistema-de-verificación-qr)
-6. [Gestión de Partidos en Vivo](#gestión-de-partidos-en-vivo)
-7. [Sistema de Sanciones](#sistema-de-sanciones)
-8. [Gestión de Categorías de Jugadores](#gestión-de-categorías-de-jugadores)
-9. [Reportes y Administración](#reportes-y-administración)
-10. [Manejo de Errores](#manejo-de-errores)
-11. [Formatos y Convenciones](#formatos-y-convenciones)
-12. [Guía de Implementación](#guía-de-implementación)
+3. [📊 Dashboards (NUEVO)](#-dashboards)
+4. [Endpoints Públicos](#endpoints-públicos)
+5. [Endpoints Autenticados](#endpoints-autenticados)
+6. [Sistema de Verificación QR](#sistema-de-verificación-qr)
+7. [Gestión de Partidos en Vivo](#gestión-de-partidos-en-vivo)
+8. [Sistema de Sanciones](#sistema-de-sanciones)
+9. [Gestión de Categorías de Jugadores](#gestión-de-categorías-de-jugadores)
+10. [Reportes y Administración](#reportes-y-administración)
+11. [Manejo de Errores](#manejo-de-errores)
+12. [Formatos y Convenciones](#formatos-y-convenciones)
+13. [Guía de Implementación](#guía-de-implementación)
 
 ---
 
@@ -298,6 +299,898 @@ Revoca todos los tokens del usuario.
 {
   "message": "Token 'iPad Pro' revocado exitosamente"
 }
+```
+
+---
+
+## 📊 Dashboards
+
+Los dashboards proporcionan métricas específicas según el rol del usuario autenticado. **Recomendamos usar el endpoint unificado** para simplicidad en el frontend móvil.
+
+### 🎯 Dashboard Unificado (RECOMENDADO)
+
+Endpoint inteligente que detecta automáticamente el rol del usuario y retorna el dashboard apropiado.
+
+**Endpoint:** `GET /dashboard`
+**Auth:** Bearer Token requerido
+**Roles:** Todos (excepto Player)
+
+#### Request
+
+```http
+GET /api/v1/dashboard
+Authorization: Bearer 1|abcdef123456...
+```
+
+#### Response SuperAdmin (200 OK)
+
+```json
+{
+  "success": true,
+  "role": "SuperAdmin",
+  "data": {
+    "users": {
+      "total": 150,
+      "active": 142,
+      "inactive": 8,
+      "new_last_30_days": 12,
+      "by_role": {
+        "SuperAdmin": 2,
+        "LeagueAdmin": 5,
+        "ClubAdmin": 15,
+        "Coach": 20,
+        "Verifier": 30,
+        "Player": 78
+      }
+    },
+    "subscriptions": {
+      "active": 12,
+      "expired": 3,
+      "expiring_soon_7_days": 2,
+      "past_due": 1,
+      "suspended": 0,
+      "total": 16
+    },
+    "system_metrics": {
+      "verifications": {
+        "total": 5420,
+        "today": 45,
+        "this_month": 1230
+      },
+      "matches": {
+        "total": 156,
+        "completed": 89,
+        "in_progress": 2,
+        "scheduled": 65
+      },
+      "clubs": {
+        "total": 15,
+        "active": 14,
+        "inactive": 1
+      }
+    },
+    "revenue": {
+      "monthly_recurring": 12500.00,
+      "total_collected": 125000.00,
+      "pending_collection": 3500.00,
+      "overdue_amount": 1200.00
+    },
+    "recent_activity": {
+      "recent_users": [
+        {
+          "id": 145,
+          "name": "María González",
+          "email": "maria@club.com",
+          "role": "ClubAdmin",
+          "created_at": "2024-12-26T10:30:00.000000Z"
+        }
+      ],
+      "recent_subscriptions": [
+        {
+          "id": 12,
+          "club": "Club Deportivo Norte",
+          "status": "active",
+          "current_period_end": "2025-01-26",
+          "created_at": "2024-12-01T08:00:00.000000Z"
+        }
+      ]
+    }
+  },
+  "timestamp": "2024-12-28T14:30:00.000000Z"
+}
+```
+
+#### Response LeagueAdmin (200 OK)
+
+```json
+{
+  "success": true,
+  "role": "LeagueAdmin",
+  "data": {
+    "league_info": {
+      "id": 1,
+      "name": "Liga Nacional de Voleibol",
+      "short_name": "LNV",
+      "logo": "https://volleypass.test/storage/logos/league-1.png",
+      "status": "active",
+      "is_active": true,
+      "email": "contacto@lnv.com",
+      "phone": "+57 300 1234567",
+      "website": "https://lnv.com"
+    },
+    "clubs": {
+      "total": 15,
+      "active": 14,
+      "inactive": 1,
+      "by_category": {
+        "mayores": 8,
+        "juvenil": 10,
+        "infantil": 5
+      },
+      "by_gender": {
+        "femenino": 12,
+        "masculino": 8,
+        "mixto": 3
+      }
+    },
+    "players": {
+      "total": 450,
+      "federated": 320,
+      "non_federated": 130,
+      "federation_percentage": 71.11,
+      "by_club": {
+        "Club Norte": 45,
+        "Club Sur": 38,
+        "Club Este": 35
+      },
+      "by_category": {
+        "mayores": 180,
+        "juvenil": 150,
+        "infantil": 120
+      }
+    },
+    "tournaments": {
+      "total": 24,
+      "active": 3,
+      "scheduled": 5,
+      "completed": 16,
+      "recent": [
+        {
+          "id": 12,
+          "name": "Torneo Nacional 2024",
+          "status": "in_progress",
+          "type": "league",
+          "category": "mayores",
+          "gender": "femenino",
+          "start_date": "2024-12-01",
+          "total_teams": 12
+        }
+      ]
+    },
+    "sanctions": {
+      "active": 8,
+      "by_type": {
+        "yellow_card": 5,
+        "red_card": 2,
+        "suspension": 1
+      },
+      "recent": [
+        {
+          "id": 23,
+          "player": "Ana Martínez",
+          "club": "Club Norte",
+          "type": "yellow_card",
+          "status": "active",
+          "start_date": "2024-12-20",
+          "end_date": null
+        }
+      ]
+    },
+    "verifications": {
+      "pending": 12,
+      "today": 45,
+      "this_month": 1230
+    }
+  },
+  "timestamp": "2024-12-28T14:30:00.000000Z"
+}
+```
+
+#### Response ClubAdmin/Coach (200 OK)
+
+```json
+{
+  "success": true,
+  "role": "ClubAdmin",
+  "data": {
+    "club_info": {
+      "id": 5,
+      "name": "Club Deportivo Norte",
+      "short_name": "CDN",
+      "logo": "https://volleypass.test/storage/logos/club-5.png",
+      "status": "active",
+      "is_active": true,
+      "is_federated": true,
+      "federation_code": "CDN-2024-001",
+      "email": "contacto@clubnorte.com",
+      "phone": "+57 300 9876543",
+      "address": "Calle 123 #45-67",
+      "city": "Bogotá",
+      "department": "Cundinamarca"
+    },
+    "players": {
+      "total": 45,
+      "active": 42,
+      "inactive": 3,
+      "federated": 38,
+      "non_federated": 7,
+      "with_overdue_payments": 5,
+      "by_category": {
+        "mayores": 18,
+        "juvenil": 15,
+        "infantil": 12
+      },
+      "expiring_medical_certs_30_days": 3
+    },
+    "matches": {
+      "total_played": 28,
+      "wins": 18,
+      "losses": 10,
+      "win_rate": 64.29,
+      "upcoming_matches": [
+        {
+          "id": 89,
+          "home_team": "Club Deportivo Norte",
+          "away_team": "Club Sur",
+          "tournament": "Torneo Nacional 2024",
+          "scheduled_at": "2024-12-29T15:00:00.000000Z",
+          "venue": "Coliseo Norte",
+          "is_home": true
+        }
+      ]
+    },
+    "payments": {
+      "pending_count": 8,
+      "overdue_count": 5,
+      "pending_amount": 2400000.00,
+      "overdue_amount": 1500000.00
+    },
+    "federation": {
+      "pending_federation": 3,
+      "expiring_federation_30_days": 2
+    },
+    "subscription": {
+      "has_subscription": true,
+      "status": "active",
+      "current_period_end": "2025-01-26",
+      "days_until_renewal": 29,
+      "is_active": true,
+      "is_past_due": false,
+      "player_count": 45,
+      "last_amount": 850000.00
+    }
+  },
+  "timestamp": "2024-12-28T14:30:00.000000Z"
+}
+```
+
+#### Response Verifier (200 OK)
+
+```json
+{
+  "success": true,
+  "role": "Verifier",
+  "message": "Verifiers should use /v1/stats/dashboard endpoint",
+  "redirect_to": "/v1/stats/dashboard"
+}
+```
+
+#### Errors
+
+**403 Forbidden** - Sin dashboard disponible para este rol
+```json
+{
+  "success": false,
+  "message": "No hay dashboard disponible para este rol de usuario",
+  "user_roles": ["Player"]
+}
+```
+
+### 🔧 Dashboards Específicos (Acceso Alternativo)
+
+También puedes acceder directamente a dashboards específicos por rol:
+
+#### SuperAdmin Dashboard
+
+**Endpoint:** `GET /admin/dashboard`
+**Auth:** Bearer Token requerido
+**Roles:** SuperAdmin
+
+Retorna las mismas métricas que el dashboard unificado para SuperAdmin.
+
+#### League Dashboard
+
+**Endpoint:** `GET /league/dashboard`
+**Auth:** Bearer Token requerido
+**Roles:** LeagueAdmin, SuperAdmin
+
+Retorna las mismas métricas que el dashboard unificado para LeagueAdmin.
+
+#### Club Dashboard
+
+**Endpoint:** `GET /club/dashboard`
+**Auth:** Bearer Token requerido
+**Roles:** ClubAdmin, Coach, SuperAdmin
+
+Retorna las mismas métricas que el dashboard unificado para ClubAdmin/Coach.
+
+### 💡 Recomendación de Implementación
+
+```javascript
+// React Native / JavaScript
+async function fetchDashboard() {
+  const response = await fetch('https://volleypass.test/api/v1/dashboard', {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json'
+    }
+  });
+
+  const data = await response.json();
+
+  // El backend decide qué dashboard retornar según el rol
+  console.log(`Dashboard para: ${data.role}`);
+
+  // Renderizar componentes según el rol
+  switch(data.role) {
+    case 'SuperAdmin':
+      return <SuperAdminDashboard data={data.data} />;
+    case 'LeagueAdmin':
+      return <LeagueDashboard data={data.data} />;
+    case 'ClubAdmin':
+    case 'Coach':
+      return <ClubDashboard data={data.data} />;
+    case 'Verifier':
+      // Redirigir al dashboard de verificación
+      navigateTo(data.redirect_to);
+      break;
+  }
+}
+```
+
+---
+
+## 💳 Gestión de Pagos
+
+El sistema de pagos utiliza un **modelo de verificación manual** donde los jugadores suben comprobantes de transferencias bancarias/billeteras virtuales (Nequi, Daviplata, etc.) y el ClubAdmin/Coach los aprueba manualmente.
+
+### 🔄 Flujo de Pago
+
+```
+1. Jugador realiza transferencia a cuenta del club
+2. Jugador sube captura del comprobante → Status: "under_verification"
+3. ClubAdmin/Coach verifica comprobante
+   - ✅ Aprobar → Status: "verified"
+   - ❌ Rechazar → Status: "rejected" (jugador debe volver a subir)
+```
+
+### Estados de Pago
+
+| Estado | Descripción | Puede Jugador Subir Comprobante | Puede Club Verificar |
+|--------|-------------|--------------------------------|---------------------|
+| `pending` | Pago creado, esperando comprobante | ✅ Sí | ❌ No |
+| `under_verification` | Comprobante subido, esperando aprobación | ❌ No | ✅ Sí |
+| `verified` | Pago aprobado por el club | ❌ No | ❌ No |
+| `rejected` | Comprobante rechazado | ✅ Sí | ❌ No |
+| `overdue` | Pago vencido (automático si pasa `due_date`) | ✅ Sí | ❌ No |
+
+---
+
+### 📋 Listar Mis Pagos (Jugador)
+
+**Endpoint:** `GET /v1/payments`
+**Auth:** Bearer Token (Player)
+**Roles:** Cualquier usuario autenticado con perfil de jugador
+
+#### Query Parameters
+
+| Parámetro | Tipo | Requerido | Descripción |
+|-----------|------|-----------|-------------|
+| `status` | string | No | Filtrar por estado: `pending`, `under_verification`, `verified`, `rejected`, `overdue` |
+| `type` | string | No | Filtrar por tipo: `monthly_fee`, `registration`, `tournament`, `fine` |
+
+#### Response (200 OK)
+
+```json
+{
+  "success": true,
+  "data": {
+    "current_page": 1,
+    "data": [
+      {
+        "id": 15,
+        "club_id": 1,
+        "player_id": 5,
+        "type": "monthly_fee",
+        "amount": "150000.00",
+        "currency": "COP",
+        "status": "under_verification",
+        "payment_date": "2025-12-29T10:30:00.000000Z",
+        "due_date": "2026-01-05",
+        "reference_number": "NEQUI-123456",
+        "notes": "Pago mensualidad diciembre",
+        "payment_proof_url": "https://volleypass-new.test/storage/receipts/abc123.jpg",
+        "created_at": "2025-12-20T00:00:00.000000Z",
+        "club": {
+          "id": 1,
+          "name": "CLUB DEPORTIVO ATHLETIC SINCELEJO"
+        },
+        "verifier": null
+      },
+      {
+        "id": 14,
+        "club_id": 1,
+        "player_id": 5,
+        "type": "monthly_fee",
+        "amount": "150000.00",
+        "status": "verified",
+        "payment_date": "2025-11-28T14:22:00.000000Z",
+        "due_date": "2025-12-05",
+        "reference_number": "DAVIPLATA-789012",
+        "payment_proof_url": "https://volleypass-new.test/storage/receipts/xyz789.jpg",
+        "verified_at": "2025-11-29T09:15:00.000000Z",
+        "club": {
+          "id": 1,
+          "name": "CLUB DEPORTIVO ATHLETIC SINCELEJO"
+        },
+        "verifier": {
+          "id": 3,
+          "name": "Kristian Orozco"
+        }
+      }
+    ],
+    "total": 12,
+    "per_page": 20
+  }
+}
+```
+
+---
+
+### 🔍 Ver Detalle de Pago (Jugador)
+
+**Endpoint:** `GET /v1/payments/{id}`
+**Auth:** Bearer Token
+**Roles:** Owner del pago, ClubAdmin del club, Coach del club
+
+#### Response (200 OK)
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": 15,
+    "club_id": 1,
+    "player_id": 5,
+    "type": "monthly_fee",
+    "amount": "150000.00",
+    "currency": "COP",
+    "status": "under_verification",
+    "payment_date": "2025-12-29T10:30:00.000000Z",
+    "due_date": "2026-01-05",
+    "reference_number": "NEQUI-123456",
+    "notes": "Pago mensualidad diciembre",
+    "payment_proof_url": "https://volleypass-new.test/storage/receipts/abc123.jpg",
+    "created_at": "2025-12-20T00:00:00.000000Z",
+    "verified_at": null,
+    "club": {
+      "id": 1,
+      "name": "CLUB DEPORTIVO ATHLETIC SINCELEJO"
+    },
+    "player": {
+      "user": {
+        "id": 9,
+        "name": "ANA SOFIA OROZCO SUAREZ"
+      }
+    },
+    "verifier": null
+  }
+}
+```
+
+#### Errors
+
+```json
+// 403 Forbidden
+{
+  "success": false,
+  "message": "No tiene permiso para ver este pago"
+}
+
+// 404 Not Found
+{
+  "success": false,
+  "message": "Error al obtener el pago"
+}
+```
+
+---
+
+### 📤 Subir Comprobante de Pago (Jugador)
+
+**Endpoint:** `POST /v1/payments/{id}/proof`
+**Auth:** Bearer Token (Player)
+**Content-Type:** `multipart/form-data`
+
+#### Request Body
+
+| Campo | Tipo | Requerido | Descripción |
+|-------|------|-----------|-------------|
+| `proof` | file | ✅ Sí | Captura del comprobante (JPEG, PNG, PDF, max 5MB) |
+| `reference_number` | string | No | Número de referencia de la transacción |
+| `notes` | string | No | Notas adicionales sobre el pago (max 500 caracteres) |
+
+#### Condiciones
+
+- Solo se puede subir comprobante si el pago está en estado `pending` o `rejected`
+- El archivo debe ser imagen (JPEG/PNG) o PDF
+- Tamaño máximo: 5MB
+
+#### Response (200 OK)
+
+```json
+{
+  "success": true,
+  "message": "Comprobante subido exitosamente. El pago está en proceso de verificación.",
+  "data": {
+    "id": 15,
+    "status": "under_verification",
+    "payment_date": "2025-12-29T11:45:00.000000Z",
+    "reference_number": "NEQUI-123456",
+    "notes": "Pago mensualidad diciembre",
+    "payment_proof_url": "https://volleypass-new.test/storage/receipts/abc123.jpg",
+    "club": {
+      "id": 1,
+      "name": "CLUB DEPORTIVO ATHLETIC SINCELEJO"
+    }
+  }
+}
+```
+
+#### Errors
+
+```json
+// 422 Estado no permite subir comprobante
+{
+  "success": false,
+  "message": "No se puede subir comprobante para un pago en estado: Verificado"
+}
+
+// 422 Validación
+{
+  "success": false,
+  "message": "Error de validación",
+  "errors": {
+    "proof": [
+      "El campo proof es obligatorio.",
+      "El archivo debe ser una imagen o PDF.",
+      "El archivo no debe pesar más de 5MB."
+    ]
+  }
+}
+```
+
+---
+
+### 🖼️ Ver Comprobante de Pago (Jugador)
+
+**Endpoint:** `GET /v1/payments/{id}/proof`
+**Auth:** Bearer Token
+
+#### Response (200 OK)
+
+```json
+{
+  "success": true,
+  "data": {
+    "proof_url": "https://volleypass-new.test/storage/receipts/abc123.jpg",
+    "uploaded_at": "2025-12-29T11:45:00.000000Z",
+    "file_name": "comprobante-diciembre.jpg",
+    "mime_type": "image/jpeg",
+    "size": 245678
+  }
+}
+```
+
+#### Errors
+
+```json
+// 404 No hay comprobante
+{
+  "success": false,
+  "message": "Este pago no tiene comprobante subido"
+}
+```
+
+---
+
+## 🏢 Gestión de Pagos (Club)
+
+Endpoints para que ClubAdmin y Coach gestionen los pagos de sus jugadores.
+
+### 📋 Listar Pagos del Club
+
+**Endpoint:** `GET /v1/club/payments`
+**Auth:** Bearer Token
+**Roles:** ClubAdmin, Coach, SuperAdmin
+
+#### Query Parameters
+
+| Parámetro | Tipo | Requerido | Descripción |
+|-----------|------|-----------|-------------|
+| `status` | string | No | Filtrar por estado |
+| `player_id` | integer | No | Filtrar por jugador específico |
+
+#### Response (200 OK)
+
+```json
+{
+  "success": true,
+  "data": {
+    "current_page": 1,
+    "data": [
+      {
+        "id": 15,
+        "club_id": 1,
+        "player_id": 5,
+        "type": "monthly_fee",
+        "amount": "150000.00",
+        "status": "under_verification",
+        "payment_date": "2025-12-29T10:30:00.000000Z",
+        "due_date": "2026-01-05",
+        "reference_number": "NEQUI-123456",
+        "payment_proof_url": "https://volleypass-new.test/storage/receipts/abc123.jpg",
+        "player": {
+          "user": {
+            "id": 9,
+            "name": "ANA SOFIA OROZCO SUAREZ",
+            "email": "anasofia@example.com"
+          }
+        },
+        "verifier": null
+      }
+    ],
+    "total": 25,
+    "per_page": 20
+  }
+}
+```
+
+---
+
+### ✅ Verificar o Rechazar Pago
+
+**Endpoint:** `PUT /v1/club/payments/{id}/verify`
+**Auth:** Bearer Token
+**Roles:** ClubAdmin, Coach, SuperAdmin
+
+#### Request Body
+
+```json
+{
+  "action": "approve", // "approve" o "reject"
+  "notes": "Comprobante verificado correctamente" // Requerido si action=reject
+}
+```
+
+#### Condiciones
+
+- Solo se puede verificar si el pago está en estado `under_verification`
+- `notes` es obligatorio cuando se rechaza
+
+#### Response (200 OK) - Aprobado
+
+```json
+{
+  "success": true,
+  "message": "Pago aprobado exitosamente",
+  "data": {
+    "id": 15,
+    "status": "verified",
+    "verified_at": "2025-12-29T12:00:00.000000Z",
+    "player": {
+      "user": {
+        "id": 9,
+        "name": "ANA SOFIA OROZCO SUAREZ"
+      }
+    },
+    "verifier": {
+      "id": 3,
+      "name": "Kristian Orozco"
+    }
+  }
+}
+```
+
+#### Response (200 OK) - Rechazado
+
+```json
+{
+  "success": true,
+  "message": "Pago rechazado. El jugador deberá subir un nuevo comprobante.",
+  "data": {
+    "id": 15,
+    "status": "rejected",
+    "verified_at": "2025-12-29T12:00:00.000000Z",
+    "notes": "Comprobante no es legible",
+    "verifier": {
+      "id": 3,
+      "name": "Kristian Orozco"
+    }
+  }
+}
+```
+
+#### Errors
+
+```json
+// 422 Estado no permite verificación
+{
+  "success": false,
+  "message": "Solo se pueden verificar pagos en estado \"Por Verificación\""
+}
+
+// 422 Validación
+{
+  "success": false,
+  "message": "Error de validación",
+  "errors": {
+    "notes": [
+      "El campo notes es obligatorio cuando el action es reject."
+    ]
+  }
+}
+```
+
+---
+
+### 📊 Estadísticas de Pagos del Club
+
+**Endpoint:** `GET /v1/club/payments/statistics`
+**Auth:** Bearer Token
+**Roles:** ClubAdmin, Coach, SuperAdmin
+
+#### Response (200 OK)
+
+```json
+{
+  "success": true,
+  "data": {
+    "total_pending": 5,
+    "total_under_verification": 8,
+    "total_verified": 45,
+    "total_overdue": 3,
+    "pending_amount": 750000.00,
+    "verified_amount": 6750000.00,
+    "recent_payments": [
+      {
+        "id": 15,
+        "player_id": 5,
+        "type": "monthly_fee",
+        "amount": "150000.00",
+        "status": "under_verification",
+        "payment_date": "2025-12-29T10:30:00.000000Z",
+        "payment_proof_url": "https://volleypass-new.test/storage/receipts/abc123.jpg",
+        "player": {
+          "user": {
+            "id": 9,
+            "name": "ANA SOFIA OROZCO SUAREZ"
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 💡 Implementación en Mobile - Ejemplo React Native
+
+```javascript
+import * as ImagePicker from 'expo-image-picker';
+import * as DocumentPicker from 'expo-document-picker';
+
+// Listar pagos del jugador
+const fetchMyPayments = async () => {
+  const response = await fetch('https://volleypass-new.test/api/v1/payments', {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json'
+    }
+  });
+
+  const { data } = await response.json();
+  return data;
+};
+
+// Subir comprobante de pago
+const uploadPaymentProof = async (paymentId) => {
+  // 1. Seleccionar imagen o documento
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    quality: 0.8,
+  });
+
+  if (result.canceled) return;
+
+  // 2. Preparar FormData
+  const formData = new FormData();
+  formData.append('proof', {
+    uri: result.assets[0].uri,
+    type: 'image/jpeg',
+    name: 'comprobante.jpg'
+  });
+  formData.append('reference_number', 'NEQUI-123456');
+  formData.append('notes', 'Pago mensualidad diciembre');
+
+  // 3. Enviar a API
+  const response = await fetch(`https://volleypass-new.test/api/v1/payments/${paymentId}/proof`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'multipart/form-data'
+    },
+    body: formData
+  });
+
+  const { success, message } = await response.json();
+
+  if (success) {
+    Alert.alert('Éxito', message);
+    refreshPayments();
+  }
+};
+
+// Ver comprobante (abrir en navegador o visor de imágenes)
+const viewPaymentProof = async (paymentId) => {
+  const response = await fetch(`https://volleypass-new.test/api/v1/payments/${paymentId}/proof`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json'
+    }
+  });
+
+  const { data } = await response.json();
+
+  // Abrir imagen en navegador o visor
+  Linking.openURL(data.proof_url);
+};
+
+// CLUB - Aprobar/Rechazar pago
+const verifyPayment = async (paymentId, approve, notes = '') => {
+  const response = await fetch(`https://volleypass-new.test/api/v1/club/payments/${paymentId}/verify`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      action: approve ? 'approve' : 'reject',
+      notes: notes
+    })
+  });
+
+  const { success, message } = await response.json();
+
+  if (success) {
+    Alert.alert('Éxito', message);
+    refreshClubPayments();
+  }
+};
 ```
 
 ---
@@ -667,6 +1560,151 @@ GET /public/player-status/VP2024001
   ]
 }
 ```
+
+---
+
+#### Listar Partidos Recientes (NUEVO)
+
+**Endpoint:** `GET /public/matches/recent`
+**Auth:** No requerida
+**Descripción:** Retorna partidos finalizados ordenados por fecha de finalización (más recientes primero)
+
+##### Query Parameters
+
+| Parámetro | Tipo | Descripción |
+|-----------|------|-------------|
+| `tournament_id` | integer | Filtrar por torneo |
+| `team_id` | integer | Filtrar por equipo |
+| `limit` | integer | Límite de resultados (default: 20) |
+
+##### Response (200 OK)
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 45,
+      "tournament_id": 1,
+      "tournament": {
+        "id": 1,
+        "name": "Torneo Nacional 2024",
+        "type": "league"
+      },
+      "home_team": {
+        "id": 3,
+        "name": "Club Norte",
+        "logo": "https://volleypass.test/storage/teams/logo3.png"
+      },
+      "away_team": {
+        "id": 5,
+        "name": "Club Sur",
+        "logo": "https://volleypass.test/storage/teams/logo5.png"
+      },
+      "scheduled_at": "2024-12-26T15:00:00.000000Z",
+      "started_at": "2024-12-26T15:05:00.000000Z",
+      "finished_at": "2024-12-26T16:45:00.000000Z",
+      "status": "finished",
+      "home_score": 3,
+      "away_score": 1,
+      "venue": "Coliseo Norte",
+      "round_number": 5,
+      "group_name": "Grupo A",
+      "winner": "home",
+      "sets_breakdown": [
+        {"set": 1, "home": 25, "away": 20},
+        {"set": 2, "home": 22, "away": 25},
+        {"set": 3, "home": 25, "away": 18},
+        {"set": 4, "home": 25, "away": 22}
+      ]
+    }
+  ]
+}
+```
+
+---
+
+#### Contenido Destacado (NUEVO)
+
+**Endpoint:** `GET /public/matches/featured`
+**Auth:** No requerida
+**Descripción:** Retorna contenido destacado incluyendo próximo partido importante, torneos activos y partidos de hoy
+
+##### Response (200 OK)
+
+```json
+{
+  "success": true,
+  "data": {
+    "featured_match": {
+      "id": 89,
+      "home_team": {
+        "id": 1,
+        "name": "Club Norte",
+        "logo": "https://volleypass.test/storage/teams/logo1.png"
+      },
+      "away_team": {
+        "id": 2,
+        "name": "Club Sur",
+        "logo": "https://volleypass.test/storage/teams/logo2.png"
+      },
+      "tournament": {
+        "id": 3,
+        "name": "Final Nacional 2024",
+        "type": "playoff",
+        "category": "mayores",
+        "gender": "femenino"
+      },
+      "scheduled_at": "2024-12-29T18:00:00.000000Z",
+      "status": "scheduled",
+      "match_type": "final"
+    },
+    "active_tournaments": [
+      {
+        "id": 3,
+        "name": "Torneo Nacional 2024",
+        "slug": "torneo-nacional-2024",
+        "league_id": 1,
+        "league": {
+          "id": 1,
+          "name": "Liga Nacional de Voleibol"
+        },
+        "category": "mayores",
+        "gender": "femenino",
+        "type": "league",
+        "total_teams": 12
+      }
+    ],
+    "top_matches_today": [
+      {
+        "id": 78,
+        "home_team": {
+          "id": 5,
+          "name": "Club Este",
+          "logo": "https://volleypass.test/storage/teams/logo5.png"
+        },
+        "away_team": {
+          "id": 8,
+          "name": "Club Oeste",
+          "logo": "https://volleypass.test/storage/teams/logo8.png"
+        },
+        "tournament": {
+          "id": 2,
+          "name": "Copa Regional",
+          "type": "cup"
+        },
+        "scheduled_at": "2024-12-28T15:00:00.000000Z",
+        "status": "scheduled"
+      }
+    ]
+  }
+}
+```
+
+**Uso recomendado en la app móvil:**
+- `featured_match`: Mostrar como banner principal en la pantalla de inicio
+- `active_tournaments`: Mostrar como carrusel de torneos en curso
+- `top_matches_today`: Mostrar como lista de partidos destacados del día
 
 ---
 

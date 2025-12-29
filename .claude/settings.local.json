@@ -15,7 +15,15 @@
       "Bash(open:*)",
       "Bash(xcrun simctl shutdown:*)",
       "Bash(r)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(flutter build:*)",
+      "Bash(xcrun simctl io:*)",
+      "Bash(pkill:*)",
+      "Bash(done)",
+      "Bash(for dir in auth dashboard match_sessions payments profile statistics tournaments verification)",
+      "Bash(cat:*)",
+      "Bash(nc:*)",
+      "Bash(wc:*)"
     ]
   }
 }

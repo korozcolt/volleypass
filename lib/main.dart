@@ -6,14 +6,31 @@ import 'core/config/app_config.dart';
 import 'core/config/environment.dart';
 import 'core/utils/app_logger.dart';
 import 'core/storage/preferences_storage.dart';
+import 'core/storage/offline_storage.dart';
+import 'core/storage/secure_storage.dart';
 import 'core/network/dev_http_overrides.dart';
+import 'core/network/api_client.dart';
+import 'core/auth/token_storage.dart';
 import 'shared/theme/app_theme.dart';
+import 'shared/widgets/main_scaffold.dart';
 import 'features/auth/presentation/pages/splash_page.dart';
 import 'features/auth/presentation/pages/login_page.dart';
-import 'features/auth/presentation/pages/dashboard_page.dart';
+import 'features/verification/presentation/pages/qr_scanner_page.dart';
+import 'features/verification/presentation/providers/verification_providers.dart';
+import 'features/match_sessions/presentation/pages/available_matches_page.dart';
+import 'features/match_sessions/presentation/pages/active_session_page.dart';
+import 'features/match_sessions/presentation/pages/session_details_page.dart';
+import 'features/match_sessions/presentation/pages/sessions_history_page.dart';
+import 'features/tournaments/presentation/pages/tournaments_list_page.dart';
+import 'features/tournaments/presentation/pages/tournament_detail_page.dart';
+import 'features/tournaments/presentation/pages/standings_page.dart';
 
-// Instancia global de PreferencesStorage
+// Instancias globales de Storage
 late final PreferencesStorage preferencesStorage;
+late final OfflineStorage offlineStorage;
+late final SecureStorage secureStorage;
+late final TokenStorage tokenStorage;
+late final ApiClient apiClient;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,10 +49,35 @@ void main() async {
   preferencesStorage = PreferencesStorage();
   await preferencesStorage.init();
 
+  // Inicializar SecureStorage
+  secureStorage = SecureStorage();
+
+  // Inicializar TokenStorage
+  tokenStorage = TokenStorage(
+    secureStorage: secureStorage,
+    preferencesStorage: preferencesStorage,
+  );
+
+  // Inicializar OfflineStorage
+  offlineStorage = OfflineStorage();
+  await offlineStorage.init();
+
+  // Inicializar ApiClient
+  apiClient = ApiClient(tokenStorage: tokenStorage);
+
   AppLogger.info('🚀 Starting VolleyPass Mobile');
   AppLogger.info('Environment: ${AppConfig.current.environment}');
 
-  runApp(const ProviderScope(child: VolleyPassApp()));
+  runApp(
+    ProviderScope(
+      overrides: [
+        // Override providers para inyección de dependencias
+        apiClientProvider.overrideWithValue(apiClient),
+        offlineStorageProvider.overrideWithValue(offlineStorage),
+      ],
+      child: const VolleyPassApp(),
+    ),
+  );
 }
 
 class VolleyPassApp extends StatelessWidget {
@@ -51,7 +93,37 @@ class VolleyPassApp extends StatelessWidget {
       routes: {
         '/': (context) => const SplashPage(),
         '/login': (context) => const LoginPage(),
-        '/dashboard': (context) => const DashboardPage(),
+        '/dashboard': (context) => const MainScaffold(),
+        '/scanner': (context) => const QRScannerPage(),
+        '/available-matches': (context) => const AvailableMatchesPage(),
+        '/active-session': (context) => const ActiveSessionPage(),
+        '/sessions-history': (context) => const SessionsHistoryPage(),
+        '/tournaments': (context) => const TournamentsListPage(),
+      },
+      onGenerateRoute: (settings) {
+        // Handle routes with parameters
+        if (settings.name == '/session-details') {
+          final sessionId = settings.arguments as int;
+          return MaterialPageRoute(
+            builder: (context) => SessionDetailsPage(sessionId: sessionId),
+          );
+        }
+
+        if (settings.name == '/tournament-detail') {
+          final tournamentId = settings.arguments as int;
+          return MaterialPageRoute(
+            builder: (context) => TournamentDetailPage(tournamentId: tournamentId),
+          );
+        }
+
+        if (settings.name == '/standings') {
+          final tournamentId = settings.arguments as int;
+          return MaterialPageRoute(
+            builder: (context) => StandingsPage(tournamentId: tournamentId),
+          );
+        }
+
+        return null;
       },
     );
   }

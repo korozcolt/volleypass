@@ -4,10 +4,7 @@
 /// en el módulo de sesiones de partido.
 library;
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/network/api_client.dart';
-import '../../../../core/storage/offline_storage.dart';
 import '../../data/datasources/match_session_local_datasource.dart';
 import '../../data/datasources/match_session_remote_datasource.dart';
 import '../../data/repositories/match_session_repository_impl.dart';
@@ -29,8 +26,10 @@ import '../notifiers/create_session_notifier.dart';
 import '../notifiers/active_session_notifier.dart';
 import '../notifiers/session_details_notifier.dart';
 import '../notifiers/sessions_history_notifier.dart';
-import '../../../auth/presentation/providers/auth_providers.dart' show apiClientProvider, connectivityProvider;
-import '../../../verification/presentation/providers/verification_providers.dart' show offlineStorageProvider;
+import '../../../auth/presentation/providers/auth_providers.dart'
+    show apiClientProvider, connectivityProvider;
+import '../../../verification/presentation/providers/verification_providers.dart'
+    show offlineStorageProvider;
 
 // ============================================================================
 // DATA LAYER PROVIDERS
@@ -39,16 +38,16 @@ import '../../../verification/presentation/providers/verification_providers.dart
 /// Provider del remote datasource
 final matchSessionRemoteDataSourceProvider =
     Provider<MatchSessionRemoteDataSource>((ref) {
-  final apiClient = ref.watch(apiClientProvider);
-  return MatchSessionRemoteDataSourceImpl(apiClient);
-});
+      final apiClient = ref.watch(apiClientProvider);
+      return MatchSessionRemoteDataSourceImpl(apiClient);
+    });
 
 /// Provider del local datasource
 final matchSessionLocalDataSourceProvider =
     Provider<MatchSessionLocalDataSource>((ref) {
-  final offlineStorage = ref.watch(offlineStorageProvider);
-  return MatchSessionLocalDataSourceImpl(offlineStorage);
-});
+      final offlineStorage = ref.watch(offlineStorageProvider);
+      return MatchSessionLocalDataSourceImpl(offlineStorage);
+    });
 
 /// Provider del repositorio
 final matchSessionRepositoryProvider = Provider<MatchSessionRepository>((ref) {
@@ -68,11 +67,12 @@ final matchSessionRepositoryProvider = Provider<MatchSessionRepository>((ref) {
 // ============================================================================
 
 /// Provider del caso de uso de obtener partidos disponibles
-final getAvailableMatchesUseCaseProvider =
-    Provider<GetAvailableMatchesUseCase>((ref) {
-  final repository = ref.watch(matchSessionRepositoryProvider);
-  return GetAvailableMatchesUseCase(repository);
-});
+final getAvailableMatchesUseCaseProvider = Provider<GetAvailableMatchesUseCase>(
+  (ref) {
+    final repository = ref.watch(matchSessionRepositoryProvider);
+    return GetAvailableMatchesUseCase(repository);
+  },
+);
 
 /// Provider del caso de uso de crear sesión
 final createSessionUseCaseProvider = Provider<CreateSessionUseCase>((ref) {
@@ -81,15 +81,17 @@ final createSessionUseCaseProvider = Provider<CreateSessionUseCase>((ref) {
 });
 
 /// Provider del caso de uso de obtener sesión activa
-final getActiveSessionUseCaseProvider =
-    Provider<GetActiveSessionUseCase>((ref) {
+final getActiveSessionUseCaseProvider = Provider<GetActiveSessionUseCase>((
+  ref,
+) {
   final repository = ref.watch(matchSessionRepositoryProvider);
   return GetActiveSessionUseCase(repository);
 });
 
 /// Provider del caso de uso de obtener detalles de sesión
-final getSessionDetailsUseCaseProvider =
-    Provider<GetSessionDetailsUseCase>((ref) {
+final getSessionDetailsUseCaseProvider = Provider<GetSessionDetailsUseCase>((
+  ref,
+) {
   final repository = ref.watch(matchSessionRepositoryProvider);
   return GetSessionDetailsUseCase(repository);
 });
@@ -107,8 +109,9 @@ final completeSessionUseCaseProvider = Provider<CompleteSessionUseCase>((ref) {
 });
 
 /// Provider del caso de uso de obtener historial de sesiones
-final getSessionsHistoryUseCaseProvider =
-    Provider<GetSessionsHistoryUseCase>((ref) {
+final getSessionsHistoryUseCaseProvider = Provider<GetSessionsHistoryUseCase>((
+  ref,
+) {
   final repository = ref.watch(matchSessionRepositoryProvider);
   return GetSessionsHistoryUseCase(repository);
 });
@@ -119,46 +122,52 @@ final getSessionsHistoryUseCaseProvider =
 
 /// Provider del state notifier de partidos disponibles
 final availableMatchesStateProvider =
-    StateNotifierProvider<AvailableMatchesNotifier, AvailableMatchesState>(
-        (ref) {
-  final getAvailableMatchesUseCase =
-      ref.watch(getAvailableMatchesUseCaseProvider);
-  return AvailableMatchesNotifier(getAvailableMatchesUseCase);
-});
+    StateNotifierProvider<AvailableMatchesNotifier, AvailableMatchesState>((
+      ref,
+    ) {
+      final getAvailableMatchesUseCase = ref.watch(
+        getAvailableMatchesUseCaseProvider,
+      );
+      return AvailableMatchesNotifier(getAvailableMatchesUseCase);
+    });
 
 /// Provider del state notifier de creación de sesión
 final createSessionStateProvider =
     StateNotifierProvider<CreateSessionNotifier, CreateSessionState>((ref) {
-  final createSessionUseCase = ref.watch(createSessionUseCaseProvider);
-  return CreateSessionNotifier(createSessionUseCase);
-});
+      final createSessionUseCase = ref.watch(createSessionUseCaseProvider);
+      return CreateSessionNotifier(createSessionUseCase);
+    });
 
 /// Provider del state notifier de sesión activa
 final activeSessionStateProvider =
     StateNotifierProvider<ActiveSessionNotifier, ActiveSessionState>((ref) {
-  final getActiveSessionUseCase = ref.watch(getActiveSessionUseCaseProvider);
-  final updateSessionUseCase = ref.watch(updateSessionUseCaseProvider);
-  final completeSessionUseCase = ref.watch(completeSessionUseCaseProvider);
+      final getActiveSessionUseCase = ref.watch(
+        getActiveSessionUseCaseProvider,
+      );
+      final updateSessionUseCase = ref.watch(updateSessionUseCaseProvider);
+      final completeSessionUseCase = ref.watch(completeSessionUseCaseProvider);
 
-  return ActiveSessionNotifier(
-    getActiveSessionUseCase,
-    updateSessionUseCase,
-    completeSessionUseCase,
-  );
-});
+      return ActiveSessionNotifier(
+        getActiveSessionUseCase,
+        updateSessionUseCase,
+        completeSessionUseCase,
+      );
+    });
 
 /// Provider del state notifier de detalles de sesión
 final sessionDetailsStateProvider =
     StateNotifierProvider<SessionDetailsNotifier, SessionDetailsState>((ref) {
-  final getSessionDetailsUseCase = ref.watch(getSessionDetailsUseCaseProvider);
-  return SessionDetailsNotifier(getSessionDetailsUseCase);
-});
+      final getSessionDetailsUseCase = ref.watch(
+        getSessionDetailsUseCaseProvider,
+      );
+      return SessionDetailsNotifier(getSessionDetailsUseCase);
+    });
 
 /// Provider del state notifier de historial de sesiones
 final sessionsHistoryStateProvider =
-    StateNotifierProvider<SessionsHistoryNotifier, SessionsHistoryState>(
-        (ref) {
-  final getSessionsHistoryUseCase =
-      ref.watch(getSessionsHistoryUseCaseProvider);
-  return SessionsHistoryNotifier(getSessionsHistoryUseCase);
-});
+    StateNotifierProvider<SessionsHistoryNotifier, SessionsHistoryState>((ref) {
+      final getSessionsHistoryUseCase = ref.watch(
+        getSessionsHistoryUseCaseProvider,
+      );
+      return SessionsHistoryNotifier(getSessionsHistoryUseCase);
+    });

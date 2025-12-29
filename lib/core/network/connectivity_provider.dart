@@ -4,7 +4,6 @@
 /// cuando se recupera la conexión.
 library;
 
-import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../utils/app_logger.dart';
@@ -14,18 +13,17 @@ class ConnectivityStatus {
   final bool isOnline;
   final ConnectivityResult result;
 
-  const ConnectivityStatus({
-    required this.isOnline,
-    required this.result,
-  });
+  const ConnectivityStatus({required this.isOnline, required this.result});
 
   @override
-  String toString() => 'ConnectivityStatus(isOnline: $isOnline, result: $result)';
+  String toString() =>
+      'ConnectivityStatus(isOnline: $isOnline, result: $result)';
 }
 
 /// Provider que escucha cambios en la conectividad
-final connectivityStreamProvider =
-    StreamProvider.autoDispose<ConnectivityStatus>((ref) {
+final connectivityStreamProvider = StreamProvider.autoDispose<ConnectivityStatus>((
+  ref,
+) {
   final connectivity = Connectivity();
 
   return connectivity.onConnectivityChanged.asyncMap((result) async {
@@ -36,10 +34,7 @@ final connectivityStreamProvider =
       'ConnectivityProvider: Connectivity changed - $result (online: $isOnline)',
     );
 
-    return ConnectivityStatus(
-      isOnline: isOnline,
-      result: result,
-    );
+    return ConnectivityStatus(isOnline: isOnline, result: result);
   });
 });
 

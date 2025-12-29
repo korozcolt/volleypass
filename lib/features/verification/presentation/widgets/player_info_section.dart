@@ -26,7 +26,7 @@ class PlayerInfoSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: AppSpacing.borderRadiusMD,
       ),
       child: Padding(
@@ -37,11 +37,7 @@ class PlayerInfoSection extends StatelessWidget {
             // Header de la sección
             Row(
               children: [
-                Icon(
-                  icon,
-                  color: iconColor ?? AppColors.primary,
-                  size: 24,
-                ),
+                Icon(icon, color: iconColor ?? AppColors.primary, size: 24),
                 const SizedBox(width: 12),
                 Text(
                   title,

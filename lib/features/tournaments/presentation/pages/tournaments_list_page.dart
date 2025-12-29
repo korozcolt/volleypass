@@ -15,7 +15,8 @@ class TournamentsListPage extends ConsumerStatefulWidget {
   const TournamentsListPage({super.key});
 
   @override
-  ConsumerState<TournamentsListPage> createState() => _TournamentsListPageState();
+  ConsumerState<TournamentsListPage> createState() =>
+      _TournamentsListPageState();
 }
 
 class _TournamentsListPageState extends ConsumerState<TournamentsListPage> {
@@ -45,7 +46,9 @@ class _TournamentsListPageState extends ConsumerState<TournamentsListPage> {
       _selectedGender = gender;
     });
 
-    ref.read(tournamentsNotifierProvider.notifier).loadTournaments(
+    ref
+        .read(tournamentsNotifierProvider.notifier)
+        .loadTournaments(
           status: status,
           type: type,
           category: category,
@@ -78,7 +81,8 @@ class _TournamentsListPageState extends ConsumerState<TournamentsListPage> {
         actions: [
           IconButton(
             icon: Badge(
-              isLabelVisible: _selectedStatus != null ||
+              isLabelVisible:
+                  _selectedStatus != null ||
                   _selectedType != null ||
                   _selectedCategory != null ||
                   _selectedGender != null,
@@ -89,21 +93,13 @@ class _TournamentsListPageState extends ConsumerState<TournamentsListPage> {
         ],
       ),
       body: state.when(
-        initial: () => const Center(
-          child: Text('Cargando torneos...'),
-        ),
-        loading: () => const Center(
-          child: CircularProgressIndicator(),
-        ),
+        initial: () => const Center(child: Text('Cargando torneos...')),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (message) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.error_outline,
-                size: 64,
-                color: AppColors.error,
-              ),
+              const Icon(Icons.error_outline, size: 64, color: AppColors.error),
               AppSpacing.verticalSpaceMD,
               Text(
                 message,
@@ -113,7 +109,9 @@ class _TournamentsListPageState extends ConsumerState<TournamentsListPage> {
               AppSpacing.verticalSpaceMD,
               ElevatedButton.icon(
                 onPressed: () {
-                  ref.read(tournamentsNotifierProvider.notifier).refresh(
+                  ref
+                      .read(tournamentsNotifierProvider.notifier)
+                      .refresh(
                         status: _selectedStatus,
                         type: _selectedType,
                         category: _selectedCategory,
@@ -162,7 +160,9 @@ class _TournamentsListPageState extends ConsumerState<TournamentsListPage> {
 
           return RefreshIndicator(
             onRefresh: () async {
-              await ref.read(tournamentsNotifierProvider.notifier).refresh(
+              await ref
+                  .read(tournamentsNotifierProvider.notifier)
+                  .refresh(
                     status: _selectedStatus,
                     type: _selectedType,
                     category: _selectedCategory,

@@ -21,6 +21,8 @@ class DashboardSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -33,13 +35,23 @@ class DashboardSection extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.1),
+                    color: isDark
+                        ? Theme.of(context).primaryColor.withOpacity(0.15)
+                        : Theme.of(context).primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
+                    border: isDark
+                        ? Border.all(
+                            color: Theme.of(context).primaryColor.withOpacity(0.3),
+                            width: 1,
+                          )
+                        : null,
                   ),
                   child: Icon(
                     icon,
                     size: 18,
-                    color: Theme.of(context).primaryColor,
+                    color: isDark
+                        ? Theme.of(context).primaryColor.withOpacity(0.9)
+                        : Theme.of(context).primaryColor,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -53,7 +65,7 @@ class DashboardSection extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
-                        color: Colors.grey[900],
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         letterSpacing: -0.3,
                       ),
                     ),
@@ -64,7 +76,7 @@ class DashboardSection extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
-                          color: Colors.grey[600],
+                          color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
                         ),
                       ),
                     ],

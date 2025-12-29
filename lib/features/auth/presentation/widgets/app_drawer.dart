@@ -21,9 +21,7 @@ class AppDrawer extends ConsumerWidget {
     final user = ref.watch(currentUserProvider);
 
     if (user == null) {
-      return const Drawer(
-        child: Center(child: CircularProgressIndicator()),
-      );
+      return const Drawer(child: Center(child: CircularProgressIndicator()));
     }
 
     return Drawer(
@@ -215,10 +213,7 @@ class AppDrawer extends ConsumerWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            AppColors.primary,
-            AppColors.primary.withOpacity(0.8),
-          ],
+          colors: [AppColors.primary, AppColors.primary.withOpacity(0.8)],
         ),
       ),
       currentAccountPicture: CircleAvatar(
@@ -234,9 +229,7 @@ class AppDrawer extends ConsumerWidget {
               )
             : Text(
                 user.initials,
-                style: AppTextStyles.h4.copyWith(
-                  color: AppColors.primary,
-                ),
+                style: AppTextStyles.h4.copyWith(color: AppColors.primary),
               ),
       ),
       accountName: Text(
@@ -285,10 +278,7 @@ class AppDrawer extends ConsumerWidget {
     String? badge,
   }) {
     return ListTile(
-      leading: Icon(
-        icon,
-        color: iconColor ?? AppColors.textPrimary,
-      ),
+      leading: Icon(icon, color: iconColor ?? AppColors.textPrimary),
       title: Row(
         children: [
           Text(
@@ -323,18 +313,13 @@ class AppDrawer extends ConsumerWidget {
   Widget _buildFooter() {
     return Container(
       padding: AppSpacing.paddingMD,
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: AppColors.border,
-            width: 1,
-          ),
-        ),
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: AppColors.border, width: 1)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.sports_volleyball,
             size: 16,
             color: AppColors.textSecondary,
@@ -377,9 +362,7 @@ class AppDrawer extends ConsumerWidget {
               Navigator.of(context).pop();
               ref.read(authStateProvider.notifier).logout();
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
             child: const Text('Cerrar Sesión'),
           ),
         ],

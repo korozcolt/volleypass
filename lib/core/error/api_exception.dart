@@ -27,7 +27,7 @@ class ApiException implements Exception {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
-        return ApiException(
+        return const ApiException(
           message: AppConstants.errorTimeout,
           statusCode: null,
         );
@@ -84,7 +84,8 @@ class ApiException implements Exception {
     String? errorCode;
 
     if (data is Map<String, dynamic>) {
-      message = data['message'] as String? ??
+      message =
+          data['message'] as String? ??
           data['error'] as String? ??
           AppConstants.errorGeneric;
       errorCode = data['error_code'] as String? ?? data['code'] as String?;

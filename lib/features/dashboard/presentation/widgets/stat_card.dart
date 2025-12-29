@@ -25,6 +25,7 @@ class StatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final cardColor = color ?? Theme.of(context).primaryColor;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDark ? const Color(0xFF1E1E1E) : Colors.white;
 
     return Container(
       decoration: BoxDecoration(
@@ -32,19 +33,19 @@ class StatCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.white,
-            cardColor.withOpacity(0.02),
+            backgroundColor,
+            cardColor.withOpacity(isDark ? 0.05 : 0.02),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: cardColor.withOpacity(0.08),
+            color: cardColor.withOpacity(isDark ? 0.12 : 0.08),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -92,13 +93,13 @@ class StatCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          color: Colors.grey[100],
+                          color: isDark ? Colors.grey[800] : Colors.grey[100],
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
                           Icons.arrow_forward_ios,
                           size: 10,
-                          color: Colors.grey[600],
+                          color: isDark ? Colors.grey[400] : Colors.grey[600],
                         ),
                       ),
                   ],
@@ -126,7 +127,7 @@ class StatCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    color: Colors.grey[700],
+                    color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
                     height: 1.3,
                     letterSpacing: 0.2,
                   ),

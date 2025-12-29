@@ -67,10 +67,7 @@ class TournamentsRemoteDataSourceImpl implements TournamentsRemoteDataSource {
         statusCode: e.response?.statusCode ?? 500,
       );
     } catch (e) {
-      throw ApiException(
-        message: 'Error inesperado: $e',
-        statusCode: 500,
-      );
+      throw ApiException(message: 'Error inesperado: $e', statusCode: 500);
     }
   }
 
@@ -93,7 +90,7 @@ class TournamentsRemoteDataSourceImpl implements TournamentsRemoteDataSource {
       );
     } on DioException catch (e) {
       if (e.response?.statusCode == 404) {
-        throw ApiException(
+        throw const ApiException(
           message: 'Torneo no encontrado',
           statusCode: 404,
         );
@@ -104,10 +101,7 @@ class TournamentsRemoteDataSourceImpl implements TournamentsRemoteDataSource {
         statusCode: e.response?.statusCode ?? 500,
       );
     } catch (e) {
-      throw ApiException(
-        message: 'Error inesperado: $e',
-        statusCode: 500,
-      );
+      throw ApiException(message: 'Error inesperado: $e', statusCode: 500);
     }
   }
 
@@ -132,7 +126,7 @@ class TournamentsRemoteDataSourceImpl implements TournamentsRemoteDataSource {
       );
     } on DioException catch (e) {
       if (e.response?.statusCode == 404) {
-        throw ApiException(
+        throw const ApiException(
           message: 'Tabla de posiciones no encontrada',
           statusCode: 404,
         );
@@ -140,14 +134,12 @@ class TournamentsRemoteDataSourceImpl implements TournamentsRemoteDataSource {
 
       throw ApiException(
         message:
-            e.response?.data?['message'] ?? 'Error al obtener tabla de posiciones',
+            e.response?.data?['message'] ??
+            'Error al obtener tabla de posiciones',
         statusCode: e.response?.statusCode ?? 500,
       );
     } catch (e) {
-      throw ApiException(
-        message: 'Error inesperado: $e',
-        statusCode: 500,
-      );
+      throw ApiException(message: 'Error inesperado: $e', statusCode: 500);
     }
   }
 }

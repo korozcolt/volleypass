@@ -27,7 +27,7 @@ class LoginUseCase implements UseCase<User, LoginParams> {
 
     // Validación de contraseña
     if (params.password.length < AppConstants.minPasswordLength) {
-      return Left(
+      return const Left(
         ValidationFailure(
           'La contraseña debe tener al menos ${AppConstants.minPasswordLength} caracteres',
         ),

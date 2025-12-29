@@ -30,9 +30,7 @@ class DashboardPage extends ConsumerWidget {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('VolleyPass'),
-      ),
+      appBar: AppBar(title: const Text('VolleyPass')),
       drawer: const AppDrawer(),
       body: user == null
           ? const Center(child: CircularProgressIndicator())
@@ -61,10 +59,7 @@ class DashboardPage extends ConsumerWidget {
                     decoration: BoxDecoration(
                       color: AppColors.success.withOpacity(0.1),
                       borderRadius: AppSpacing.borderRadiusSM,
-                      border: Border.all(
-                        color: AppColors.success,
-                        width: 1,
-                      ),
+                      border: Border.all(color: AppColors.success, width: 1),
                     ),
                     child: Row(
                       children: [
@@ -91,7 +86,7 @@ class DashboardPage extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Información de Usuario',
                             style: AppTextStyles.h6,
                           ),
@@ -103,10 +98,7 @@ class DashboardPage extends ConsumerWidget {
                           _buildInfoRow('Nombre completo', user.fullName),
                           AppSpacing.verticalSpaceSM,
 
-                          _buildInfoRow(
-                            'Roles',
-                            user.roles.join(', '),
-                          ),
+                          _buildInfoRow('Roles', user.roles.join(', ')),
                           AppSpacing.verticalSpaceSM,
 
                           _buildInfoRow(
@@ -127,10 +119,7 @@ class DashboardPage extends ConsumerWidget {
                   AppSpacing.verticalSpaceXL,
 
                   // Quick Actions
-                  Text(
-                    'Acciones Rápidas',
-                    style: AppTextStyles.h6,
-                  ),
+                  const Text('Acciones Rápidas', style: AppTextStyles.h6),
                   AppSpacing.verticalSpaceMD,
 
                   GridView.count(
@@ -213,12 +202,7 @@ class DashboardPage extends ConsumerWidget {
             ),
           ),
         ),
-        Expanded(
-          child: Text(
-            value,
-            style: AppTextStyles.bodyMedium,
-          ),
-        ),
+        Expanded(child: Text(value, style: AppTextStyles.bodyMedium)),
       ],
     );
   }
@@ -239,11 +223,7 @@ class DashboardPage extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                size: 48,
-                color: color,
-              ),
+              Icon(icon, size: 48, color: color),
               AppSpacing.verticalSpaceSM,
               Text(
                 label,
@@ -273,9 +253,7 @@ class DashboardPage extends ConsumerWidget {
               Navigator.of(context).pop();
               ref.read(authStateProvider.notifier).logout();
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
             child: const Text('Cerrar Sesión'),
           ),
         ],

@@ -64,10 +64,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             children: [
               const Icon(Icons.error_outline, size: 64, color: AppColors.error),
               AppSpacing.verticalSpaceMD,
-              Text(
-                'Error al cargar dashboard',
-                style: AppTextStyles.h5,
-              ),
+              const Text('Error al cargar dashboard', style: AppTextStyles.h5),
               AppSpacing.verticalSpaceSM,
               Text(
                 message,
@@ -120,7 +117,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Dashboard SuperAdmin', style: AppTextStyles.h4),
+            const Text('Dashboard SuperAdmin', style: AppTextStyles.h4),
             AppSpacing.verticalSpaceMD,
 
             // Users metrics
@@ -129,38 +126,41 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
               subtitle: 'Métricas de usuarios del sistema',
               icon: Icons.people_outline,
               child: GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: AppSpacing.sm,
-              mainAxisSpacing: AppSpacing.sm,
-              childAspectRatio: 1.1,
-              children: [
-                StatCard(
-                  title: 'Total Usuarios',
-                  value: dashboard.users.total.toString(),
-                  icon: Icons.people,
-                  color: AppColors.primary,
-                ),
-                StatCard(
-                  title: 'Activos',
-                  value: dashboard.users.active.toString(),
-                  icon: Icons.verified_user,
-                  color: AppColors.success,
-                ),
-                StatCard(
-                  title: 'SuperAdmins',
-                  value: dashboard.users.byRole['SuperAdmin']?.toString() ?? '0',
-                  icon: Icons.admin_panel_settings,
-                  color: AppColors.error,
-                ),
-                StatCard(
-                  title: 'League Admins',
-                  value: dashboard.users.byRole['LeagueAdmin']?.toString() ?? '0',
-                  icon: Icons.sports,
-                  color: AppColors.info,
-                ),
-              ],
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: AppSpacing.sm,
+                mainAxisSpacing: AppSpacing.sm,
+                childAspectRatio: 1.1,
+                children: [
+                  StatCard(
+                    title: 'Total Usuarios',
+                    value: dashboard.users.total.toString(),
+                    icon: Icons.people,
+                    color: AppColors.primary,
+                  ),
+                  StatCard(
+                    title: 'Activos',
+                    value: dashboard.users.active.toString(),
+                    icon: Icons.verified_user,
+                    color: AppColors.success,
+                  ),
+                  StatCard(
+                    title: 'SuperAdmins',
+                    value:
+                        dashboard.users.byRole['SuperAdmin']?.toString() ?? '0',
+                    icon: Icons.admin_panel_settings,
+                    color: AppColors.error,
+                  ),
+                  StatCard(
+                    title: 'League Admins',
+                    value:
+                        dashboard.users.byRole['LeagueAdmin']?.toString() ??
+                        '0',
+                    icon: Icons.sports,
+                    color: AppColors.info,
+                  ),
+                ],
               ),
             ),
             AppSpacing.verticalSpaceLG,
@@ -171,26 +171,26 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
               subtitle: 'Estado de suscripciones activas',
               icon: Icons.card_membership_outlined,
               child: GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: AppSpacing.sm,
-              mainAxisSpacing: AppSpacing.sm,
-              childAspectRatio: 1.1,
-              children: [
-                StatCard(
-                  title: 'Activas',
-                  value: dashboard.subscriptions.active.toString(),
-                  icon: Icons.check_circle,
-                  color: AppColors.success,
-                ),
-                StatCard(
-                  title: 'Por Expirar (7 días)',
-                  value: dashboard.subscriptions.expiringSoon7Days.toString(),
-                  icon: Icons.warning,
-                  color: AppColors.warning,
-                ),
-              ],
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: AppSpacing.sm,
+                mainAxisSpacing: AppSpacing.sm,
+                childAspectRatio: 1.1,
+                children: [
+                  StatCard(
+                    title: 'Activas',
+                    value: dashboard.subscriptions.active.toString(),
+                    icon: Icons.check_circle,
+                    color: AppColors.success,
+                  ),
+                  StatCard(
+                    title: 'Por Expirar (7 días)',
+                    value: dashboard.subscriptions.expiringSoon7Days.toString(),
+                    icon: Icons.warning,
+                    color: AppColors.warning,
+                  ),
+                ],
               ),
             ),
             AppSpacing.verticalSpaceLG,
@@ -201,38 +201,40 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
               subtitle: 'Métricas de actividad reciente',
               icon: Icons.analytics_outlined,
               child: GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: AppSpacing.sm,
-              mainAxisSpacing: AppSpacing.sm,
-              childAspectRatio: 1.1,
-              children: [
-                StatCard(
-                  title: 'Verificaciones Hoy',
-                  value: dashboard.systemMetrics.verifications.today.toString(),
-                  icon: Icons.qr_code_scanner,
-                  color: AppColors.primary,
-                ),
-                StatCard(
-                  title: 'Partidos Activos',
-                  value: dashboard.systemMetrics.matches.inProgress.toString(),
-                  icon: Icons.sports_volleyball,
-                  color: AppColors.secondary,
-                ),
-              ],
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: AppSpacing.sm,
+                mainAxisSpacing: AppSpacing.sm,
+                childAspectRatio: 1.1,
+                children: [
+                  StatCard(
+                    title: 'Verificaciones Hoy',
+                    value: dashboard.systemMetrics.verifications.today
+                        .toString(),
+                    icon: Icons.qr_code_scanner,
+                    color: AppColors.primary,
+                  ),
+                  StatCard(
+                    title: 'Partidos Activos',
+                    value: dashboard.systemMetrics.matches.inProgress
+                        .toString(),
+                    icon: Icons.sports_volleyball,
+                    color: AppColors.secondary,
+                  ),
+                ],
               ),
             ),
             AppSpacing.verticalSpaceLG,
 
             // Mini gráfico de actividad semanal
-            DashboardSection(
+            const DashboardSection(
               title: 'Actividad Semanal',
               subtitle: 'Verificaciones realizadas',
               icon: Icons.bar_chart,
               child: MiniBarChart(
-                values: const [45, 52, 38, 65, 48, 71, 58],
-                labels: const ['L', 'M', 'X', 'J', 'V', 'S', 'D'],
+                values: [45, 52, 38, 65, 48, 71, 58],
+                labels: ['L', 'M', 'X', 'J', 'V', 'S', 'D'],
                 color: AppColors.primary,
                 height: 100,
               ),
@@ -251,21 +253,27 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                     description: 'Club Deportivo Los Andes',
                     icon: Icons.check_circle,
                     color: AppColors.success,
-                    timestamp: DateTime.now().subtract(const Duration(minutes: 15)),
+                    timestamp: DateTime.now().subtract(
+                      const Duration(minutes: 15),
+                    ),
                   ),
                   ActivityItem(
                     title: 'Usuario registrado',
                     description: 'Juan Pérez - LeagueAdmin',
                     icon: Icons.person_add,
                     color: AppColors.info,
-                    timestamp: DateTime.now().subtract(const Duration(hours: 2)),
+                    timestamp: DateTime.now().subtract(
+                      const Duration(hours: 2),
+                    ),
                   ),
                   ActivityItem(
                     title: 'Verificación QR realizada',
                     description: '150 jugadores verificados',
                     icon: Icons.qr_code_scanner,
                     color: AppColors.primary,
-                    timestamp: DateTime.now().subtract(const Duration(hours: 5)),
+                    timestamp: DateTime.now().subtract(
+                      const Duration(hours: 5),
+                    ),
                   ),
                   ActivityItem(
                     title: 'Partido finalizado',
@@ -344,39 +352,39 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
               subtitle: 'Gestión de jugadores del club',
               icon: Icons.people_outline,
               child: GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: AppSpacing.sm,
-              mainAxisSpacing: AppSpacing.sm,
-              childAspectRatio: 1.1,
-              children: [
-                StatCard(
-                  title: 'Total Jugadores',
-                  value: dashboard.players.total.toString(),
-                  icon: Icons.people,
-                  color: AppColors.primary,
-                ),
-                StatCard(
-                  title: 'Activos',
-                  value: dashboard.players.active.toString(),
-                  icon: Icons.verified_user,
-                  color: AppColors.success,
-                ),
-                StatCard(
-                  title: 'EN MORA ⚠️',
-                  value: dashboard.players.withOverduePayments.toString(),
-                  icon: Icons.money_off,
-                  color: AppColors.error,
-                  subtitle: 'Requiere atención',
-                ),
-                StatCard(
-                  title: 'Federados',
-                  value: dashboard.players.federated.toString(),
-                  icon: Icons.card_membership,
-                  color: AppColors.info,
-                ),
-              ],
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: AppSpacing.sm,
+                mainAxisSpacing: AppSpacing.sm,
+                childAspectRatio: 1.1,
+                children: [
+                  StatCard(
+                    title: 'Total Jugadores',
+                    value: dashboard.players.total.toString(),
+                    icon: Icons.people,
+                    color: AppColors.primary,
+                  ),
+                  StatCard(
+                    title: 'Activos',
+                    value: dashboard.players.active.toString(),
+                    icon: Icons.verified_user,
+                    color: AppColors.success,
+                  ),
+                  StatCard(
+                    title: 'EN MORA ⚠️',
+                    value: dashboard.players.withOverduePayments.toString(),
+                    icon: Icons.money_off,
+                    color: AppColors.error,
+                    subtitle: 'Requiere atención',
+                  ),
+                  StatCard(
+                    title: 'Federados',
+                    value: dashboard.players.federated.toString(),
+                    icon: Icons.card_membership,
+                    color: AppColors.info,
+                  ),
+                ],
               ),
             ),
             AppSpacing.verticalSpaceLG,
@@ -385,27 +393,30 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             if (dashboard.matches.upcomingMatches.isNotEmpty) ...[
               DashboardSection(
                 title: 'Próximos Partidos',
-                subtitle: '${dashboard.matches.upcomingMatches.length} partidos programados',
+                subtitle:
+                    '${dashboard.matches.upcomingMatches.length} partidos programados',
                 icon: Icons.event,
                 child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: dashboard.matches.upcomingMatches.length,
-                itemBuilder: (context, index) {
-                  final match = dashboard.matches.upcomingMatches[index];
-                  final dateTime = match.scheduledAt;
-                  final date = '${dateTime.day}/${dateTime.month}/${dateTime.year}';
-                  final time = '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: dashboard.matches.upcomingMatches.length,
+                  itemBuilder: (context, index) {
+                    final match = dashboard.matches.upcomingMatches[index];
+                    final dateTime = match.scheduledAt;
+                    final date =
+                        '${dateTime.day}/${dateTime.month}/${dateTime.year}';
+                    final time =
+                        '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
 
-                  return UpcomingMatchCard(
-                    homeTeam: match.homeTeam,
-                    awayTeam: match.awayTeam,
-                    date: date,
-                    time: time,
-                    location: match.venue,
-                    tournament: match.tournament,
-                  );
-                },
+                    return UpcomingMatchCard(
+                      homeTeam: match.homeTeam,
+                      awayTeam: match.awayTeam,
+                      date: date,
+                      time: time,
+                      location: match.venue,
+                      tournament: match.tournament,
+                    );
+                  },
                 ),
               ),
               AppSpacing.verticalSpaceLG,
@@ -417,26 +428,26 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
               subtitle: 'Estado de pagos del club',
               icon: Icons.payments_outlined,
               child: GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: AppSpacing.sm,
-              mainAxisSpacing: AppSpacing.sm,
-              childAspectRatio: 1.1,
-              children: [
-                StatCard(
-                  title: 'Pendientes',
-                  value: dashboard.payments.pendingCount.toString(),
-                  icon: Icons.pending,
-                  color: AppColors.warning,
-                ),
-                StatCard(
-                  title: 'En Mora',
-                  value: dashboard.payments.overdueCount.toString(),
-                  icon: Icons.error,
-                  color: AppColors.error,
-                ),
-              ],
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: AppSpacing.sm,
+                mainAxisSpacing: AppSpacing.sm,
+                childAspectRatio: 1.1,
+                children: [
+                  StatCard(
+                    title: 'Pendientes',
+                    value: dashboard.payments.pendingCount.toString(),
+                    icon: Icons.pending,
+                    color: AppColors.warning,
+                  ),
+                  StatCard(
+                    title: 'En Mora',
+                    value: dashboard.payments.overdueCount.toString(),
+                    icon: Icons.error,
+                    color: AppColors.error,
+                  ),
+                ],
               ),
             ),
           ],
@@ -471,8 +482,9 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                     if (dashboard.leagueInfo.logo != null)
                       CircleAvatar(
                         radius: 32,
-                        backgroundImage:
-                            NetworkImage(dashboard.leagueInfo.logo!),
+                        backgroundImage: NetworkImage(
+                          dashboard.leagueInfo.logo!,
+                        ),
                       )
                     else
                       const CircleAvatar(
@@ -510,26 +522,26 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
               subtitle: 'Clubes afiliados a la liga',
               icon: Icons.shield_outlined,
               child: GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: AppSpacing.sm,
-              mainAxisSpacing: AppSpacing.sm,
-              childAspectRatio: 1.1,
-              children: [
-                StatCard(
-                  title: 'Total Clubes',
-                  value: dashboard.clubs.total.toString(),
-                  icon: Icons.shield,
-                  color: AppColors.primary,
-                ),
-                StatCard(
-                  title: 'Activos',
-                  value: dashboard.clubs.active.toString(),
-                  icon: Icons.verified,
-                  color: AppColors.success,
-                ),
-              ],
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: AppSpacing.sm,
+                mainAxisSpacing: AppSpacing.sm,
+                childAspectRatio: 1.1,
+                children: [
+                  StatCard(
+                    title: 'Total Clubes',
+                    value: dashboard.clubs.total.toString(),
+                    icon: Icons.shield,
+                    color: AppColors.primary,
+                  ),
+                  StatCard(
+                    title: 'Activos',
+                    value: dashboard.clubs.active.toString(),
+                    icon: Icons.verified,
+                    color: AppColors.success,
+                  ),
+                ],
               ),
             ),
             AppSpacing.verticalSpaceLG,
@@ -540,34 +552,34 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
               subtitle: 'Federados y no federados',
               icon: Icons.people_outline,
               child: GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: AppSpacing.sm,
-              mainAxisSpacing: AppSpacing.sm,
-              childAspectRatio: 1.1,
-              children: [
-                StatCard(
-                  title: 'Total Jugadores',
-                  value: dashboard.players.total.toString(),
-                  icon: Icons.people,
-                  color: AppColors.primary,
-                ),
-                StatCard(
-                  title: 'Federados',
-                  value: dashboard.players.federated.toString(),
-                  icon: Icons.card_membership,
-                  color: AppColors.success,
-                  subtitle:
-                      '${dashboard.players.federationPercentage.toStringAsFixed(1)}%',
-                ),
-                StatCard(
-                  title: 'No Federados',
-                  value: dashboard.players.nonFederated.toString(),
-                  icon: Icons.person_outline,
-                  color: AppColors.warning,
-                ),
-              ],
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: AppSpacing.sm,
+                mainAxisSpacing: AppSpacing.sm,
+                childAspectRatio: 1.1,
+                children: [
+                  StatCard(
+                    title: 'Total Jugadores',
+                    value: dashboard.players.total.toString(),
+                    icon: Icons.people,
+                    color: AppColors.primary,
+                  ),
+                  StatCard(
+                    title: 'Federados',
+                    value: dashboard.players.federated.toString(),
+                    icon: Icons.card_membership,
+                    color: AppColors.success,
+                    subtitle:
+                        '${dashboard.players.federationPercentage.toStringAsFixed(1)}%',
+                  ),
+                  StatCard(
+                    title: 'No Federados',
+                    value: dashboard.players.nonFederated.toString(),
+                    icon: Icons.person_outline,
+                    color: AppColors.warning,
+                  ),
+                ],
               ),
             ),
             AppSpacing.verticalSpaceLG,
@@ -578,38 +590,38 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
               subtitle: 'Gestión de torneos de la liga',
               icon: Icons.emoji_events_outlined,
               child: GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: AppSpacing.sm,
-              mainAxisSpacing: AppSpacing.sm,
-              childAspectRatio: 1.1,
-              children: [
-                StatCard(
-                  title: 'Total Torneos',
-                  value: dashboard.tournaments.total.toString(),
-                  icon: Icons.emoji_events,
-                  color: AppColors.primary,
-                ),
-                StatCard(
-                  title: 'Activos',
-                  value: dashboard.tournaments.active.toString(),
-                  icon: Icons.play_circle,
-                  color: AppColors.success,
-                ),
-                StatCard(
-                  title: 'Programados',
-                  value: dashboard.tournaments.scheduled.toString(),
-                  icon: Icons.schedule,
-                  color: AppColors.info,
-                ),
-                StatCard(
-                  title: 'Completados',
-                  value: dashboard.tournaments.completed.toString(),
-                  icon: Icons.check_circle,
-                  color: AppColors.textSecondary,
-                ),
-              ],
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: AppSpacing.sm,
+                mainAxisSpacing: AppSpacing.sm,
+                childAspectRatio: 1.1,
+                children: [
+                  StatCard(
+                    title: 'Total Torneos',
+                    value: dashboard.tournaments.total.toString(),
+                    icon: Icons.emoji_events,
+                    color: AppColors.primary,
+                  ),
+                  StatCard(
+                    title: 'Activos',
+                    value: dashboard.tournaments.active.toString(),
+                    icon: Icons.play_circle,
+                    color: AppColors.success,
+                  ),
+                  StatCard(
+                    title: 'Programados',
+                    value: dashboard.tournaments.scheduled.toString(),
+                    icon: Icons.schedule,
+                    color: AppColors.info,
+                  ),
+                  StatCard(
+                    title: 'Completados',
+                    value: dashboard.tournaments.completed.toString(),
+                    icon: Icons.check_circle,
+                    color: AppColors.textSecondary,
+                  ),
+                ],
               ),
             ),
             AppSpacing.verticalSpaceLG,
@@ -620,26 +632,26 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
               subtitle: 'QR de jugadores verificados',
               icon: Icons.qr_code_scanner_outlined,
               child: GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: AppSpacing.sm,
-              mainAxisSpacing: AppSpacing.sm,
-              childAspectRatio: 1.1,
-              children: [
-                StatCard(
-                  title: 'Hoy',
-                  value: dashboard.verifications.today.toString(),
-                  icon: Icons.qr_code_scanner,
-                  color: AppColors.primary,
-                ),
-                StatCard(
-                  title: 'Este Mes',
-                  value: dashboard.verifications.thisMonth.toString(),
-                  icon: Icons.calendar_month,
-                  color: AppColors.info,
-                ),
-              ],
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: AppSpacing.sm,
+                mainAxisSpacing: AppSpacing.sm,
+                childAspectRatio: 1.1,
+                children: [
+                  StatCard(
+                    title: 'Hoy',
+                    value: dashboard.verifications.today.toString(),
+                    icon: Icons.qr_code_scanner,
+                    color: AppColors.primary,
+                  ),
+                  StatCard(
+                    title: 'Este Mes',
+                    value: dashboard.verifications.thisMonth.toString(),
+                    icon: Icons.calendar_month,
+                    color: AppColors.info,
+                  ),
+                ],
               ),
             ),
           ],

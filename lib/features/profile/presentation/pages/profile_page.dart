@@ -22,9 +22,7 @@ class ProfilePage extends ConsumerWidget {
             icon: const Icon(Icons.edit),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Editar perfil - Próximamente'),
-                ),
+                const SnackBar(content: Text('Editar perfil - Próximamente')),
               );
             },
           ),
@@ -156,7 +154,7 @@ class ProfilePage extends ConsumerWidget {
                       label: const Text('Cerrar Sesión'),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.error,
-                        side: BorderSide(color: AppColors.error),
+                        side: const BorderSide(color: AppColors.error),
                       ),
                     ),
                   ),

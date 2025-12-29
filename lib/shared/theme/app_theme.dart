@@ -73,9 +73,7 @@ class AppTheme {
       cardTheme: const CardThemeData(
         color: AppColors.surface,
         elevation: AppSpacing.cardElevation,
-        shape: RoundedRectangleBorder(
-          borderRadius: AppSpacing.borderRadiusMD,
-        ),
+        shape: RoundedRectangleBorder(borderRadius: AppSpacing.borderRadiusMD),
         margin: AppSpacing.paddingMD,
       ),
 
@@ -89,7 +87,7 @@ class AppTheme {
           elevation: 2,
           minimumSize: const Size(88, AppSpacing.buttonHeightMedium),
           padding: AppSpacing.paddingHorizontalLG,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: AppSpacing.borderRadiusSM,
           ),
           textStyle: AppTextStyles.buttonMedium,
@@ -104,11 +102,8 @@ class AppTheme {
           foregroundColor: AppColors.primary,
           minimumSize: const Size(88, AppSpacing.buttonHeightMedium),
           padding: AppSpacing.paddingHorizontalLG,
-          side: const BorderSide(
-            color: AppColors.primary,
-            width: 1.5,
-          ),
-          shape: RoundedRectangleBorder(
+          side: const BorderSide(color: AppColors.primary, width: 1.5),
+          shape: const RoundedRectangleBorder(
             borderRadius: AppSpacing.borderRadiusSM,
           ),
           textStyle: AppTextStyles.buttonMedium.copyWith(
@@ -125,7 +120,7 @@ class AppTheme {
           foregroundColor: AppColors.primary,
           minimumSize: const Size(88, AppSpacing.buttonHeightMedium),
           padding: AppSpacing.paddingHorizontalMD,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: AppSpacing.borderRadiusSM,
           ),
           textStyle: AppTextStyles.buttonMedium.copyWith(
@@ -151,40 +146,25 @@ class AppTheme {
         filled: true,
         fillColor: AppColors.surface,
         contentPadding: AppSpacing.paddingMD,
-        border: OutlineInputBorder(
+        border: const OutlineInputBorder(
           borderRadius: AppSpacing.borderRadiusSM,
-          borderSide: const BorderSide(
-            color: AppColors.border,
-            width: 1,
-          ),
+          borderSide: BorderSide(color: AppColors.border, width: 1),
         ),
-        enabledBorder: OutlineInputBorder(
+        enabledBorder: const OutlineInputBorder(
           borderRadius: AppSpacing.borderRadiusSM,
-          borderSide: const BorderSide(
-            color: AppColors.border,
-            width: 1,
-          ),
+          borderSide: BorderSide(color: AppColors.border, width: 1),
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderRadius: AppSpacing.borderRadiusSM,
-          borderSide: const BorderSide(
-            color: AppColors.primary,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: AppColors.primary, width: 2),
         ),
-        errorBorder: OutlineInputBorder(
+        errorBorder: const OutlineInputBorder(
           borderRadius: AppSpacing.borderRadiusSM,
-          borderSide: const BorderSide(
-            color: AppColors.error,
-            width: 1,
-          ),
+          borderSide: BorderSide(color: AppColors.error, width: 1),
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
           borderRadius: AppSpacing.borderRadiusSM,
-          borderSide: const BorderSide(
-            color: AppColors.error,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: AppColors.error, width: 2),
         ),
         labelStyle: AppTextStyles.bodyMedium.copyWith(
           color: AppColors.textSecondary,
@@ -226,9 +206,7 @@ class AppTheme {
       dialogTheme: const DialogThemeData(
         backgroundColor: AppColors.surface,
         elevation: AppSpacing.cardElevation,
-        shape: RoundedRectangleBorder(
-          borderRadius: AppSpacing.borderRadiusMD,
-        ),
+        shape: RoundedRectangleBorder(borderRadius: AppSpacing.borderRadiusMD),
         titleTextStyle: AppTextStyles.h5,
         contentTextStyle: AppTextStyles.bodyMedium,
       ),
@@ -253,7 +231,7 @@ class AppTheme {
       // ========================================================================
       // CHIP
       // ========================================================================
-      chipTheme: ChipThemeData(
+      chipTheme: const ChipThemeData(
         backgroundColor: AppColors.surfaceDark,
         deleteIconColor: AppColors.textSecondary,
         selectedColor: AppColors.primaryLight,
@@ -261,9 +239,7 @@ class AppTheme {
         padding: AppSpacing.paddingSM,
         labelStyle: AppTextStyles.labelMedium,
         secondaryLabelStyle: AppTextStyles.labelMedium,
-        shape: RoundedRectangleBorder(
-          borderRadius: AppSpacing.borderRadiusSM,
-        ),
+        shape: RoundedRectangleBorder(borderRadius: AppSpacing.borderRadiusSM),
       ),
 
       // ========================================================================
@@ -284,7 +260,7 @@ class AppTheme {
           color: AppColors.textOnDark,
         ),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: AppSpacing.borderRadiusSM,
         ),
       ),
@@ -293,36 +269,36 @@ class AppTheme {
       // SWITCH
       // ========================================================================
       switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.resolveWith<Color>(
-          (Set<WidgetState> states) {
-            if (states.contains(WidgetState.selected)) {
-              return AppColors.primary;
-            }
-            return AppColors.textTertiary;
-          },
-        ),
-        trackColor: WidgetStateProperty.resolveWith<Color>(
-          (Set<WidgetState> states) {
-            if (states.contains(WidgetState.selected)) {
-              return AppColors.primaryLight;
-            }
-            return AppColors.divider;
-          },
-        ),
+        thumbColor: WidgetStateProperty.resolveWith<Color>((
+          Set<WidgetState> states,
+        ) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.primary;
+          }
+          return AppColors.textTertiary;
+        }),
+        trackColor: WidgetStateProperty.resolveWith<Color>((
+          Set<WidgetState> states,
+        ) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.primaryLight;
+          }
+          return AppColors.divider;
+        }),
       ),
 
       // ========================================================================
       // CHECKBOX
       // ========================================================================
       checkboxTheme: CheckboxThemeData(
-        fillColor: WidgetStateProperty.resolveWith<Color>(
-          (Set<WidgetState> states) {
-            if (states.contains(WidgetState.selected)) {
-              return AppColors.primary;
-            }
-            return AppColors.surface;
-          },
-        ),
+        fillColor: WidgetStateProperty.resolveWith<Color>((
+          Set<WidgetState> states,
+        ) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.primary;
+          }
+          return AppColors.surface;
+        }),
         checkColor: const WidgetStatePropertyAll(AppColors.textOnDark),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radiusXS),
@@ -333,14 +309,14 @@ class AppTheme {
       // RADIO
       // ========================================================================
       radioTheme: RadioThemeData(
-        fillColor: WidgetStateProperty.resolveWith<Color>(
-          (Set<WidgetState> states) {
-            if (states.contains(WidgetState.selected)) {
-              return AppColors.primary;
-            }
-            return AppColors.textSecondary;
-          },
-        ),
+        fillColor: WidgetStateProperty.resolveWith<Color>((
+          Set<WidgetState> states,
+        ) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.primary;
+          }
+          return AppColors.textSecondary;
+        }),
       ),
 
       // ========================================================================

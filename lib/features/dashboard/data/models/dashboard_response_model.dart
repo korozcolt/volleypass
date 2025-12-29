@@ -110,12 +110,12 @@ class UserMetricsModel with _$UserMetricsModel {
 
 extension UserMetricsModelX on UserMetricsModel {
   UserMetrics toEntity() => UserMetrics(
-        total: total,
-        active: active,
-        inactive: inactive,
-        newLast30Days: newLast30Days,
-        byRole: byRole,
-      );
+    total: total,
+    active: active,
+    inactive: inactive,
+    newLast30Days: newLast30Days,
+    byRole: byRole,
+  );
 }
 
 @freezed
@@ -135,13 +135,13 @@ class SubscriptionMetricsModel with _$SubscriptionMetricsModel {
 
 extension SubscriptionMetricsModelX on SubscriptionMetricsModel {
   SubscriptionMetrics toEntity() => SubscriptionMetrics(
-        active: active,
-        expired: expired,
-        expiringSoon7Days: expiringSoon7Days,
-        pastDue: pastDue,
-        suspended: suspended,
-        total: total,
-      );
+    active: active,
+    expired: expired,
+    expiringSoon7Days: expiringSoon7Days,
+    pastDue: pastDue,
+    suspended: suspended,
+    total: total,
+  );
 }
 
 @freezed
@@ -158,10 +158,10 @@ class SystemMetricsModel with _$SystemMetricsModel {
 
 extension SystemMetricsModelX on SystemMetricsModel {
   SystemMetrics toEntity() => SystemMetrics(
-        verifications: verifications.toEntity(),
-        matches: matches.toEntity(),
-        clubs: clubs.toEntity(),
-      );
+    verifications: verifications.toEntity(),
+    matches: matches.toEntity(),
+    clubs: clubs.toEntity(),
+  );
 }
 
 @freezed
@@ -177,11 +177,8 @@ class VerificationMetricsModel with _$VerificationMetricsModel {
 }
 
 extension VerificationMetricsModelX on VerificationMetricsModel {
-  VerificationMetrics toEntity() => VerificationMetrics(
-        total: total,
-        today: today,
-        thisMonth: thisMonth,
-      );
+  VerificationMetrics toEntity() =>
+      VerificationMetrics(total: total, today: today, thisMonth: thisMonth);
 }
 
 @freezed
@@ -199,11 +196,11 @@ class MatchMetricsModel with _$MatchMetricsModel {
 
 extension MatchMetricsModelX on MatchMetricsModel {
   MatchMetrics toEntity() => MatchMetrics(
-        total: total,
-        completed: completed,
-        inProgress: inProgress,
-        scheduled: scheduled,
-      );
+    total: total,
+    completed: completed,
+    inProgress: inProgress,
+    scheduled: scheduled,
+  );
 }
 
 @freezed
@@ -219,11 +216,8 @@ class ClubMetricsModel with _$ClubMetricsModel {
 }
 
 extension ClubMetricsModelX on ClubMetricsModel {
-  ClubMetrics toEntity() => ClubMetrics(
-        total: total,
-        active: active,
-        inactive: inactive,
-      );
+  ClubMetrics toEntity() =>
+      ClubMetrics(total: total, active: active, inactive: inactive);
 }
 
 @freezed
@@ -241,11 +235,11 @@ class RevenueMetricsModel with _$RevenueMetricsModel {
 
 extension RevenueMetricsModelX on RevenueMetricsModel {
   RevenueMetrics toEntity() => RevenueMetrics(
-        monthlyRecurring: monthlyRecurring,
-        totalCollected: totalCollected,
-        pendingCollection: pendingCollection,
-        overdueAmount: overdueAmount,
-      );
+    monthlyRecurring: monthlyRecurring,
+    totalCollected: totalCollected,
+    pendingCollection: pendingCollection,
+    overdueAmount: overdueAmount,
+  );
 }
 
 @freezed
@@ -262,10 +256,9 @@ class RecentActivityModel with _$RecentActivityModel {
 
 extension RecentActivityModelX on RecentActivityModel {
   RecentActivity toEntity() => RecentActivity(
-        recentUsers: recentUsers.map((u) => u.toEntity()).toList(),
-        recentSubscriptions:
-            recentSubscriptions.map((s) => s.toEntity()).toList(),
-      );
+    recentUsers: recentUsers.map((u) => u.toEntity()).toList(),
+    recentSubscriptions: recentSubscriptions.map((s) => s.toEntity()).toList(),
+  );
 }
 
 @freezed
@@ -284,12 +277,12 @@ class RecentUserModel with _$RecentUserModel {
 
 extension RecentUserModelX on RecentUserModel {
   RecentUser toEntity() => RecentUser(
-        id: id,
-        name: name,
-        email: email,
-        role: role,
-        createdAt: DateTime.parse(createdAt),
-      );
+    id: id,
+    name: name,
+    email: email,
+    role: role,
+    createdAt: DateTime.parse(createdAt),
+  );
 }
 
 @freezed
@@ -308,12 +301,12 @@ class RecentSubscriptionModel with _$RecentSubscriptionModel {
 
 extension RecentSubscriptionModelX on RecentSubscriptionModel {
   RecentSubscription toEntity() => RecentSubscription(
-        id: id,
-        club: club,
-        status: status,
-        currentPeriodEnd: currentPeriodEnd,
-        createdAt: DateTime.parse(createdAt),
-      );
+    id: id,
+    club: club,
+    status: status,
+    currentPeriodEnd: currentPeriodEnd,
+    createdAt: DateTime.parse(createdAt),
+  );
 }
 
 // ============================================================================
@@ -339,15 +332,15 @@ class ClubDashboardModel with _$ClubDashboardModel {
 
 extension ClubDashboardModelX on ClubDashboardModel {
   ClubDashboard toEntity() => ClubDashboard(
-        role: role,
-        timestamp: DateTime.parse(timestamp),
-        clubInfo: clubInfo.toEntity(),
-        players: players.toEntity(),
-        matches: matches.toEntity(),
-        payments: payments.toEntity(),
-        federation: federation.toEntity(),
-        subscription: subscription?.toEntity(),
-      );
+    role: role,
+    timestamp: DateTime.parse(timestamp),
+    clubInfo: clubInfo.toEntity(),
+    players: players.toEntity(),
+    matches: matches.toEntity(),
+    payments: payments.toEntity(),
+    federation: federation.toEntity(),
+    subscription: subscription?.toEntity(),
+  );
 }
 
 @freezed
@@ -374,20 +367,20 @@ class ClubInfoModel with _$ClubInfoModel {
 
 extension ClubInfoModelX on ClubInfoModel {
   ClubInfo toEntity() => ClubInfo(
-        id: id,
-        name: name,
-        shortName: shortName,
-        logo: logo,
-        status: status,
-        isActive: isActive,
-        isFederated: isFederated,
-        federationCode: federationCode,
-        email: email,
-        phone: phone,
-        address: address,
-        city: city,
-        department: department,
-      );
+    id: id,
+    name: name,
+    shortName: shortName,
+    logo: logo,
+    status: status,
+    isActive: isActive,
+    isFederated: isFederated,
+    federationCode: federationCode,
+    email: email,
+    phone: phone,
+    address: address,
+    city: city,
+    department: department,
+  );
 }
 
 @freezed
@@ -410,15 +403,15 @@ class ClubPlayersModel with _$ClubPlayersModel {
 
 extension ClubPlayersModelX on ClubPlayersModel {
   ClubPlayers toEntity() => ClubPlayers(
-        total: total,
-        active: active,
-        inactive: inactive,
-        federated: federated,
-        nonFederated: nonFederated,
-        withOverduePayments: withOverduePayments,
-        byCategory: byCategory,
-        expiringMedicalCerts30Days: expiringMedicalCerts30Days,
-      );
+    total: total,
+    active: active,
+    inactive: inactive,
+    federated: federated,
+    nonFederated: nonFederated,
+    withOverduePayments: withOverduePayments,
+    byCategory: byCategory,
+    expiringMedicalCerts30Days: expiringMedicalCerts30Days,
+  );
 }
 
 @freezed
@@ -438,12 +431,12 @@ class ClubMatchesModel with _$ClubMatchesModel {
 
 extension ClubMatchesModelX on ClubMatchesModel {
   ClubMatches toEntity() => ClubMatches(
-        totalPlayed: totalPlayed,
-        wins: wins,
-        losses: losses,
-        winRate: winRate,
-        upcomingMatches: upcomingMatches.map((m) => m.toEntity()).toList(),
-      );
+    totalPlayed: totalPlayed,
+    wins: wins,
+    losses: losses,
+    winRate: winRate,
+    upcomingMatches: upcomingMatches.map((m) => m.toEntity()).toList(),
+  );
 }
 
 @freezed
@@ -464,14 +457,14 @@ class UpcomingMatchModel with _$UpcomingMatchModel {
 
 extension UpcomingMatchModelX on UpcomingMatchModel {
   UpcomingMatch toEntity() => UpcomingMatch(
-        id: id,
-        homeTeam: homeTeam,
-        awayTeam: awayTeam,
-        tournament: tournament,
-        scheduledAt: DateTime.parse(scheduledAt),
-        venue: venue,
-        isHome: isHome,
-      );
+    id: id,
+    homeTeam: homeTeam,
+    awayTeam: awayTeam,
+    tournament: tournament,
+    scheduledAt: DateTime.parse(scheduledAt),
+    venue: venue,
+    isHome: isHome,
+  );
 }
 
 @freezed
@@ -489,11 +482,11 @@ class ClubPaymentsModel with _$ClubPaymentsModel {
 
 extension ClubPaymentsModelX on ClubPaymentsModel {
   ClubPayments toEntity() => ClubPayments(
-        pendingCount: pendingCount,
-        overdueCount: overdueCount,
-        pendingAmount: pendingAmount,
-        overdueAmount: overdueAmount,
-      );
+    pendingCount: pendingCount,
+    overdueCount: overdueCount,
+    pendingAmount: pendingAmount,
+    overdueAmount: overdueAmount,
+  );
 }
 
 @freezed
@@ -510,9 +503,9 @@ class FederationInfoModel with _$FederationInfoModel {
 
 extension FederationInfoModelX on FederationInfoModel {
   FederationInfo toEntity() => FederationInfo(
-        pendingFederation: pendingFederation,
-        expiringFederation30Days: expiringFederation30Days,
-      );
+    pendingFederation: pendingFederation,
+    expiringFederation30Days: expiringFederation30Days,
+  );
 }
 
 @freezed
@@ -534,15 +527,15 @@ class ClubSubscriptionModel with _$ClubSubscriptionModel {
 
 extension ClubSubscriptionModelX on ClubSubscriptionModel {
   ClubSubscription toEntity() => ClubSubscription(
-        hasSubscription: hasSubscription,
-        status: status,
-        currentPeriodEnd: currentPeriodEnd,
-        daysUntilRenewal: daysUntilRenewal,
-        isActive: isActive,
-        isPastDue: isPastDue,
-        playerCount: playerCount,
-        lastAmount: lastAmount,
-      );
+    hasSubscription: hasSubscription,
+    status: status,
+    currentPeriodEnd: currentPeriodEnd,
+    daysUntilRenewal: daysUntilRenewal,
+    isActive: isActive,
+    isPastDue: isPastDue,
+    playerCount: playerCount,
+    lastAmount: lastAmount,
+  );
 }
 
 // ============================================================================
@@ -594,7 +587,8 @@ extension LeagueDashboardModelX on LeagueDashboardModel {
         total: players['total'] as int,
         federated: players['federated'] as int,
         nonFederated: players['non_federated'] as int,
-        federationPercentage: (players['federation_percentage'] as num).toDouble(),
+        federationPercentage: (players['federation_percentage'] as num)
+            .toDouble(),
         byClub: Map<String, int>.from(players['by_club'] as Map),
         byCategory: Map<String, int>.from(players['by_category'] as Map),
       ),
@@ -603,12 +597,12 @@ extension LeagueDashboardModelX on LeagueDashboardModel {
         active: tournaments['active'] as int,
         scheduled: tournaments['scheduled'] as int,
         completed: tournaments['completed'] as int,
-        recent: [], // Will complete in Phase B
+        recent: const [], // Will complete in Phase B
       ),
       sanctions: LeagueSanctions(
         active: sanctions['active'] as int,
         byType: Map<String, int>.from(sanctions['by_type'] as Map),
-        recent: [], // Will complete in Phase B
+        recent: const [], // Will complete in Phase B
       ),
       verifications: LeagueVerifications(
         pending: verifications['pending'] as int,

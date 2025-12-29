@@ -10,13 +10,13 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
   final GetDashboardUseCase getDashboardUseCase;
 
   DashboardNotifier({required this.getDashboardUseCase})
-      : super(const DashboardState.initial());
+    : super(const DashboardState.initial());
 
   /// Carga el dashboard según el rol del usuario autenticado
   Future<void> loadDashboard() async {
     state = const DashboardState.loading();
 
-    final result = await getDashboardUseCase(NoParams());
+    final result = await getDashboardUseCase(const NoParams());
 
     result.fold(
       (failure) => state = DashboardState.error(failure.message),

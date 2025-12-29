@@ -41,6 +41,8 @@ class ActivityItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -82,10 +84,11 @@ class ActivityItem extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       height: 1.3,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -96,7 +99,7 @@ class ActivityItem extends StatelessWidget {
                       description!,
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey[600],
+                        color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
                         height: 1.2,
                       ),
                       maxLines: 1,
@@ -111,7 +114,7 @@ class ActivityItem extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: Colors.grey[100],
+                color: isDark ? Colors.grey[800] : Colors.grey[100],
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
@@ -119,7 +122,7 @@ class ActivityItem extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
-                  color: Colors.grey[600],
+                  color: isDark ? Colors.grey[400] : Colors.grey[600],
                 ),
               ),
             ),

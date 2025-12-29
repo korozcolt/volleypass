@@ -49,7 +49,7 @@ class TournamentsRepositoryImpl implements TournamentsRepository {
       return Right(entity);
     } on ApiException catch (e) {
       if (e.statusCode == 404) {
-        return Left(NotFoundFailure('Torneo no encontrado'));
+        return const Left(NotFoundFailure('Torneo no encontrado'));
       }
       return Left(ServerFailure(e.message));
     } catch (e) {
@@ -67,7 +67,7 @@ class TournamentsRepositoryImpl implements TournamentsRepository {
       return Right(entity);
     } on ApiException catch (e) {
       if (e.statusCode == 404) {
-        return Left(NotFoundFailure('Tabla de posiciones no encontrada'));
+        return const Left(NotFoundFailure('Tabla de posiciones no encontrada'));
       }
       return Left(ServerFailure(e.message));
     } catch (e) {

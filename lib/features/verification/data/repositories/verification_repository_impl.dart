@@ -26,9 +26,9 @@ class VerificationRepositoryImpl implements VerificationRepository {
     required VerificationRemoteDataSource remoteDataSource,
     required VerificationLocalDataSource localDataSource,
     required Connectivity connectivity,
-  })  : _remoteDataSource = remoteDataSource,
-        _localDataSource = localDataSource,
-        _connectivity = connectivity;
+  }) : _remoteDataSource = remoteDataSource,
+       _localDataSource = localDataSource,
+       _connectivity = connectivity;
 
   @override
   Future<Either<Failure, VerificationResultData>> verifyQR(
@@ -69,7 +69,8 @@ class VerificationRepositoryImpl implements VerificationRepository {
         // Crear verificación offline temporal
         final offlineVerification = VerificationModel(
           id: DateTime.now().millisecondsSinceEpoch,
-          result: 'eligible', // Asumir elegible offline (se validará al sincronizar)
+          result:
+              'eligible', // Asumir elegible offline (se validará al sincronizar)
           restrictionReason: null,
           verifiedAt: DateTime.now().toIso8601String(),
           sessionId: request.matchSessionId,
@@ -115,7 +116,9 @@ class VerificationRepositoryImpl implements VerificationRepository {
         error: e,
         stackTrace: stackTrace,
       );
-      return Left(ServerFailure('Error inesperado durante la verificación'));
+      return const Left(
+        ServerFailure('Error inesperado durante la verificación'),
+      );
     }
   }
 
@@ -148,7 +151,9 @@ class VerificationRepositoryImpl implements VerificationRepository {
           // Guardar en caché
           await _localDataSource.saveVerificationHistory(responses);
 
-          final resultDataList = responses.map((r) => r.toResultData()).toList();
+          final resultDataList = responses
+              .map((r) => r.toResultData())
+              .toList();
 
           AppLogger.info(
             'VerificationRepository: Got ${resultDataList.length} verifications from server',
@@ -172,8 +177,9 @@ class VerificationRepositoryImpl implements VerificationRepository {
           return const Right([]);
         }
 
-        final resultDataList =
-            cachedResponses.map((r) => r.toResultData()).toList();
+        final resultDataList = cachedResponses
+            .map((r) => r.toResultData())
+            .toList();
 
         AppLogger.info(
           'VerificationRepository: Got ${resultDataList.length} cached verifications',
@@ -187,7 +193,7 @@ class VerificationRepositoryImpl implements VerificationRepository {
         error: e,
         stackTrace: stackTrace,
       );
-      return Left(ServerFailure('Error inesperado al obtener historial'));
+      return const Left(ServerFailure('Error inesperado al obtener historial'));
     }
   }
 
@@ -200,16 +206,16 @@ class VerificationRepositoryImpl implements VerificationRepository {
 
       if (!isOnline) {
         AppLogger.info('VerificationRepository: Cannot sync - offline');
-        return const Left(
-          NetworkFailure('No hay conexión para sincronizar'),
-        );
+        return const Left(NetworkFailure('No hay conexión para sincronizar'));
       }
 
       // Obtener pending verifications
       final pendingVerifications = _localDataSource.getPendingVerifications();
 
       if (pendingVerifications.isEmpty) {
-        AppLogger.info('VerificationRepository: No pending verifications to sync');
+        AppLogger.info(
+          'VerificationRepository: No pending verifications to sync',
+        );
         return const Right(true);
       }
 
@@ -249,7 +255,9 @@ class VerificationRepositoryImpl implements VerificationRepository {
         error: e,
         stackTrace: stackTrace,
       );
-      return Left(ServerFailure('Error inesperado durante la sincronización'));
+      return const Left(
+        ServerFailure('Error inesperado durante la sincronización'),
+      );
     }
   }
 

@@ -7,7 +7,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:io';
 import '../../../../core/utils/app_logger.dart';
-import '../../domain/entities/verification_request.dart';
 import '../../domain/usecases/verify_qr_usecase.dart';
 import '../state/scanner_state.dart';
 

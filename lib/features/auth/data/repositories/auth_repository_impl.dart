@@ -23,9 +23,9 @@ class AuthRepositoryImpl implements AuthRepository {
     required AuthRemoteDataSource remoteDataSource,
     required AuthLocalDataSource localDataSource,
     required NetworkInfo networkInfo,
-  })  : _remoteDataSource = remoteDataSource,
-        _localDataSource = localDataSource,
-        _networkInfo = networkInfo;
+  }) : _remoteDataSource = remoteDataSource,
+       _localDataSource = localDataSource,
+       _networkInfo = networkInfo;
 
   @override
   Future<Either<Failure, User>> login({
@@ -65,7 +65,9 @@ class AuthRepositoryImpl implements AuthRepository {
 
       // Retornar entidad
       final userEntity = response.user.toEntity();
-      AppLogger.info('AuthRepository: Login successful for user ${userEntity.email}');
+      AppLogger.info(
+        'AuthRepository: Login successful for user ${userEntity.email}',
+      );
       return Right(userEntity);
     } on ApiException catch (e) {
       AppLogger.error('AuthRepository: API error during login', error: e);
@@ -108,7 +110,10 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return Right(userModel.toEntity());
     } on ApiException catch (e) {
-      AppLogger.error('AuthRepository: API error getting current user', error: e);
+      AppLogger.error(
+        'AuthRepository: API error getting current user',
+        error: e,
+      );
 
       // Si es 401, limpiar datos locales
       if (e.statusCode == 401) {
@@ -138,7 +143,10 @@ class AuthRepositoryImpl implements AuthRepository {
           await _remoteDataSource.logout();
           AppLogger.debug('AuthRepository: API logout successful');
         } catch (e) {
-          AppLogger.warning('AuthRepository: API logout failed, continuing with local cleanup', error: e);
+          AppLogger.warning(
+            'AuthRepository: API logout failed, continuing with local cleanup',
+            error: e,
+          );
           // No retornar error, continuar con limpieza local
         }
       }
@@ -154,7 +162,7 @@ class AuthRepositoryImpl implements AuthRepository {
         error: e,
         stackTrace: stackTrace,
       );
-      return Left(CacheFailure('Error al cerrar sesión localmente'));
+      return const Left(CacheFailure('Error al cerrar sesión localmente'));
     }
   }
 

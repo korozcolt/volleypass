@@ -2,7 +2,6 @@
 library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/usecases/usecase.dart';
 import '../../domain/usecases/get_available_matches_usecase.dart';
 import '../state/available_matches_state.dart';
 
@@ -10,7 +9,7 @@ class AvailableMatchesNotifier extends StateNotifier<AvailableMatchesState> {
   final GetAvailableMatchesUseCase _getAvailableMatchesUseCase;
 
   AvailableMatchesNotifier(this._getAvailableMatchesUseCase)
-      : super(const AvailableMatchesState.initial());
+    : super(const AvailableMatchesState.initial());
 
   Future<void> loadMatches({bool refresh = false}) async {
     if (refresh) {
@@ -22,9 +21,8 @@ class AvailableMatchesNotifier extends StateNotifier<AvailableMatchesState> {
     );
 
     result.fold(
-      (failure) => state = AvailableMatchesState.error(
-        message: failure.message,
-      ),
+      (failure) =>
+          state = AvailableMatchesState.error(message: failure.message),
       (matches) {
         if (matches.isEmpty) {
           state = const AvailableMatchesState.empty();
@@ -41,11 +39,8 @@ class AvailableMatchesNotifier extends StateNotifier<AvailableMatchesState> {
 
   Future<void> loadMore() async {
     final stateData = state.whenOrNull(
-      loaded: (matches, hasMore, currentPage) => (
-        matches: matches,
-        hasMore: hasMore,
-        currentPage: currentPage,
-      ),
+      loaded: (matches, hasMore, currentPage) =>
+          (matches: matches, hasMore: hasMore, currentPage: currentPage),
     );
 
     if (stateData == null || !stateData.hasMore) return;

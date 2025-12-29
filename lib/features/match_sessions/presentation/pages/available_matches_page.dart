@@ -26,7 +26,9 @@ class _AvailableMatchesPageState extends ConsumerState<AvailableMatchesPage> {
 
     // Load matches on init
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(availableMatchesStateProvider.notifier).loadMatches(refresh: true);
+      ref
+          .read(availableMatchesStateProvider.notifier)
+          .loadMatches(refresh: true);
     });
   }
 
@@ -54,7 +56,9 @@ class _AvailableMatchesPageState extends ConsumerState<AvailableMatchesPage> {
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              ref.read(availableMatchesStateProvider.notifier).loadMatches(refresh: true);
+              ref
+                  .read(availableMatchesStateProvider.notifier)
+                  .loadMatches(refresh: true);
             },
           ),
         ],
@@ -72,7 +76,9 @@ class _AvailableMatchesPageState extends ConsumerState<AvailableMatchesPage> {
 
           return RefreshIndicator(
             onRefresh: () async {
-              await ref.read(availableMatchesStateProvider.notifier).loadMatches(refresh: true);
+              await ref
+                  .read(availableMatchesStateProvider.notifier)
+                  .loadMatches(refresh: true);
             },
             child: ListView.builder(
               controller: _scrollController,
@@ -88,7 +94,8 @@ class _AvailableMatchesPageState extends ConsumerState<AvailableMatchesPage> {
                 final match = matches[index];
                 return AvailableMatchCard(
                   match: match,
-                  onTap: () => _showCreateSessionDialog(match.id, match.matchTitle),
+                  onTap: () =>
+                      _showCreateSessionDialog(match.id, match.matchTitle),
                 );
               },
             ),
@@ -99,7 +106,9 @@ class _AvailableMatchesPageState extends ConsumerState<AvailableMatchesPage> {
           message: message,
           actionLabel: 'Reintentar',
           onAction: () {
-            ref.read(availableMatchesStateProvider.notifier).loadMatches(refresh: true);
+            ref
+                .read(availableMatchesStateProvider.notifier)
+                .loadMatches(refresh: true);
           },
         ),
         empty: () => const EmptyStateWidget(
@@ -121,7 +130,7 @@ class _AvailableMatchesPageState extends ConsumerState<AvailableMatchesPage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('¿Deseas crear una planilla para:'),
+            const Text('¿Deseas crear una planilla para:'),
             const SizedBox(height: 8),
             Text(
               matchTitle,
@@ -166,10 +175,9 @@ class _AvailableMatchesPageState extends ConsumerState<AvailableMatchesPage> {
     );
 
     // Create session
-    await ref.read(createSessionStateProvider.notifier).createSession(
-          matchId: matchId,
-          notes: notes.isEmpty ? null : notes,
-        );
+    await ref
+        .read(createSessionStateProvider.notifier)
+        .createSession(matchId: matchId, notes: notes.isEmpty ? null : notes);
 
     // Hide loading
     if (!mounted) return;
@@ -192,10 +200,7 @@ class _AvailableMatchesPageState extends ConsumerState<AvailableMatchesPage> {
       },
       error: (message) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(message),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text(message), backgroundColor: Colors.red),
         );
       },
     );

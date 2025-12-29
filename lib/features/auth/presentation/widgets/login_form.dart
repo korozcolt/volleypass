@@ -33,10 +33,9 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   void _handleLogin() {
     if (_formKey.currentState!.validate()) {
-      ref.read(authStateProvider.notifier).login(
-            _emailController.text.trim(),
-            _passwordController.text,
-          );
+      ref
+          .read(authStateProvider.notifier)
+          .login(_emailController.text.trim(), _passwordController.text);
     }
   }
 
@@ -61,7 +60,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             AppSpacing.verticalSpaceXL,
 
             // Título
-            Text(
+            const Text(
               'Iniciar Sesión',
               style: AppTextStyles.h3,
               textAlign: TextAlign.center,
@@ -168,38 +167,36 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
             // Error message
             authState.whenOrNull(
-              error: (message) => Padding(
-                padding: AppSpacing.paddingVerticalMD,
-                child: Container(
-                  padding: AppSpacing.paddingMD,
-                  decoration: BoxDecoration(
-                    color: AppColors.error.withOpacity(0.1),
-                    borderRadius: AppSpacing.borderRadiusSM,
-                    border: Border.all(
-                      color: AppColors.error,
-                      width: 1,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.error_outline,
-                        color: AppColors.error,
+                  error: (message) => Padding(
+                    padding: AppSpacing.paddingVerticalMD,
+                    child: Container(
+                      padding: AppSpacing.paddingMD,
+                      decoration: BoxDecoration(
+                        color: AppColors.error.withOpacity(0.1),
+                        borderRadius: AppSpacing.borderRadiusSM,
+                        border: Border.all(color: AppColors.error, width: 1),
                       ),
-                      AppSpacing.horizontalSpaceSM,
-                      Expanded(
-                        child: Text(
-                          message,
-                          style: AppTextStyles.bodySmall.copyWith(
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
                             color: AppColors.error,
                           ),
-                        ),
+                          AppSpacing.horizontalSpaceSM,
+                          Expanded(
+                            child: Text(
+                              message,
+                              style: AppTextStyles.bodySmall.copyWith(
+                                color: AppColors.error,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ) ?? const SizedBox.shrink(),
+                ) ??
+                const SizedBox.shrink(),
           ],
         ),
       ),

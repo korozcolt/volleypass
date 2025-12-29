@@ -15,10 +15,7 @@ import '../widgets/match_item.dart';
 class TournamentDetailPage extends ConsumerStatefulWidget {
   final int tournamentId;
 
-  const TournamentDetailPage({
-    super.key,
-    required this.tournamentId,
-  });
+  const TournamentDetailPage({super.key, required this.tournamentId});
 
   @override
   ConsumerState<TournamentDetailPage> createState() =>
@@ -81,21 +78,13 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
 
     return Scaffold(
       body: state.when(
-        initial: () => const Center(
-          child: Text('Cargando detalles...'),
-        ),
-        loading: () => const Center(
-          child: CircularProgressIndicator(),
-        ),
+        initial: () => const Center(child: Text('Cargando detalles...')),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (message) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.error_outline,
-                size: 64,
-                color: AppColors.error,
-              ),
+              const Icon(Icons.error_outline, size: 64, color: AppColors.error),
               AppSpacing.verticalSpaceMD,
               Text(
                 message,
@@ -132,12 +121,7 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
                     tournament.name,
                     style: const TextStyle(
                       fontWeight: FontWeight.w700,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black45,
-                          blurRadius: 8,
-                        ),
-                      ],
+                      shadows: [Shadow(color: Colors.black45, blurRadius: 8)],
                     ),
                   ),
                   background: Container(
@@ -228,10 +212,7 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Colors.white,
-            statusColor.withOpacity(0.02),
-          ],
+          colors: [Colors.white, statusColor.withOpacity(0.02)],
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
@@ -286,7 +267,7 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
                 ),
                 child: Text(
                   _getTypeLabel(tournament.type),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: AppColors.primary,
@@ -296,11 +277,7 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
             ],
           ),
           const SizedBox(height: 16),
-          _buildInfoRow(
-            Icons.emoji_events,
-            'Liga',
-            tournament.league.name,
-          ),
+          _buildInfoRow(Icons.emoji_events, 'Liga', tournament.league.name),
           const SizedBox(height: 12),
           _buildInfoRow(
             Icons.calendar_today,
@@ -329,11 +306,7 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
             color: AppColors.primary.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(
-            icon,
-            size: 16,
-            color: AppColors.primary,
-          ),
+          child: Icon(icon, size: 16, color: AppColors.primary),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -372,10 +345,7 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
           padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
           child: Text(
             'Estadísticas',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
         ),
         const SizedBox(height: 12),
@@ -418,17 +388,18 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
   }
 
   Widget _buildStatCard(
-      String label, String value, IconData icon, Color color) {
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Colors.white,
-            color.withOpacity(0.02),
-          ],
+          colors: [Colors.white, color.withOpacity(0.02)],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
@@ -454,10 +425,7 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  color.withOpacity(0.15),
-                  color.withOpacity(0.05),
-                ],
+                colors: [color.withOpacity(0.15), color.withOpacity(0.05)],
               ),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -498,10 +466,7 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            AppColors.primary,
-            AppColors.primary.withOpacity(0.8),
-          ],
+          colors: [AppColors.primary, AppColors.primary.withOpacity(0.8)],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
@@ -523,21 +488,14 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
             );
           },
           borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 16,
-            ),
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.leaderboard,
-                  color: Colors.white,
-                  size: 24,
-                ),
-                const SizedBox(width: 12),
-                const Text(
+                Icon(Icons.leaderboard, color: Colors.white, size: 24),
+                SizedBox(width: 12),
+                Text(
                   'Ver Tabla de Posiciones',
                   style: TextStyle(
                     fontSize: 16,
@@ -568,7 +526,7 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
                   color: AppColors.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.groups,
                   size: 18,
                   color: AppColors.primary,
@@ -577,10 +535,7 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
               const SizedBox(width: 12),
               const Text(
                 'Equipos Participantes',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
               ),
             ],
           ),
@@ -592,10 +547,7 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
               padding: const EdgeInsets.all(24),
               child: Text(
                 'No hay equipos registrados',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: Colors.grey[600], fontSize: 14),
               ),
             ),
           )
@@ -620,10 +572,11 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
 
   Widget _buildMatchesSection(List<TournamentMatch> matches) {
     // Filtrar solo partidos programados o en progreso
-    final upcomingMatches = matches
-        .where((m) => m.status == 'scheduled' || m.status == 'in_progress')
-        .toList()
-      ..sort((a, b) => a.scheduledAt.compareTo(b.scheduledAt));
+    final upcomingMatches =
+        matches
+            .where((m) => m.status == 'scheduled' || m.status == 'in_progress')
+            .toList()
+          ..sort((a, b) => a.scheduledAt.compareTo(b.scheduledAt));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -638,7 +591,7 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
                   color: AppColors.success.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.sports_volleyball,
                   size: 18,
                   color: AppColors.success,
@@ -647,10 +600,7 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
               const SizedBox(width: 12),
               const Text(
                 'Próximos Partidos',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
               ),
             ],
           ),
@@ -662,18 +612,11 @@ class _TournamentDetailPageState extends ConsumerState<TournamentDetailPage> {
               padding: const EdgeInsets.all(24),
               child: Column(
                 children: [
-                  Icon(
-                    Icons.event_busy,
-                    size: 48,
-                    color: Colors.grey[400],
-                  ),
+                  Icon(Icons.event_busy, size: 48, color: Colors.grey[400]),
                   const SizedBox(height: 12),
                   Text(
                     'No hay partidos programados',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                 ],
               ),

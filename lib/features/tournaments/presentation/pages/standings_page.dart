@@ -14,10 +14,7 @@ import '../widgets/standing_item.dart';
 class StandingsPage extends ConsumerStatefulWidget {
   final int tournamentId;
 
-  const StandingsPage({
-    super.key,
-    required this.tournamentId,
-  });
+  const StandingsPage({super.key, required this.tournamentId});
 
   @override
   ConsumerState<StandingsPage> createState() => _StandingsPageState();
@@ -65,21 +62,14 @@ class _StandingsPageState extends ConsumerState<StandingsPage> {
         ],
       ),
       body: state.when(
-        initial: () => const Center(
-          child: Text('Cargando tabla de posiciones...'),
-        ),
-        loading: () => const Center(
-          child: CircularProgressIndicator(),
-        ),
+        initial: () =>
+            const Center(child: Text('Cargando tabla de posiciones...')),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (message) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.error_outline,
-                size: 64,
-                color: AppColors.error,
-              ),
+              const Icon(Icons.error_outline, size: 64, color: AppColors.error),
               AppSpacing.verticalSpaceMD,
               Text(
                 message,
@@ -105,11 +95,7 @@ class _StandingsPageState extends ConsumerState<StandingsPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.leaderboard,
-                    size: 64,
-                    color: Colors.grey[400],
-                  ),
+                  Icon(Icons.leaderboard, size: 64, color: Colors.grey[400]),
                   AppSpacing.verticalSpaceMD,
                   Text(
                     'No hay posiciones disponibles',
@@ -160,10 +146,7 @@ class _StandingsPageState extends ConsumerState<StandingsPage> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            AppColors.primary,
-            AppColors.primary.withOpacity(0.8),
-          ],
+          colors: [AppColors.primary, AppColors.primary.withOpacity(0.8)],
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
@@ -209,11 +192,7 @@ class _StandingsPageState extends ConsumerState<StandingsPage> {
           const SizedBox(height: 12),
           Row(
             children: [
-              const Icon(
-                Icons.update,
-                size: 14,
-                color: Colors.white70,
-              ),
+              const Icon(Icons.update, size: 14, color: Colors.white70),
               const SizedBox(width: 6),
               Text(
                 'Actualizado: ${DateFormat('dd/MM/yyyy HH:mm').format(updatedAt)}',
@@ -236,28 +215,18 @@ class _StandingsPageState extends ConsumerState<StandingsPage> {
       decoration: BoxDecoration(
         color: Colors.grey[50],
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.grey[300]!,
-          width: 1,
-        ),
+        border: Border.all(color: Colors.grey[300]!, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
-              Icon(
-                Icons.info_outline,
-                size: 16,
-                color: AppColors.primary,
-              ),
-              const SizedBox(width: 8),
-              const Text(
+              Icon(Icons.info_outline, size: 16, color: AppColors.primary),
+              SizedBox(width: 8),
+              Text(
                 'Leyenda',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
               ),
             ],
           ),
@@ -292,7 +261,7 @@ class _StandingsPageState extends ConsumerState<StandingsPage> {
           ),
           child: Text(
             abbr,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w700,
               color: AppColors.primary,
@@ -300,13 +269,7 @@ class _StandingsPageState extends ConsumerState<StandingsPage> {
           ),
         ),
         const SizedBox(width: 4),
-        Text(
-          meaning,
-          style: TextStyle(
-            fontSize: 11,
-            color: Colors.grey[700],
-          ),
-        ),
+        Text(meaning, style: TextStyle(fontSize: 11, color: Colors.grey[700])),
       ],
     );
   }
@@ -319,9 +282,7 @@ class _StandingsPageState extends ConsumerState<StandingsPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
             color: AppColors.primary.withOpacity(0.1),
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(16),
-            ),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
           ),
           child: Row(
             children: [
@@ -375,10 +336,8 @@ class _StandingsPageState extends ConsumerState<StandingsPage> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: standings.length,
-            separatorBuilder: (context, index) => Divider(
-              height: 1,
-              color: Colors.grey[200],
-            ),
+            separatorBuilder: (context, index) =>
+                Divider(height: 1, color: Colors.grey[200]),
             itemBuilder: (context, index) {
               final standing = standings[index];
               final isTopThree = standing.position <= 3;

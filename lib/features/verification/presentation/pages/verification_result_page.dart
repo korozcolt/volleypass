@@ -57,11 +57,9 @@ class _VerificationResultPageState
     // Resetear el scanner state
     ref.read(scannerStateProvider.notifier).resetScanner();
 
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (_) => const QRScannerPage(),
-      ),
-    );
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => const QRScannerPage()));
   }
 
   void _viewDetails() {
@@ -75,7 +73,8 @@ class _VerificationResultPageState
 
   @override
   Widget build(BuildContext context) {
-    final isEligible = widget.verification.result == VerificationResult.eligible;
+    final isEligible =
+        widget.verification.result == VerificationResult.eligible;
     final bgColor = isEligible ? AppColors.success : AppColors.error;
     final icon = isEligible ? Icons.check_circle : Icons.cancel;
 
@@ -97,11 +96,7 @@ class _VerificationResultPageState
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Icono de resultado
-              Icon(
-                icon,
-                size: 120,
-                color: bgColor,
-              ),
+              Icon(icon, size: 120, color: bgColor),
               AppSpacing.verticalSpaceMD,
 
               // Mensaje de estado
@@ -118,7 +113,10 @@ class _VerificationResultPageState
               if (widget.verification.isOffline) ...[
                 AppSpacing.verticalSpaceSM,
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.warning,
                     borderRadius: BorderRadius.circular(12),
@@ -149,7 +147,7 @@ class _VerificationResultPageState
               // Tarjeta con información del jugador
               Card(
                 elevation: 4,
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: AppSpacing.borderRadiusMD,
                 ),
                 child: Padding(
@@ -240,12 +238,18 @@ class _VerificationResultPageState
 
                         if (widget.player.bloodType != null) ...[
                           AppSpacing.verticalSpaceSM,
-                          _buildInfoRow('Tipo de Sangre', widget.player.bloodType!),
+                          _buildInfoRow(
+                            'Tipo de Sangre',
+                            widget.player.bloodType!,
+                          ),
                         ],
 
                         if (widget.player.emergencyContact != null) ...[
                           AppSpacing.verticalSpaceSM,
-                          _buildInfoRow('Contacto', widget.player.emergencyContact!),
+                          _buildInfoRow(
+                            'Contacto',
+                            widget.player.emergencyContact!,
+                          ),
                         ],
                       ],
 
@@ -357,12 +361,7 @@ class _VerificationResultPageState
             ),
           ),
         ),
-        Expanded(
-          child: Text(
-            value,
-            style: AppTextStyles.bodyMedium,
-          ),
-        ),
+        Expanded(child: Text(value, style: AppTextStyles.bodyMedium)),
       ],
     );
   }

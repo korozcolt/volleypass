@@ -8,10 +8,7 @@ import '../../domain/entities/tournament_detail.dart';
 class TeamCard extends StatelessWidget {
   final TournamentTeam team;
 
-  const TeamCard({
-    super.key,
-    required this.team,
-  });
+  const TeamCard({super.key, required this.team});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +17,7 @@ class TeamCard extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Colors.white,
-            AppColors.primary.withOpacity(0.02),
-          ],
+          colors: [Colors.white, AppColors.primary.withOpacity(0.02)],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
@@ -107,7 +101,7 @@ class TeamCard extends StatelessWidget {
                   ),
                   child: Text(
                     team.club,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
                       color: AppColors.primary,
@@ -139,11 +133,7 @@ class TeamCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Icon(
-        Icons.groups,
-        size: 28,
-        color: AppColors.primary,
-      ),
+      child: const Icon(Icons.groups, size: 28, color: AppColors.primary),
     );
   }
 }

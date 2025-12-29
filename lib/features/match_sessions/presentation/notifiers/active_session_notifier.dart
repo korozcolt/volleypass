@@ -24,15 +24,11 @@ class ActiveSessionNotifier extends StateNotifier<ActiveSessionState> {
       state = const ActiveSessionState.loading();
     }
 
-    final result = await _getActiveSessionUseCase(NoParams());
+    final result = await _getActiveSessionUseCase(const NoParams());
 
     result.fold(
-      (failure) => state = ActiveSessionState.error(
-        message: failure.message,
-      ),
-      (session) => state = ActiveSessionState.loaded(
-        session: session,
-      ),
+      (failure) => state = ActiveSessionState.error(message: failure.message),
+      (session) => state = ActiveSessionState.loaded(session: session),
     );
   }
 
@@ -44,12 +40,8 @@ class ActiveSessionNotifier extends StateNotifier<ActiveSessionState> {
     );
 
     result.fold(
-      (failure) => state = ActiveSessionState.error(
-        message: failure.message,
-      ),
-      (session) => state = ActiveSessionState.loaded(
-        session: session,
-      ),
+      (failure) => state = ActiveSessionState.error(message: failure.message),
+      (session) => state = ActiveSessionState.loaded(session: session),
     );
   }
 
@@ -61,19 +53,12 @@ class ActiveSessionNotifier extends StateNotifier<ActiveSessionState> {
     );
 
     result.fold(
-      (failure) => state = ActiveSessionState.error(
-        message: failure.message,
-      ),
-      (session) => state = ActiveSessionState.loaded(
-        session: session,
-      ),
+      (failure) => state = ActiveSessionState.error(message: failure.message),
+      (session) => state = ActiveSessionState.loaded(session: session),
     );
   }
 
-  Future<void> completeSession({
-    required int sessionId,
-    String? notes,
-  }) async {
+  Future<void> completeSession({required int sessionId, String? notes}) async {
     state = const ActiveSessionState.updating();
 
     final result = await _completeSessionUseCase(
@@ -81,9 +66,7 @@ class ActiveSessionNotifier extends StateNotifier<ActiveSessionState> {
     );
 
     result.fold(
-      (failure) => state = ActiveSessionState.error(
-        message: failure.message,
-      ),
+      (failure) => state = ActiveSessionState.error(message: failure.message),
       (session) {
         // Al completar, la sesión activa es null
         state = const ActiveSessionState.loaded(session: null);

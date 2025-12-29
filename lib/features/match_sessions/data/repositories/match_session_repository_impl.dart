@@ -24,9 +24,9 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
     required MatchSessionRemoteDataSource remoteDataSource,
     required MatchSessionLocalDataSource localDataSource,
     required Connectivity connectivity,
-  })  : _remoteDataSource = remoteDataSource,
-        _localDataSource = localDataSource,
-        _connectivity = connectivity;
+  }) : _remoteDataSource = remoteDataSource,
+       _localDataSource = localDataSource,
+       _connectivity = connectivity;
 
   @override
   Future<Either<Failure, List<AvailableMatch>>> getAvailableMatches({
@@ -95,7 +95,9 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
         error: e,
         stackTrace: stackTrace,
       );
-      return Left(ServerFailure('Error inesperado al obtener partidos disponibles'));
+      return const Left(
+        ServerFailure('Error inesperado al obtener partidos disponibles'),
+      );
     }
   }
 
@@ -110,7 +112,9 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
       final isOnline = connectivityResult != ConnectivityResult.none;
 
       if (!isOnline) {
-        AppLogger.info('MatchSessionRepository: Cannot create session - offline');
+        AppLogger.info(
+          'MatchSessionRepository: Cannot create session - offline',
+        );
         return const Left(
           NetworkFailure('No hay conexión para crear una sesión'),
         );
@@ -149,7 +153,7 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
         error: e,
         stackTrace: stackTrace,
       );
-      return Left(ServerFailure('Error inesperado al crear sesión'));
+      return const Left(ServerFailure('Error inesperado al crear sesión'));
     }
   }
 
@@ -215,7 +219,9 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
         error: e,
         stackTrace: stackTrace,
       );
-      return Left(ServerFailure('Error inesperado al obtener sesión activa'));
+      return const Left(
+        ServerFailure('Error inesperado al obtener sesión activa'),
+      );
     }
   }
 
@@ -235,7 +241,9 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
         );
 
         try {
-          final detailsModel = await _remoteDataSource.getSessionDetails(sessionId);
+          final detailsModel = await _remoteDataSource.getSessionDetails(
+            sessionId,
+          );
 
           // Guardar en caché
           await _localDataSource.saveSessionDetails(sessionId, detailsModel);
@@ -263,7 +271,7 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
         final cachedDetails = _localDataSource.getSessionDetails(sessionId);
 
         if (cachedDetails == null) {
-          return Left(
+          return const Left(
             NetworkFailure('No hay conexión y no hay datos en caché'),
           );
         }
@@ -282,7 +290,9 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
         error: e,
         stackTrace: stackTrace,
       );
-      return Left(ServerFailure('Error inesperado al obtener detalles de sesión'));
+      return const Left(
+        ServerFailure('Error inesperado al obtener detalles de sesión'),
+      );
     }
   }
 
@@ -297,7 +307,9 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
       final isOnline = connectivityResult != ConnectivityResult.none;
 
       if (!isOnline) {
-        AppLogger.info('MatchSessionRepository: Cannot update session - offline');
+        AppLogger.info(
+          'MatchSessionRepository: Cannot update session - offline',
+        );
         return const Left(
           NetworkFailure('No hay conexión para actualizar la sesión'),
         );
@@ -314,7 +326,8 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
         );
 
         // Actualizar caché si es la sesión activa
-        if (sessionModel.status == 'active' || sessionModel.status == 'paused') {
+        if (sessionModel.status == 'active' ||
+            sessionModel.status == 'paused') {
           await _localDataSource.saveActiveSession(sessionModel);
         }
 
@@ -338,7 +351,7 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
         error: e,
         stackTrace: stackTrace,
       );
-      return Left(ServerFailure('Error inesperado al actualizar sesión'));
+      return const Left(ServerFailure('Error inesperado al actualizar sesión'));
     }
   }
 
@@ -353,15 +366,15 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
       final isOnline = connectivityResult != ConnectivityResult.none;
 
       if (!isOnline) {
-        AppLogger.info('MatchSessionRepository: Cannot complete session - offline');
+        AppLogger.info(
+          'MatchSessionRepository: Cannot complete session - offline',
+        );
         return const Left(
           NetworkFailure('No hay conexión para completar la sesión'),
         );
       }
 
-      AppLogger.info(
-        'MatchSessionRepository: Completing session $sessionId',
-      );
+      AppLogger.info('MatchSessionRepository: Completing session $sessionId');
 
       try {
         final sessionModel = await _remoteDataSource.completeSession(
@@ -392,7 +405,7 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
         error: e,
         stackTrace: stackTrace,
       );
-      return Left(ServerFailure('Error inesperado al completar sesión'));
+      return const Left(ServerFailure('Error inesperado al completar sesión'));
     }
   }
 
@@ -443,9 +456,7 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
         }
       } else {
         // Obtener del caché
-        AppLogger.info(
-          'MatchSessionRepository: Getting sessions from cache',
-        );
+        AppLogger.info('MatchSessionRepository: Getting sessions from cache');
 
         final cachedSessions = _localDataSource.getSessionsHistory();
 
@@ -467,7 +478,7 @@ class MatchSessionRepositoryImpl implements MatchSessionRepository {
         error: e,
         stackTrace: stackTrace,
       );
-      return Left(ServerFailure('Error inesperado al obtener sesiones'));
+      return const Left(ServerFailure('Error inesperado al obtener sesiones'));
     }
   }
 

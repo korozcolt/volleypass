@@ -21,7 +21,9 @@ class StandingItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: isTopThree ? positionColor.withOpacity(0.03) : Colors.transparent,
+        color: isTopThree
+            ? positionColor.withOpacity(0.03)
+            : Colors.transparent,
       ),
       child: Material(
         color: Colors.transparent,
@@ -64,7 +66,9 @@ class StandingItem extends StatelessWidget {
                         '${standing.position}',
                         style: TextStyle(
                           fontSize: isTopThree ? 16 : 14,
-                          fontWeight: isTopThree ? FontWeight.w800 : FontWeight.w600,
+                          fontWeight: isTopThree
+                              ? FontWeight.w800
+                              : FontWeight.w600,
                           color: isTopThree ? positionColor : Colors.grey[700],
                         ),
                       ),
@@ -125,7 +129,9 @@ class StandingItem extends StatelessWidget {
                           standing.teamName,
                           style: TextStyle(
                             fontSize: 13,
-                            fontWeight: isTopThree ? FontWeight.w700 : FontWeight.w600,
+                            fontWeight: isTopThree
+                                ? FontWeight.w700
+                                : FontWeight.w600,
                             color: Colors.black87,
                           ),
                           maxLines: 1,
@@ -175,11 +181,7 @@ class StandingItem extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Icon(
-        Icons.groups,
-        size: 18,
-        color: AppColors.primary,
-      ),
+      child: const Icon(Icons.groups, size: 18, color: AppColors.primary),
     );
   }
 
@@ -351,7 +353,7 @@ class StandingItem extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w700,
             color: AppColors.primary,
@@ -363,36 +365,21 @@ class StandingItem extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.grey[50],
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Colors.grey[200]!,
-              width: 1,
-            ),
+            border: Border.all(color: Colors.grey[200]!, width: 1),
           ),
-          child: Column(
-            children: children,
-          ),
+          child: Column(children: children),
         ),
       ],
     );
   }
 
-  Widget _buildDetailRow(
-    String label,
-    dynamic value, {
-    Color? valueColor,
-  }) {
+  Widget _buildDetailRow(String label, dynamic value, {Color? valueColor}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.grey[700],
-            ),
-          ),
+          Text(label, style: TextStyle(fontSize: 13, color: Colors.grey[700])),
           Text(
             value.toString(),
             style: TextStyle(

@@ -22,10 +22,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required LoginUseCase loginUseCase,
     required GetCurrentUserUseCase getCurrentUserUseCase,
     required LogoutUseCase logoutUseCase,
-  })  : _loginUseCase = loginUseCase,
-        _getCurrentUserUseCase = getCurrentUserUseCase,
-        _logoutUseCase = logoutUseCase,
-        super(const AuthState.initial());
+  }) : _loginUseCase = loginUseCase,
+       _getCurrentUserUseCase = getCurrentUserUseCase,
+       _logoutUseCase = logoutUseCase,
+       super(const AuthState.initial());
 
   /// Realiza el login
   Future<void> login(String email, String password) async {
@@ -35,11 +35,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       final deviceName = await _getDeviceName();
 
-      final result = await _loginUseCase(LoginParams(
-        email: email.trim(),
-        password: password,
-        deviceName: deviceName,
-      ));
+      final result = await _loginUseCase(
+        LoginParams(
+          email: email.trim(),
+          password: password,
+          deviceName: deviceName,
+        ),
+      );
 
       result.fold(
         (failure) {
@@ -57,7 +59,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         error: e,
         stackTrace: stackTrace,
       );
-      state = AuthState.error('Error inesperado durante el login');
+      state = const AuthState.error('Error inesperado durante el login');
     }
   }
 
@@ -70,7 +72,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       result.fold(
         (failure) {
-          AppLogger.debug('AuthNotifier: Not authenticated - ${failure.message}');
+          AppLogger.debug(
+            'AuthNotifier: Not authenticated - ${failure.message}',
+          );
           state = const AuthState.unauthenticated();
         },
         (user) {

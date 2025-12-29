@@ -48,7 +48,7 @@ class AppColors {
   static const Color infoDark = Color(0xFF0086C3);
 
   // ============================================================================
-  // COLORES DE FONDO
+  // COLORES DE FONDO - LIGHT MODE
   // ============================================================================
 
   /// Fondo principal (modo claro)
@@ -60,7 +60,20 @@ class AppColors {
   static const Color surfaceDark = Color(0xFFEEEEEE);
 
   // ============================================================================
-  // COLORES DE TEXTO
+  // COLORES DE FONDO - DARK MODE
+  // ============================================================================
+
+  /// Fondo principal (modo oscuro)
+  static const Color darkBackground = Color(0xFF121212);
+  static const Color darkBackgroundElevated = Color(0xFF1E1E1E);
+
+  /// Fondo de tarjetas/contenedores (dark)
+  static const Color darkSurface = Color(0xFF1E1E1E);
+  static const Color darkSurfaceElevated = Color(0xFF2C2C2C);
+  static const Color darkSurfaceHighest = Color(0xFF383838);
+
+  // ============================================================================
+  // COLORES DE TEXTO - LIGHT MODE
   // ============================================================================
 
   /// Texto principal
@@ -74,11 +87,28 @@ class AppColors {
   static const Color textOnDarkSecondary = Color(0xFFE0E0E0);
 
   // ============================================================================
-  // COLORES DE BORDES Y DIVISORES
+  // COLORES DE TEXTO - DARK MODE
+  // ============================================================================
+
+  /// Texto principal (dark mode)
+  static const Color darkTextPrimary = Color(0xFFE0E0E0);
+  static const Color darkTextSecondary = Color(0xFFB0B0B0);
+  static const Color darkTextTertiary = Color(0xFF808080);
+  static const Color darkTextDisabled = Color(0xFF606060);
+
+  // ============================================================================
+  // COLORES DE BORDES Y DIVISORES - LIGHT MODE
   // ============================================================================
 
   static const Color border = Color(0xFFE0E0E0);
   static const Color divider = Color(0xFFBDBDBD);
+
+  // ============================================================================
+  // COLORES DE BORDES Y DIVISORES - DARK MODE
+  // ============================================================================
+
+  static const Color darkBorder = Color(0xFF383838);
+  static const Color darkDivider = Color(0xFF505050);
 
   // ============================================================================
   // COLORES ESPECÍFICOS DE LA APP

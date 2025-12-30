@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../shared/theme/app_colors.dart';
 import '../../../../shared/theme/app_text_styles.dart';
 import '../../../../shared/theme/app_spacing.dart';
-import '../../domain/entities/tournament.dart';
 import '../providers/tournaments_providers.dart';
 import '../widgets/tournament_card.dart';
 import '../widgets/tournament_filters.dart';

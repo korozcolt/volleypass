@@ -9,7 +9,6 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/api_exception.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/utils/app_logger.dart';
-import '../../domain/entities/verification.dart';
 import '../../domain/entities/verification_request.dart';
 import '../../domain/repositories/verification_repository.dart';
 import '../datasources/verification_local_datasource.dart';

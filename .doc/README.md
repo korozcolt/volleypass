@@ -1,15 +1,10 @@
-# Archive Master - Sistema de Gestión Documental
+# Archivo archivado
 
-![Estado](https://img.shields.io/badge/estado-en%20desarrollo-yellow)
-![Versión](https://img.shields.io/badge/versión-2.1.0-blue)
-![Laravel](https://img.shields.io/badge/Laravel-v12.40-FF2D20?logo=laravel)
-![PHP](https://img.shields.io/badge/PHP-v8.2+-777BB4?logo=php)
-![Filament](https://img.shields.io/badge/Filament-v3.3.45-41a6b3?logo=filament)
-![React](https://img.shields.io/badge/React-v19.x-61DAFB?logo=react)
+**Este archivo ha sido archivado y movido a** `.doc/archive/README_BACKEND.md` **el 2025-12-29.**
 
-## Descripción
+Este README corresponde al sistema backend `Archive Master`. Se ha movido a la carpeta de archivos archivados porque no es parte activa de la documentación móvil del proyecto.
 
-Archive Master es un sistema avanzado de gestión documental empresarial construido con Laravel y Filament, que incluye flujos de trabajo, reportería avanzada, búsqueda inteligente y soporte multilingüe. Diseñado para optimizar el almacenamiento, organización y flujo de trabajo de documentos en entornos empresariales multi-compañía.
+Si necesitas recuperar o consultar el contenido completo, revisa el historial de Git o solicita que se restaure la versión completa.
 
 ## Características Principales
 

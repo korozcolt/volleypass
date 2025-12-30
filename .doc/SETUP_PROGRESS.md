@@ -1,20 +1,8 @@
-# Setup del Proyecto - Progreso
+# Archivo archivado
 
-> **Fecha:** Diciembre 27, 2024
-> **Estado:** ✅ COMPLETO - Core Infrastructure 100%
+**Este archivo ha sido archivado y movido a** `.doc/archive/SETUP_PROGRESS.md` **el 2025-12-29.**
 
----
-
-## ✅ Completado
-
-### 1. Configuración Base (100%)
-- ✅ `pubspec.yaml` con todas las dependencias
-  - State management (Riverpod)
-  - Networking (Dio)
-  - Storage (Secure Storage, Hive, SharedPreferences)
-  - Utils (Logger, Intl, Device Info)
-  - Functional programming (Dartz, Equatable)
-  - Code generation (Freezed, Json Serializable)
+El contenido histórico se conserva en la versión archivada. Si necesitas restaurarlo o revisarlo en detalle, por favor consulta el historial de Git o solicita a un miembro del equipo que lo restaure.
 
 ### 2. Estructura de Carpetas (100%)
 ```

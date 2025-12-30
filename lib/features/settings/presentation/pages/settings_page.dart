@@ -20,10 +20,7 @@ class SettingsPage extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Configuración'),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Configuración'), elevation: 0),
       body: ListView(
         children: [
           // Sección de Apariencia
@@ -78,13 +75,17 @@ class SettingsPage extends ConsumerWidget {
             title: Text(
               'Modo de Tema',
               style: AppTextStyles.bodyMedium.copyWith(
-                color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
               ),
             ),
             subtitle: Text(
               _getThemeModeLabel(themeState.mode),
               style: AppTextStyles.bodySmall.copyWith(
-                color: isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.textSecondary,
               ),
             ),
             trailing: const Icon(Icons.chevron_right),
@@ -101,13 +102,17 @@ class SettingsPage extends ConsumerWidget {
               title: Text(
                 'Modo Oscuro',
                 style: AppTextStyles.bodyMedium.copyWith(
-                  color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+                  color: isDark
+                      ? AppColors.darkTextPrimary
+                      : AppColors.textPrimary,
                 ),
               ),
               subtitle: Text(
                 themeState.isDark ? 'Activado' : 'Desactivado',
                 style: AppTextStyles.bodySmall.copyWith(
-                  color: isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
+                  color: isDark
+                      ? AppColors.darkTextSecondary
+                      : AppColors.textSecondary,
                 ),
               ),
               value: themeState.isDark,
@@ -130,17 +135,24 @@ class SettingsPage extends ConsumerWidget {
       child: Column(
         children: [
           ListTile(
-            leading: const Icon(Icons.notifications_outlined, color: AppColors.primary),
+            leading: const Icon(
+              Icons.notifications_outlined,
+              color: AppColors.primary,
+            ),
             title: Text(
               'Notificaciones',
               style: AppTextStyles.bodyMedium.copyWith(
-                color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
               ),
             ),
             subtitle: Text(
               'Próximamente',
               style: AppTextStyles.bodySmall.copyWith(
-                color: isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.textSecondary,
               ),
             ),
             onTap: () => _showComingSoon(context),
@@ -151,13 +163,17 @@ class SettingsPage extends ConsumerWidget {
             title: Text(
               'Idioma',
               style: AppTextStyles.bodyMedium.copyWith(
-                color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
               ),
             ),
             subtitle: Text(
               'Español',
               style: AppTextStyles.bodySmall.copyWith(
-                color: isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.textSecondary,
               ),
             ),
             onTap: () => _showComingSoon(context),
@@ -177,23 +193,32 @@ class SettingsPage extends ConsumerWidget {
             title: Text(
               'Versión',
               style: AppTextStyles.bodyMedium.copyWith(
-                color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
               ),
             ),
             subtitle: Text(
               '1.0.0',
               style: AppTextStyles.bodySmall.copyWith(
-                color: isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.textSecondary,
               ),
             ),
           ),
           const Divider(height: 1),
           ListTile(
-            leading: const Icon(Icons.privacy_tip_outlined, color: AppColors.primary),
+            leading: const Icon(
+              Icons.privacy_tip_outlined,
+              color: AppColors.primary,
+            ),
             title: Text(
               'Política de Privacidad',
               style: AppTextStyles.bodyMedium.copyWith(
-                color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
               ),
             ),
             trailing: const Icon(Icons.open_in_new, size: 18),
@@ -201,11 +226,16 @@ class SettingsPage extends ConsumerWidget {
           ),
           const Divider(height: 1),
           ListTile(
-            leading: const Icon(Icons.description_outlined, color: AppColors.primary),
+            leading: const Icon(
+              Icons.description_outlined,
+              color: AppColors.primary,
+            ),
             title: Text(
               'Términos y Condiciones',
               style: AppTextStyles.bodyMedium.copyWith(
-                color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
               ),
             ),
             trailing: const Icon(Icons.open_in_new, size: 18),
@@ -253,11 +283,11 @@ class SettingsPage extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             RadioListTile<theme_notifier.ThemeMode>(
-              title: Row(
+              title: const Row(
                 children: [
-                  const Icon(Icons.light_mode, size: 20),
+                  Icon(Icons.light_mode, size: 20),
                   AppSpacing.horizontalSpaceSM,
-                  const Text('Modo Claro'),
+                  Text('Modo Claro'),
                 ],
               ),
               value: theme_notifier.ThemeMode.light,
@@ -268,11 +298,11 @@ class SettingsPage extends ConsumerWidget {
               },
             ),
             RadioListTile<theme_notifier.ThemeMode>(
-              title: Row(
+              title: const Row(
                 children: [
-                  const Icon(Icons.dark_mode, size: 20),
+                  Icon(Icons.dark_mode, size: 20),
                   AppSpacing.horizontalSpaceSM,
-                  const Text('Modo Oscuro'),
+                  Text('Modo Oscuro'),
                 ],
               ),
               value: theme_notifier.ThemeMode.dark,
@@ -283,11 +313,11 @@ class SettingsPage extends ConsumerWidget {
               },
             ),
             RadioListTile<theme_notifier.ThemeMode>(
-              title: Row(
+              title: const Row(
                 children: [
-                  const Icon(Icons.brightness_auto, size: 20),
+                  Icon(Icons.brightness_auto, size: 20),
                   AppSpacing.horizontalSpaceSM,
-                  const Text('Automático (Sistema)'),
+                  Text('Automático (Sistema)'),
                 ],
               ),
               subtitle: Padding(
@@ -295,7 +325,9 @@ class SettingsPage extends ConsumerWidget {
                 child: Text(
                   'Sigue la configuración del dispositivo',
                   style: AppTextStyles.bodySmall.copyWith(
-                    color: isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.textSecondary,
                   ),
                 ),
               ),

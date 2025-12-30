@@ -257,6 +257,12 @@ Todos los documentos tienen:
 - Fecha de última actualización
 - Fecha de próxima revisión (si aplica)
 
+### Archivados
+
+- `SETUP_PROGRESS.md` → `.doc/archive/SETUP_PROGRESS.md` (archivado 2025-12-29)
+- `README.md (backend)` → `.doc/archive/README_BACKEND.md` (archivado 2025-12-29)
+
+
 ---
 
 ## 📞 Contacto

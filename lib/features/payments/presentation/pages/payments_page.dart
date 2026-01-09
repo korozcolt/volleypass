@@ -65,35 +65,29 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
     final uploadState = ref.watch(uploadProofNotifierProvider);
 
     // Escuchar cambios en el estado de subida de comprobante
-    ref.listen<UploadProofState>(
-      uploadProofNotifierProvider,
-      (previous, next) {
-        next.when(
-          initial: () {},
-          uploading: (_) {},
-          success: (message) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-                backgroundColor: AppColors.success,
-              ),
-            );
-            // Recargar lista de pagos
-            ref.read(paymentListNotifierProvider.notifier).refresh();
-            ref.read(uploadProofNotifierProvider.notifier).reset();
-          },
-          error: (message) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-                backgroundColor: AppColors.error,
-              ),
-            );
-            ref.read(uploadProofNotifierProvider.notifier).reset();
-          },
-        );
-      },
-    );
+    ref.listen<UploadProofState>(uploadProofNotifierProvider, (previous, next) {
+      next.when(
+        initial: () {},
+        uploading: (_) {},
+        success: (message) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(message),
+              backgroundColor: AppColors.success,
+            ),
+          );
+          // Recargar lista de pagos
+          ref.read(paymentListNotifierProvider.notifier).refresh();
+          ref.read(uploadProofNotifierProvider.notifier).reset();
+        },
+        error: (message) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message), backgroundColor: AppColors.error),
+          );
+          ref.read(uploadProofNotifierProvider.notifier).reset();
+        },
+      );
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -147,12 +141,8 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
           // Lista de pagos
           Expanded(
             child: paymentState.when(
-              initial: () => const Center(
-                child: Text('Inicializando...'),
-              ),
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
+              initial: () => const Center(child: Text('Inicializando...')),
+              loading: () => const Center(child: CircularProgressIndicator()),
               error: (message) => Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -163,7 +153,7 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
                       color: AppColors.error,
                     ),
                     AppSpacing.verticalSpaceMD,
-                    Text(
+                    const Text(
                       'Error al cargar pagos',
                       style: AppTextStyles.h6,
                     ),
@@ -210,16 +200,16 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
                   },
                   child: ListView.builder(
                     controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppSpacing.sm,
+                    ),
                     itemCount: payments.length + (hasMore ? 1 : 0),
                     itemBuilder: (context, index) {
                       if (index == payments.length) {
                         // Indicador de carga de más pagos
                         return const Padding(
                           padding: EdgeInsets.all(AppSpacing.md),
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
+                          child: Center(child: CircularProgressIndicator()),
                         );
                       }
 
@@ -273,10 +263,7 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
                 ),
 
                 // Título
-                Text(
-                  'Detalle del Pago',
-                  style: AppTextStyles.h5,
-                ),
+                const Text('Detalle del Pago', style: AppTextStyles.h5),
                 AppSpacing.verticalSpaceMD,
 
                 // Información del pago

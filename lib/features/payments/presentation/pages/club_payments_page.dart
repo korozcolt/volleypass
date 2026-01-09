@@ -63,35 +63,32 @@ class _ClubPaymentsPageState extends ConsumerState<ClubPaymentsPage> {
     final verifyState = ref.watch(verifyPaymentNotifierProvider);
 
     // Escuchar cambios en el estado de verificación
-    ref.listen<VerifyPaymentState>(
-      verifyPaymentNotifierProvider,
-      (previous, next) {
-        next.when(
-          initial: () {},
-          processing: () {},
-          success: (message) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-                backgroundColor: AppColors.success,
-              ),
-            );
-            // Recargar lista de pagos
-            ref.read(clubPaymentListNotifierProvider.notifier).refresh();
-            ref.read(verifyPaymentNotifierProvider.notifier).reset();
-          },
-          error: (message) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-                backgroundColor: AppColors.error,
-              ),
-            );
-            ref.read(verifyPaymentNotifierProvider.notifier).reset();
-          },
-        );
-      },
-    );
+    ref.listen<VerifyPaymentState>(verifyPaymentNotifierProvider, (
+      previous,
+      next,
+    ) {
+      next.when(
+        initial: () {},
+        processing: () {},
+        success: (message) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(message),
+              backgroundColor: AppColors.success,
+            ),
+          );
+          // Recargar lista de pagos
+          ref.read(clubPaymentListNotifierProvider.notifier).refresh();
+          ref.read(verifyPaymentNotifierProvider.notifier).reset();
+        },
+        error: (message) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message), backgroundColor: AppColors.error),
+          );
+          ref.read(verifyPaymentNotifierProvider.notifier).reset();
+        },
+      );
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -100,7 +97,9 @@ class _ClubPaymentsPageState extends ConsumerState<ClubPaymentsPage> {
           // Filtro por estado
           PopupMenuButton<String?>(
             icon: Icon(
-              statusFilter != null ? Icons.filter_alt : Icons.filter_alt_outlined,
+              statusFilter != null
+                  ? Icons.filter_alt
+                  : Icons.filter_alt_outlined,
             ),
             tooltip: 'Filtrar por estado',
             onSelected: (value) {
@@ -110,17 +109,19 @@ class _ClubPaymentsPageState extends ConsumerState<ClubPaymentsPage> {
                   .filterByStatus(value);
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: null,
-                child: Text('Todos'),
-              ),
+              const PopupMenuItem(value: null, child: Text('Todos')),
               const PopupMenuDivider(),
               PopupMenuItem(
                 value: PaymentStatus.underVerification.toJson(),
                 child: Row(
                   children: [
-                    if (statusFilter == PaymentStatus.underVerification.toJson())
-                      const Icon(Icons.check, size: 16, color: AppColors.primary)
+                    if (statusFilter ==
+                        PaymentStatus.underVerification.toJson())
+                      const Icon(
+                        Icons.check,
+                        size: 16,
+                        color: AppColors.primary,
+                      )
                     else
                       const SizedBox(width: 16),
                     const SizedBox(width: 8),
@@ -133,7 +134,11 @@ class _ClubPaymentsPageState extends ConsumerState<ClubPaymentsPage> {
                 child: Row(
                   children: [
                     if (statusFilter == PaymentStatus.verified.toJson())
-                      const Icon(Icons.check, size: 16, color: AppColors.primary)
+                      const Icon(
+                        Icons.check,
+                        size: 16,
+                        color: AppColors.primary,
+                      )
                     else
                       const SizedBox(width: 16),
                     const SizedBox(width: 8),
@@ -146,7 +151,11 @@ class _ClubPaymentsPageState extends ConsumerState<ClubPaymentsPage> {
                 child: Row(
                   children: [
                     if (statusFilter == PaymentStatus.rejected.toJson())
-                      const Icon(Icons.check, size: 16, color: AppColors.primary)
+                      const Icon(
+                        Icons.check,
+                        size: 16,
+                        color: AppColors.primary,
+                      )
                     else
                       const SizedBox(width: 16),
                     const SizedBox(width: 8),
@@ -159,7 +168,11 @@ class _ClubPaymentsPageState extends ConsumerState<ClubPaymentsPage> {
                 child: Row(
                   children: [
                     if (statusFilter == PaymentStatus.overdue.toJson())
-                      const Icon(Icons.check, size: 16, color: AppColors.primary)
+                      const Icon(
+                        Icons.check,
+                        size: 16,
+                        color: AppColors.primary,
+                      )
                     else
                       const SizedBox(width: 16),
                     const SizedBox(width: 8),
@@ -178,26 +191,15 @@ class _ClubPaymentsPageState extends ConsumerState<ClubPaymentsPage> {
         ],
       ),
       body: paymentState.when(
-        initial: () => const Center(
-          child: Text('Inicializando...'),
-        ),
-        loading: () => const Center(
-          child: CircularProgressIndicator(),
-        ),
+        initial: () => const Center(child: Text('Inicializando...')),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (message) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.error_outline,
-                size: 64,
-                color: AppColors.error,
-              ),
+              const Icon(Icons.error_outline, size: 64, color: AppColors.error),
               AppSpacing.verticalSpaceMD,
-              Text(
-                'Error al cargar pagos',
-                style: AppTextStyles.h6,
-              ),
+              const Text('Error al cargar pagos', style: AppTextStyles.h6),
               AppSpacing.verticalSpaceSM,
               Text(
                 message,
@@ -247,9 +249,7 @@ class _ClubPaymentsPageState extends ConsumerState<ClubPaymentsPage> {
                   // Indicador de carga de más pagos
                   return const Padding(
                     padding: EdgeInsets.all(AppSpacing.md),
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: Center(child: CircularProgressIndicator()),
                   );
                 }
 
@@ -306,10 +306,7 @@ class _ClubPaymentsPageState extends ConsumerState<ClubPaymentsPage> {
                 ),
 
                 // Título
-                Text(
-                  'Detalle del Pago',
-                  style: AppTextStyles.h5,
-                ),
+                const Text('Detalle del Pago', style: AppTextStyles.h5),
                 AppSpacing.verticalSpaceMD,
 
                 // Información del pago
@@ -421,9 +418,7 @@ class _ClubPaymentsPageState extends ConsumerState<ClubPaymentsPage> {
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.success,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.success),
             child: const Text('Aprobar'),
           ),
         ],
@@ -431,7 +426,9 @@ class _ClubPaymentsPageState extends ConsumerState<ClubPaymentsPage> {
     );
 
     if (confirmed == true) {
-      ref.read(verifyPaymentNotifierProvider.notifier).approvePayment(payment.id);
+      ref
+          .read(verifyPaymentNotifierProvider.notifier)
+          .approvePayment(payment.id);
     }
   }
 
@@ -480,9 +477,7 @@ class _ClubPaymentsPageState extends ConsumerState<ClubPaymentsPage> {
               }
               Navigator.pop(context, true);
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
             child: const Text('Rechazar'),
           ),
         ],
@@ -500,9 +495,7 @@ class _ClubPaymentsPageState extends ConsumerState<ClubPaymentsPage> {
   void _viewProof(BuildContext context, Payment payment) {
     // TODO: Implementar visualización de comprobante (imagen o PDF)
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Ver comprobante: ${payment.paymentProofUrl}'),
-      ),
+      SnackBar(content: Text('Ver comprobante: ${payment.paymentProofUrl}')),
     );
   }
 }

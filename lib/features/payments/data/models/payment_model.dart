@@ -41,26 +41,26 @@ class PaymentModel with _$PaymentModel {
 /// Extension para convertir a entidad
 extension PaymentModelX on PaymentModel {
   Payment toEntity() => Payment(
-        id: id,
-        playerId: playerId,
-        playerName: playerName,
-        clubId: clubId,
-        clubName: clubName,
-        leagueId: leagueId,
-        leagueName: leagueName,
-        type: PaymentType.fromJson(type),
-        status: PaymentStatus.fromJson(status),
-        amount: amount,
-        description: description,
-        dueDate: DateTime.parse(dueDate),
-        verifiedAt: verifiedAt != null ? DateTime.parse(verifiedAt!) : null,
-        verifiedBy: verifiedBy,
-        verifierName: verifierName,
-        rejectionNotes: rejectionNotes,
-        paymentProofUrl: paymentProofUrl,
-        createdAt: DateTime.parse(createdAt),
-        updatedAt: DateTime.parse(updatedAt),
-      );
+    id: id,
+    playerId: playerId,
+    playerName: playerName,
+    clubId: clubId,
+    clubName: clubName,
+    leagueId: leagueId,
+    leagueName: leagueName,
+    type: PaymentType.fromJson(type),
+    status: PaymentStatus.fromJson(status),
+    amount: amount,
+    description: description,
+    dueDate: DateTime.parse(dueDate),
+    verifiedAt: verifiedAt != null ? DateTime.parse(verifiedAt!) : null,
+    verifiedBy: verifiedBy,
+    verifierName: verifierName,
+    rejectionNotes: rejectionNotes,
+    paymentProofUrl: paymentProofUrl,
+    createdAt: DateTime.parse(createdAt),
+    updatedAt: DateTime.parse(updatedAt),
+  );
 }
 
 /// Respuesta de lista de pagos
@@ -130,10 +130,11 @@ class VerifyPaymentRequest with _$VerifyPaymentRequest {
   factory VerifyPaymentRequest.fromJson(Map<String, dynamic> json) =>
       _$VerifyPaymentRequestFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => {
-        'action': action,
-        if (notes != null) 'notes': notes,
-      };
+    'action': action,
+    if (notes != null) 'notes': notes,
+  };
 }
 
 /// Respuesta de verificación de pago
@@ -165,7 +166,8 @@ class ClubPaymentStatistics with _$ClubPaymentStatistics {
 class ClubPaymentStatsData with _$ClubPaymentStatsData {
   const factory ClubPaymentStatsData({
     @JsonKey(name: 'total_pending') required int totalPending,
-    @JsonKey(name: 'total_under_verification') required int totalUnderVerification,
+    @JsonKey(name: 'total_under_verification')
+    required int totalUnderVerification,
     @JsonKey(name: 'total_verified') required int totalVerified,
     @JsonKey(name: 'total_overdue') required int totalOverdue,
     @JsonKey(name: 'pending_amount') required double pendingAmount,

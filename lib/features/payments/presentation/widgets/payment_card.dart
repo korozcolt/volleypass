@@ -157,7 +157,8 @@ class PaymentCard extends StatelessWidget {
               ],
 
               // Mostrar mensaje si tiene comprobante
-              if (payment.hasProof && payment.status == PaymentStatus.underVerification) ...[
+              if (payment.hasProof &&
+                  payment.status == PaymentStatus.underVerification) ...[
                 AppSpacing.verticalSpaceSM,
                 Container(
                   padding: const EdgeInsets.all(8),
@@ -167,7 +168,7 @@ class PaymentCard extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.info_outline,
                         size: 16,
                         color: AppColors.info,
@@ -199,7 +200,7 @@ class PaymentCard extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.warning_amber,
                         size: 16,
                         color: AppColors.error,

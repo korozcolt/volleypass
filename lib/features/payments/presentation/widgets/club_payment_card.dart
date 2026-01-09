@@ -154,7 +154,7 @@ class ClubPaymentCard extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.attach_file,
                         size: 16,
                         color: AppColors.info,

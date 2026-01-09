@@ -48,5 +48,6 @@ final dashboardNotifierProvider =
     StateNotifierProvider<DashboardNotifier, DashboardState>(
   (ref) => DashboardNotifier(
     getDashboardUseCase: ref.watch(getDashboardUseCaseProvider),
+    ref: ref,
   ),
 );

@@ -7,5 +7,7 @@ import '../entities/dashboard_response.dart';
 
 abstract class DashboardRepository {
   /// Obtiene el dashboard según el rol del usuario autenticado
-  Future<Either<Failure, DashboardResponse>> getDashboard();
+  ///
+  /// [userRole] - Rol del usuario para determinar qué dashboard cargar
+  Future<Either<Failure, DashboardResponse>> getDashboard({String? userRole});
 }

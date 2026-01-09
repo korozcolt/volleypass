@@ -23,7 +23,9 @@
       "Bash(for dir in auth dashboard match_sessions payments profile statistics tournaments verification)",
       "Bash(cat:*)",
       "Bash(nc:*)",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Bash(git -C /Volumes/NAS\\\\\\(MAC\\\\\\)/Data/Projects/mobile/volleypass log --oneline -10)",
+      "Bash(dart run build_runner build:*)"
     ]
   }
 }

@@ -470,3 +470,95 @@ Map<String, dynamic> _$$LeagueDashboardModelImplToJson(
       'sanctions': instance.sanctions,
       'verifications': instance.verifications,
     };
+
+_$VerifierDashboardModelImpl _$$VerifierDashboardModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$VerifierDashboardModelImpl(
+      role: json['role'] as String,
+      timestamp: json['timestamp'] as String,
+      verifierStats: VerifierStatsModel.fromJson(
+          json['verifier_stats'] as Map<String, dynamic>),
+      recentVerifications: (json['recent_verifications'] as List<dynamic>?)
+          ?.map((e) =>
+              RecentVerificationModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$$VerifierDashboardModelImplToJson(
+        _$VerifierDashboardModelImpl instance) =>
+    <String, dynamic>{
+      'role': instance.role,
+      'timestamp': instance.timestamp,
+      'verifier_stats': instance.verifierStats,
+      'recent_verifications': instance.recentVerifications,
+    };
+
+_$VerifierStatsModelImpl _$$VerifierStatsModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$VerifierStatsModelImpl(
+      totalVerifications: (json['total_verifications'] as num).toInt(),
+      todayVerifications: (json['today_verifications'] as num).toInt(),
+      thisWeekVerifications: (json['this_week_verifications'] as num).toInt(),
+      thisMonthVerifications: (json['this_month_verifications'] as num).toInt(),
+      averagePerSession: (json['average_per_session'] as num).toDouble(),
+      totalSessions: (json['total_sessions'] as num).toInt(),
+      uniquePlayersVerified: (json['unique_players_verified'] as num).toInt(),
+      weeklyVerifications:
+          (json['weekly_verifications'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, (e as num).toInt()),
+      ),
+      trend: json['trend'] == null
+          ? null
+          : TrendDataModel.fromJson(json['trend'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$VerifierStatsModelImplToJson(
+        _$VerifierStatsModelImpl instance) =>
+    <String, dynamic>{
+      'total_verifications': instance.totalVerifications,
+      'today_verifications': instance.todayVerifications,
+      'this_week_verifications': instance.thisWeekVerifications,
+      'this_month_verifications': instance.thisMonthVerifications,
+      'average_per_session': instance.averagePerSession,
+      'total_sessions': instance.totalSessions,
+      'unique_players_verified': instance.uniquePlayersVerified,
+      'weekly_verifications': instance.weeklyVerifications,
+      'trend': instance.trend,
+    };
+
+_$TrendDataModelImpl _$$TrendDataModelImplFromJson(Map<String, dynamic> json) =>
+    _$TrendDataModelImpl(
+      percentageChange: (json['percentage_change'] as num).toDouble(),
+      isPositive: json['is_positive'] as bool,
+      comparisonPeriod: json['comparison_period'] as String,
+    );
+
+Map<String, dynamic> _$$TrendDataModelImplToJson(
+        _$TrendDataModelImpl instance) =>
+    <String, dynamic>{
+      'percentage_change': instance.percentageChange,
+      'is_positive': instance.isPositive,
+      'comparison_period': instance.comparisonPeriod,
+    };
+
+_$RecentVerificationModelImpl _$$RecentVerificationModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$RecentVerificationModelImpl(
+      id: (json['id'] as num).toInt(),
+      playerName: json['player_name'] as String,
+      playerPhoto: json['player_photo'] as String?,
+      wasEligible: json['was_eligible'] as bool,
+      verifiedAt: json['verified_at'] as String,
+      matchInfo: json['match_info'] as String?,
+    );
+
+Map<String, dynamic> _$$RecentVerificationModelImplToJson(
+        _$RecentVerificationModelImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'player_name': instance.playerName,
+      'player_photo': instance.playerPhoto,
+      'was_eligible': instance.wasEligible,
+      'verified_at': instance.verifiedAt,
+      'match_info': instance.matchInfo,
+    };

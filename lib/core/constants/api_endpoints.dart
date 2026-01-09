@@ -182,6 +182,35 @@ class ApiEndpoints {
   static String matchStatus(int matchId) => '/matches/$matchId/status';
 
   // ============================================================================
+  // PAGOS (Para Jugadores)
+  // ============================================================================
+
+  /// Listar mis pagos
+  static const payments = '/payments';
+
+  /// Ver detalle de pago
+  static String paymentDetail(int paymentId) => '/payments/$paymentId';
+
+  /// Subir comprobante de pago
+  static String paymentUploadProof(int paymentId) => '/payments/$paymentId/proof';
+
+  /// Ver comprobante subido
+  static String paymentGetProof(int paymentId) => '/payments/$paymentId/proof';
+
+  // ============================================================================
+  // PAGOS DEL CLUB (Para ClubAdmin/Coach)
+  // ============================================================================
+
+  /// Listar pagos del club
+  static const clubPayments = '/club/payments';
+
+  /// Verificar (aprobar/rechazar) pago
+  static String clubPaymentVerify(int paymentId) => '/club/payments/$paymentId/verify';
+
+  /// Estadísticas de pagos del club
+  static const clubPaymentsStatistics = '/club/payments/statistics';
+
+  // ============================================================================
   // PERFIL DE USUARIO
   // ============================================================================
 

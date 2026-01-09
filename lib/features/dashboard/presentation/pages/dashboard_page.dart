@@ -11,6 +11,7 @@ import '../../../auth/presentation/widgets/app_drawer.dart';
 import '../../domain/entities/club_dashboard.dart';
 import '../../domain/entities/league_dashboard.dart';
 import '../../domain/entities/super_admin_dashboard.dart';
+import '../../domain/entities/verifier_dashboard.dart';
 import '../providers/dashboard_providers.dart';
 import '../widgets/stat_card.dart';
 import '../widgets/upcoming_match_card.dart';
@@ -29,9 +30,13 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    // Cargar dashboard al iniciar
+    // Cargar dashboard al iniciar con el rol del usuario
     Future.microtask(() {
-      ref.read(dashboardNotifierProvider.notifier).loadDashboard();
+      final user = ref.read(currentUserProvider);
+      final userRole = user?.primaryRole;
+      ref
+          .read(dashboardNotifierProvider.notifier)
+          .loadDashboard(userRole: userRole);
     });
   }
 
@@ -47,7 +52,11 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              ref.read(dashboardNotifierProvider.notifier).refresh();
+              final user = ref.read(currentUserProvider);
+              final userRole = user?.primaryRole;
+              ref
+                  .read(dashboardNotifierProvider.notifier)
+                  .refresh(userRole: userRole);
             },
           ),
         ],
@@ -90,6 +99,8 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             return _buildClubDashboard(context, dashboard);
           } else if (dashboard is LeagueDashboard) {
             return _buildLeagueDashboard(context, dashboard);
+          } else if (dashboard is VerifierDashboard) {
+            return _buildVerifierDashboard(context, dashboard);
           } else {
             return const Center(child: Text('Dashboard no soportado'));
           }
@@ -652,6 +663,167 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                 ],
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ============================================================================
+  // VERIFIER DASHBOARD
+  // ============================================================================
+
+  Widget _buildVerifierDashboard(
+    BuildContext context,
+    VerifierDashboard dashboard,
+  ) {
+    final stats = dashboard.verifierStats;
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        final user = ref.read(currentUserProvider);
+        final userRole = user?.primaryRole;
+        await ref
+            .read(dashboardNotifierProvider.notifier)
+            .refresh(userRole: userRole);
+      },
+      child: SingleChildScrollView(
+        padding: AppSpacing.paddingSM,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Dashboard Verificador', style: AppTextStyles.h4),
+            AppSpacing.verticalSpaceMD,
+
+            // Estadísticas principales
+            DashboardSection(
+              title: 'Mis Verificaciones',
+              subtitle: 'Resumen de actividad personal',
+              icon: Icons.qr_code_scanner_outlined,
+              child: GridView.count(
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: AppSpacing.sm,
+                mainAxisSpacing: AppSpacing.sm,
+                childAspectRatio: 1.1,
+                children: [
+                  StatCard(
+                    title: 'Total',
+                    value: stats.totalVerifications.toString(),
+                    icon: Icons.qr_code_scanner,
+                    color: AppColors.primary,
+                    subtitle: '${stats.totalSessions} sesiones',
+                  ),
+                  StatCard(
+                    title: 'Hoy',
+                    value: stats.todayVerifications.toString(),
+                    icon: Icons.today,
+                    color: AppColors.success,
+                    subtitle: stats.trend != null
+                        ? '${stats.trend!.isPositive ? '+' : ''}${stats.trend!.percentageChange.toStringAsFixed(1)}%'
+                        : '',
+                  ),
+                  StatCard(
+                    title: 'Esta Semana',
+                    value: stats.thisWeekVerifications.toString(),
+                    icon: Icons.calendar_view_week,
+                    color: AppColors.info,
+                  ),
+                  StatCard(
+                    title: 'Este Mes',
+                    value: stats.thisMonthVerifications.toString(),
+                    icon: Icons.calendar_month,
+                    color: AppColors.secondary,
+                  ),
+                ],
+              ),
+            ),
+            AppSpacing.verticalSpaceLG,
+
+            // Métricas de rendimiento
+            DashboardSection(
+              title: 'Rendimiento',
+              subtitle: 'Métricas de eficiencia',
+              icon: Icons.analytics_outlined,
+              child: GridView.count(
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: AppSpacing.sm,
+                mainAxisSpacing: AppSpacing.sm,
+                childAspectRatio: 1.1,
+                children: [
+                  StatCard(
+                    title: 'Promedio/Sesión',
+                    value: stats.averagePerSession.toStringAsFixed(1),
+                    icon: Icons.speed,
+                    color: AppColors.warning,
+                  ),
+                  StatCard(
+                    title: 'Jugadores Únicos',
+                    value: stats.uniquePlayersVerified.toString(),
+                    icon: Icons.people,
+                    color: AppColors.primary,
+                  ),
+                ],
+              ),
+            ),
+            AppSpacing.verticalSpaceLG,
+
+            // Gráfico de actividad semanal
+            if (stats.weeklyVerifications != null &&
+                stats.weeklyVerifications!.isNotEmpty) ...[
+              DashboardSection(
+                title: 'Actividad Semanal',
+                subtitle: 'Verificaciones por día',
+                icon: Icons.bar_chart,
+                child: MiniBarChart(
+                  values: stats.weeklyVerifications!.values
+                      .map((e) => e.toDouble())
+                      .toList(),
+                  labels: stats.weeklyVerifications!.keys.toList(),
+                  color: AppColors.primary,
+                  height: 100,
+                ),
+              ),
+              AppSpacing.verticalSpaceLG,
+            ],
+
+            // Verificaciones recientes
+            if (dashboard.recentVerifications != null &&
+                dashboard.recentVerifications!.isNotEmpty) ...[
+              DashboardSection(
+                title: 'Verificaciones Recientes',
+                subtitle:
+                    'Últimas ${dashboard.recentVerifications!.length} verificaciones',
+                icon: Icons.history,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: dashboard.recentVerifications!.length,
+                  itemBuilder: (context, index) {
+                    final verification =
+                        dashboard.recentVerifications![index];
+                    final minutesAgo = DateTime.now()
+                        .difference(verification.verifiedAt)
+                        .inMinutes;
+
+                    return ActivityItem(
+                      title: verification.playerName,
+                      description: verification.matchInfo ?? 'Sin partido',
+                      icon: verification.wasEligible
+                          ? Icons.check_circle
+                          : Icons.cancel,
+                      color: verification.wasEligible
+                          ? AppColors.success
+                          : AppColors.error,
+                      timestamp: verification.verifiedAt,
+                    );
+                  },
+                ),
+              ),
+            ],
           ],
         ),
       ),

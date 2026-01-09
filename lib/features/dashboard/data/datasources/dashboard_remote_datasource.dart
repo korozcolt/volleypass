@@ -8,8 +8,15 @@ import '../../../../core/error/api_exception.dart';
 import '../models/dashboard_response_model.dart';
 
 abstract class DashboardRemoteDataSource {
-  /// GET /dashboard
-  Future<DashboardResponseModel> getDashboard();
+  /// GET /dashboard o endpoint específico según rol
+  ///
+  /// [userRole] - Rol del usuario autenticado para determinar endpoint
+  /// - SuperAdmin -> /admin/dashboard
+  /// - LeagueAdmin -> /league/dashboard
+  /// - ClubAdmin/Coach -> /club/dashboard
+  /// - Verifier -> /stats/dashboard
+  /// - Por defecto -> /dashboard (unificado)
+  Future<DashboardResponseModel> getDashboard({String? userRole});
 }
 
 class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
@@ -18,9 +25,12 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
   DashboardRemoteDataSourceImpl(this.apiClient);
 
   @override
-  Future<DashboardResponseModel> getDashboard() async {
+  Future<DashboardResponseModel> getDashboard({String? userRole}) async {
     try {
-      final response = await apiClient.get(ApiEndpoints.dashboard);
+      // Determinar el endpoint según el rol del usuario
+      final String endpoint = _getEndpointForRole(userRole);
+
+      final response = await apiClient.get(endpoint);
 
       if (response.data == null) {
         throw ApiException(
@@ -50,6 +60,26 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
         message: 'Error inesperado: $e',
         statusCode: 500,
       );
+    }
+  }
+
+  /// Determina el endpoint correcto basado en el rol del usuario
+  String _getEndpointForRole(String? role) {
+    if (role == null) return ApiEndpoints.dashboard;
+
+    switch (role) {
+      case 'SuperAdmin':
+        return ApiEndpoints.adminDashboard;
+      case 'LeagueAdmin':
+        return ApiEndpoints.leagueDashboard;
+      case 'ClubAdmin':
+      case 'Coach':
+        return ApiEndpoints.clubDashboard;
+      case 'Verifier':
+        // Endpoint específico para estadísticas de verificadores
+        return ApiEndpoints.verificationDashboard;
+      default:
+        return ApiEndpoints.dashboard;
     }
   }
 }

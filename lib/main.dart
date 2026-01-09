@@ -29,6 +29,8 @@ import 'features/tournaments/presentation/pages/tournaments_list_page.dart';
 import 'features/tournaments/presentation/pages/tournament_detail_page.dart';
 import 'features/tournaments/presentation/pages/standings_page.dart';
 import 'features/settings/presentation/pages/settings_page.dart';
+import 'features/payments/presentation/pages/payments_page.dart';
+import 'features/payments/presentation/pages/club_payments_page.dart';
 
 // Instancias globales de Storage
 late final SharedPreferences sharedPreferences;
@@ -154,7 +156,7 @@ class _VolleyPassAppState extends ConsumerState<VolleyPassApp> with WidgetsBindi
       title: AppConfig.appName,
       debugShowCheckedModeBanner: AppConfig.isDevelopment,
       theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      darkTheme: AppTheme.lightTheme, // TODO: Implement dark theme
       themeMode: flutterThemeMode,
       initialRoute: '/',
       routes: {
@@ -167,6 +169,8 @@ class _VolleyPassAppState extends ConsumerState<VolleyPassApp> with WidgetsBindi
         '/sessions-history': (context) => const SessionsHistoryPage(),
         '/tournaments': (context) => const TournamentsListPage(),
         '/settings': (context) => const SettingsPage(),
+        '/payments': (context) => const PaymentsPage(),
+        '/club-payments': (context) => const ClubPaymentsPage(),
       },
       onGenerateRoute: (settings) {
         // Handle routes with parameters

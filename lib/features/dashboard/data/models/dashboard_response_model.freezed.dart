@@ -5462,3 +5462,1096 @@ abstract class _LeagueDashboardModel implements LeagueDashboardModel {
   _$$LeagueDashboardModelImplCopyWith<_$LeagueDashboardModelImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
+
+VerifierDashboardModel _$VerifierDashboardModelFromJson(
+    Map<String, dynamic> json) {
+  return _VerifierDashboardModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$VerifierDashboardModel {
+  String get role => throw _privateConstructorUsedError;
+  String get timestamp => throw _privateConstructorUsedError;
+  @JsonKey(name: 'verifier_stats')
+  VerifierStatsModel get verifierStats => throw _privateConstructorUsedError;
+  @JsonKey(name: 'recent_verifications')
+  List<RecentVerificationModel>? get recentVerifications =>
+      throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $VerifierDashboardModelCopyWith<VerifierDashboardModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $VerifierDashboardModelCopyWith<$Res> {
+  factory $VerifierDashboardModelCopyWith(VerifierDashboardModel value,
+          $Res Function(VerifierDashboardModel) then) =
+      _$VerifierDashboardModelCopyWithImpl<$Res, VerifierDashboardModel>;
+  @useResult
+  $Res call(
+      {String role,
+      String timestamp,
+      @JsonKey(name: 'verifier_stats') VerifierStatsModel verifierStats,
+      @JsonKey(name: 'recent_verifications')
+      List<RecentVerificationModel>? recentVerifications});
+
+  $VerifierStatsModelCopyWith<$Res> get verifierStats;
+}
+
+/// @nodoc
+class _$VerifierDashboardModelCopyWithImpl<$Res,
+        $Val extends VerifierDashboardModel>
+    implements $VerifierDashboardModelCopyWith<$Res> {
+  _$VerifierDashboardModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? role = null,
+    Object? timestamp = null,
+    Object? verifierStats = null,
+    Object? recentVerifications = freezed,
+  }) {
+    return _then(_value.copyWith(
+      role: null == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as String,
+      verifierStats: null == verifierStats
+          ? _value.verifierStats
+          : verifierStats // ignore: cast_nullable_to_non_nullable
+              as VerifierStatsModel,
+      recentVerifications: freezed == recentVerifications
+          ? _value.recentVerifications
+          : recentVerifications // ignore: cast_nullable_to_non_nullable
+              as List<RecentVerificationModel>?,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $VerifierStatsModelCopyWith<$Res> get verifierStats {
+    return $VerifierStatsModelCopyWith<$Res>(_value.verifierStats, (value) {
+      return _then(_value.copyWith(verifierStats: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$VerifierDashboardModelImplCopyWith<$Res>
+    implements $VerifierDashboardModelCopyWith<$Res> {
+  factory _$$VerifierDashboardModelImplCopyWith(
+          _$VerifierDashboardModelImpl value,
+          $Res Function(_$VerifierDashboardModelImpl) then) =
+      __$$VerifierDashboardModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String role,
+      String timestamp,
+      @JsonKey(name: 'verifier_stats') VerifierStatsModel verifierStats,
+      @JsonKey(name: 'recent_verifications')
+      List<RecentVerificationModel>? recentVerifications});
+
+  @override
+  $VerifierStatsModelCopyWith<$Res> get verifierStats;
+}
+
+/// @nodoc
+class __$$VerifierDashboardModelImplCopyWithImpl<$Res>
+    extends _$VerifierDashboardModelCopyWithImpl<$Res,
+        _$VerifierDashboardModelImpl>
+    implements _$$VerifierDashboardModelImplCopyWith<$Res> {
+  __$$VerifierDashboardModelImplCopyWithImpl(
+      _$VerifierDashboardModelImpl _value,
+      $Res Function(_$VerifierDashboardModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? role = null,
+    Object? timestamp = null,
+    Object? verifierStats = null,
+    Object? recentVerifications = freezed,
+  }) {
+    return _then(_$VerifierDashboardModelImpl(
+      role: null == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as String,
+      verifierStats: null == verifierStats
+          ? _value.verifierStats
+          : verifierStats // ignore: cast_nullable_to_non_nullable
+              as VerifierStatsModel,
+      recentVerifications: freezed == recentVerifications
+          ? _value._recentVerifications
+          : recentVerifications // ignore: cast_nullable_to_non_nullable
+              as List<RecentVerificationModel>?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$VerifierDashboardModelImpl implements _VerifierDashboardModel {
+  const _$VerifierDashboardModelImpl(
+      {required this.role,
+      required this.timestamp,
+      @JsonKey(name: 'verifier_stats') required this.verifierStats,
+      @JsonKey(name: 'recent_verifications')
+      final List<RecentVerificationModel>? recentVerifications})
+      : _recentVerifications = recentVerifications;
+
+  factory _$VerifierDashboardModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$VerifierDashboardModelImplFromJson(json);
+
+  @override
+  final String role;
+  @override
+  final String timestamp;
+  @override
+  @JsonKey(name: 'verifier_stats')
+  final VerifierStatsModel verifierStats;
+  final List<RecentVerificationModel>? _recentVerifications;
+  @override
+  @JsonKey(name: 'recent_verifications')
+  List<RecentVerificationModel>? get recentVerifications {
+    final value = _recentVerifications;
+    if (value == null) return null;
+    if (_recentVerifications is EqualUnmodifiableListView)
+      return _recentVerifications;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  String toString() {
+    return 'VerifierDashboardModel(role: $role, timestamp: $timestamp, verifierStats: $verifierStats, recentVerifications: $recentVerifications)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$VerifierDashboardModelImpl &&
+            (identical(other.role, role) || other.role == role) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp) &&
+            (identical(other.verifierStats, verifierStats) ||
+                other.verifierStats == verifierStats) &&
+            const DeepCollectionEquality()
+                .equals(other._recentVerifications, _recentVerifications));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, role, timestamp, verifierStats,
+      const DeepCollectionEquality().hash(_recentVerifications));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$VerifierDashboardModelImplCopyWith<_$VerifierDashboardModelImpl>
+      get copyWith => __$$VerifierDashboardModelImplCopyWithImpl<
+          _$VerifierDashboardModelImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$VerifierDashboardModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _VerifierDashboardModel implements VerifierDashboardModel {
+  const factory _VerifierDashboardModel(
+          {required final String role,
+          required final String timestamp,
+          @JsonKey(name: 'verifier_stats')
+          required final VerifierStatsModel verifierStats,
+          @JsonKey(name: 'recent_verifications')
+          final List<RecentVerificationModel>? recentVerifications}) =
+      _$VerifierDashboardModelImpl;
+
+  factory _VerifierDashboardModel.fromJson(Map<String, dynamic> json) =
+      _$VerifierDashboardModelImpl.fromJson;
+
+  @override
+  String get role;
+  @override
+  String get timestamp;
+  @override
+  @JsonKey(name: 'verifier_stats')
+  VerifierStatsModel get verifierStats;
+  @override
+  @JsonKey(name: 'recent_verifications')
+  List<RecentVerificationModel>? get recentVerifications;
+  @override
+  @JsonKey(ignore: true)
+  _$$VerifierDashboardModelImplCopyWith<_$VerifierDashboardModelImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+VerifierStatsModel _$VerifierStatsModelFromJson(Map<String, dynamic> json) {
+  return _VerifierStatsModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$VerifierStatsModel {
+  @JsonKey(name: 'total_verifications')
+  int get totalVerifications => throw _privateConstructorUsedError;
+  @JsonKey(name: 'today_verifications')
+  int get todayVerifications => throw _privateConstructorUsedError;
+  @JsonKey(name: 'this_week_verifications')
+  int get thisWeekVerifications => throw _privateConstructorUsedError;
+  @JsonKey(name: 'this_month_verifications')
+  int get thisMonthVerifications => throw _privateConstructorUsedError;
+  @JsonKey(name: 'average_per_session')
+  double get averagePerSession => throw _privateConstructorUsedError;
+  @JsonKey(name: 'total_sessions')
+  int get totalSessions => throw _privateConstructorUsedError;
+  @JsonKey(name: 'unique_players_verified')
+  int get uniquePlayersVerified => throw _privateConstructorUsedError;
+  @JsonKey(name: 'weekly_verifications')
+  Map<String, int>? get weeklyVerifications =>
+      throw _privateConstructorUsedError;
+  TrendDataModel? get trend => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $VerifierStatsModelCopyWith<VerifierStatsModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $VerifierStatsModelCopyWith<$Res> {
+  factory $VerifierStatsModelCopyWith(
+          VerifierStatsModel value, $Res Function(VerifierStatsModel) then) =
+      _$VerifierStatsModelCopyWithImpl<$Res, VerifierStatsModel>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'total_verifications') int totalVerifications,
+      @JsonKey(name: 'today_verifications') int todayVerifications,
+      @JsonKey(name: 'this_week_verifications') int thisWeekVerifications,
+      @JsonKey(name: 'this_month_verifications') int thisMonthVerifications,
+      @JsonKey(name: 'average_per_session') double averagePerSession,
+      @JsonKey(name: 'total_sessions') int totalSessions,
+      @JsonKey(name: 'unique_players_verified') int uniquePlayersVerified,
+      @JsonKey(name: 'weekly_verifications')
+      Map<String, int>? weeklyVerifications,
+      TrendDataModel? trend});
+
+  $TrendDataModelCopyWith<$Res>? get trend;
+}
+
+/// @nodoc
+class _$VerifierStatsModelCopyWithImpl<$Res, $Val extends VerifierStatsModel>
+    implements $VerifierStatsModelCopyWith<$Res> {
+  _$VerifierStatsModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? totalVerifications = null,
+    Object? todayVerifications = null,
+    Object? thisWeekVerifications = null,
+    Object? thisMonthVerifications = null,
+    Object? averagePerSession = null,
+    Object? totalSessions = null,
+    Object? uniquePlayersVerified = null,
+    Object? weeklyVerifications = freezed,
+    Object? trend = freezed,
+  }) {
+    return _then(_value.copyWith(
+      totalVerifications: null == totalVerifications
+          ? _value.totalVerifications
+          : totalVerifications // ignore: cast_nullable_to_non_nullable
+              as int,
+      todayVerifications: null == todayVerifications
+          ? _value.todayVerifications
+          : todayVerifications // ignore: cast_nullable_to_non_nullable
+              as int,
+      thisWeekVerifications: null == thisWeekVerifications
+          ? _value.thisWeekVerifications
+          : thisWeekVerifications // ignore: cast_nullable_to_non_nullable
+              as int,
+      thisMonthVerifications: null == thisMonthVerifications
+          ? _value.thisMonthVerifications
+          : thisMonthVerifications // ignore: cast_nullable_to_non_nullable
+              as int,
+      averagePerSession: null == averagePerSession
+          ? _value.averagePerSession
+          : averagePerSession // ignore: cast_nullable_to_non_nullable
+              as double,
+      totalSessions: null == totalSessions
+          ? _value.totalSessions
+          : totalSessions // ignore: cast_nullable_to_non_nullable
+              as int,
+      uniquePlayersVerified: null == uniquePlayersVerified
+          ? _value.uniquePlayersVerified
+          : uniquePlayersVerified // ignore: cast_nullable_to_non_nullable
+              as int,
+      weeklyVerifications: freezed == weeklyVerifications
+          ? _value.weeklyVerifications
+          : weeklyVerifications // ignore: cast_nullable_to_non_nullable
+              as Map<String, int>?,
+      trend: freezed == trend
+          ? _value.trend
+          : trend // ignore: cast_nullable_to_non_nullable
+              as TrendDataModel?,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $TrendDataModelCopyWith<$Res>? get trend {
+    if (_value.trend == null) {
+      return null;
+    }
+
+    return $TrendDataModelCopyWith<$Res>(_value.trend!, (value) {
+      return _then(_value.copyWith(trend: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$VerifierStatsModelImplCopyWith<$Res>
+    implements $VerifierStatsModelCopyWith<$Res> {
+  factory _$$VerifierStatsModelImplCopyWith(_$VerifierStatsModelImpl value,
+          $Res Function(_$VerifierStatsModelImpl) then) =
+      __$$VerifierStatsModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'total_verifications') int totalVerifications,
+      @JsonKey(name: 'today_verifications') int todayVerifications,
+      @JsonKey(name: 'this_week_verifications') int thisWeekVerifications,
+      @JsonKey(name: 'this_month_verifications') int thisMonthVerifications,
+      @JsonKey(name: 'average_per_session') double averagePerSession,
+      @JsonKey(name: 'total_sessions') int totalSessions,
+      @JsonKey(name: 'unique_players_verified') int uniquePlayersVerified,
+      @JsonKey(name: 'weekly_verifications')
+      Map<String, int>? weeklyVerifications,
+      TrendDataModel? trend});
+
+  @override
+  $TrendDataModelCopyWith<$Res>? get trend;
+}
+
+/// @nodoc
+class __$$VerifierStatsModelImplCopyWithImpl<$Res>
+    extends _$VerifierStatsModelCopyWithImpl<$Res, _$VerifierStatsModelImpl>
+    implements _$$VerifierStatsModelImplCopyWith<$Res> {
+  __$$VerifierStatsModelImplCopyWithImpl(_$VerifierStatsModelImpl _value,
+      $Res Function(_$VerifierStatsModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? totalVerifications = null,
+    Object? todayVerifications = null,
+    Object? thisWeekVerifications = null,
+    Object? thisMonthVerifications = null,
+    Object? averagePerSession = null,
+    Object? totalSessions = null,
+    Object? uniquePlayersVerified = null,
+    Object? weeklyVerifications = freezed,
+    Object? trend = freezed,
+  }) {
+    return _then(_$VerifierStatsModelImpl(
+      totalVerifications: null == totalVerifications
+          ? _value.totalVerifications
+          : totalVerifications // ignore: cast_nullable_to_non_nullable
+              as int,
+      todayVerifications: null == todayVerifications
+          ? _value.todayVerifications
+          : todayVerifications // ignore: cast_nullable_to_non_nullable
+              as int,
+      thisWeekVerifications: null == thisWeekVerifications
+          ? _value.thisWeekVerifications
+          : thisWeekVerifications // ignore: cast_nullable_to_non_nullable
+              as int,
+      thisMonthVerifications: null == thisMonthVerifications
+          ? _value.thisMonthVerifications
+          : thisMonthVerifications // ignore: cast_nullable_to_non_nullable
+              as int,
+      averagePerSession: null == averagePerSession
+          ? _value.averagePerSession
+          : averagePerSession // ignore: cast_nullable_to_non_nullable
+              as double,
+      totalSessions: null == totalSessions
+          ? _value.totalSessions
+          : totalSessions // ignore: cast_nullable_to_non_nullable
+              as int,
+      uniquePlayersVerified: null == uniquePlayersVerified
+          ? _value.uniquePlayersVerified
+          : uniquePlayersVerified // ignore: cast_nullable_to_non_nullable
+              as int,
+      weeklyVerifications: freezed == weeklyVerifications
+          ? _value._weeklyVerifications
+          : weeklyVerifications // ignore: cast_nullable_to_non_nullable
+              as Map<String, int>?,
+      trend: freezed == trend
+          ? _value.trend
+          : trend // ignore: cast_nullable_to_non_nullable
+              as TrendDataModel?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$VerifierStatsModelImpl implements _VerifierStatsModel {
+  const _$VerifierStatsModelImpl(
+      {@JsonKey(name: 'total_verifications') required this.totalVerifications,
+      @JsonKey(name: 'today_verifications') required this.todayVerifications,
+      @JsonKey(name: 'this_week_verifications')
+      required this.thisWeekVerifications,
+      @JsonKey(name: 'this_month_verifications')
+      required this.thisMonthVerifications,
+      @JsonKey(name: 'average_per_session') required this.averagePerSession,
+      @JsonKey(name: 'total_sessions') required this.totalSessions,
+      @JsonKey(name: 'unique_players_verified')
+      required this.uniquePlayersVerified,
+      @JsonKey(name: 'weekly_verifications')
+      final Map<String, int>? weeklyVerifications,
+      this.trend})
+      : _weeklyVerifications = weeklyVerifications;
+
+  factory _$VerifierStatsModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$VerifierStatsModelImplFromJson(json);
+
+  @override
+  @JsonKey(name: 'total_verifications')
+  final int totalVerifications;
+  @override
+  @JsonKey(name: 'today_verifications')
+  final int todayVerifications;
+  @override
+  @JsonKey(name: 'this_week_verifications')
+  final int thisWeekVerifications;
+  @override
+  @JsonKey(name: 'this_month_verifications')
+  final int thisMonthVerifications;
+  @override
+  @JsonKey(name: 'average_per_session')
+  final double averagePerSession;
+  @override
+  @JsonKey(name: 'total_sessions')
+  final int totalSessions;
+  @override
+  @JsonKey(name: 'unique_players_verified')
+  final int uniquePlayersVerified;
+  final Map<String, int>? _weeklyVerifications;
+  @override
+  @JsonKey(name: 'weekly_verifications')
+  Map<String, int>? get weeklyVerifications {
+    final value = _weeklyVerifications;
+    if (value == null) return null;
+    if (_weeklyVerifications is EqualUnmodifiableMapView)
+      return _weeklyVerifications;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
+  @override
+  final TrendDataModel? trend;
+
+  @override
+  String toString() {
+    return 'VerifierStatsModel(totalVerifications: $totalVerifications, todayVerifications: $todayVerifications, thisWeekVerifications: $thisWeekVerifications, thisMonthVerifications: $thisMonthVerifications, averagePerSession: $averagePerSession, totalSessions: $totalSessions, uniquePlayersVerified: $uniquePlayersVerified, weeklyVerifications: $weeklyVerifications, trend: $trend)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$VerifierStatsModelImpl &&
+            (identical(other.totalVerifications, totalVerifications) ||
+                other.totalVerifications == totalVerifications) &&
+            (identical(other.todayVerifications, todayVerifications) ||
+                other.todayVerifications == todayVerifications) &&
+            (identical(other.thisWeekVerifications, thisWeekVerifications) ||
+                other.thisWeekVerifications == thisWeekVerifications) &&
+            (identical(other.thisMonthVerifications, thisMonthVerifications) ||
+                other.thisMonthVerifications == thisMonthVerifications) &&
+            (identical(other.averagePerSession, averagePerSession) ||
+                other.averagePerSession == averagePerSession) &&
+            (identical(other.totalSessions, totalSessions) ||
+                other.totalSessions == totalSessions) &&
+            (identical(other.uniquePlayersVerified, uniquePlayersVerified) ||
+                other.uniquePlayersVerified == uniquePlayersVerified) &&
+            const DeepCollectionEquality()
+                .equals(other._weeklyVerifications, _weeklyVerifications) &&
+            (identical(other.trend, trend) || other.trend == trend));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      totalVerifications,
+      todayVerifications,
+      thisWeekVerifications,
+      thisMonthVerifications,
+      averagePerSession,
+      totalSessions,
+      uniquePlayersVerified,
+      const DeepCollectionEquality().hash(_weeklyVerifications),
+      trend);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$VerifierStatsModelImplCopyWith<_$VerifierStatsModelImpl> get copyWith =>
+      __$$VerifierStatsModelImplCopyWithImpl<_$VerifierStatsModelImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$VerifierStatsModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _VerifierStatsModel implements VerifierStatsModel {
+  const factory _VerifierStatsModel(
+      {@JsonKey(name: 'total_verifications')
+      required final int totalVerifications,
+      @JsonKey(name: 'today_verifications')
+      required final int todayVerifications,
+      @JsonKey(name: 'this_week_verifications')
+      required final int thisWeekVerifications,
+      @JsonKey(name: 'this_month_verifications')
+      required final int thisMonthVerifications,
+      @JsonKey(name: 'average_per_session')
+      required final double averagePerSession,
+      @JsonKey(name: 'total_sessions') required final int totalSessions,
+      @JsonKey(name: 'unique_players_verified')
+      required final int uniquePlayersVerified,
+      @JsonKey(name: 'weekly_verifications')
+      final Map<String, int>? weeklyVerifications,
+      final TrendDataModel? trend}) = _$VerifierStatsModelImpl;
+
+  factory _VerifierStatsModel.fromJson(Map<String, dynamic> json) =
+      _$VerifierStatsModelImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'total_verifications')
+  int get totalVerifications;
+  @override
+  @JsonKey(name: 'today_verifications')
+  int get todayVerifications;
+  @override
+  @JsonKey(name: 'this_week_verifications')
+  int get thisWeekVerifications;
+  @override
+  @JsonKey(name: 'this_month_verifications')
+  int get thisMonthVerifications;
+  @override
+  @JsonKey(name: 'average_per_session')
+  double get averagePerSession;
+  @override
+  @JsonKey(name: 'total_sessions')
+  int get totalSessions;
+  @override
+  @JsonKey(name: 'unique_players_verified')
+  int get uniquePlayersVerified;
+  @override
+  @JsonKey(name: 'weekly_verifications')
+  Map<String, int>? get weeklyVerifications;
+  @override
+  TrendDataModel? get trend;
+  @override
+  @JsonKey(ignore: true)
+  _$$VerifierStatsModelImplCopyWith<_$VerifierStatsModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+TrendDataModel _$TrendDataModelFromJson(Map<String, dynamic> json) {
+  return _TrendDataModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TrendDataModel {
+  @JsonKey(name: 'percentage_change')
+  double get percentageChange => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_positive')
+  bool get isPositive => throw _privateConstructorUsedError;
+  @JsonKey(name: 'comparison_period')
+  String get comparisonPeriod => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $TrendDataModelCopyWith<TrendDataModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TrendDataModelCopyWith<$Res> {
+  factory $TrendDataModelCopyWith(
+          TrendDataModel value, $Res Function(TrendDataModel) then) =
+      _$TrendDataModelCopyWithImpl<$Res, TrendDataModel>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'percentage_change') double percentageChange,
+      @JsonKey(name: 'is_positive') bool isPositive,
+      @JsonKey(name: 'comparison_period') String comparisonPeriod});
+}
+
+/// @nodoc
+class _$TrendDataModelCopyWithImpl<$Res, $Val extends TrendDataModel>
+    implements $TrendDataModelCopyWith<$Res> {
+  _$TrendDataModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? percentageChange = null,
+    Object? isPositive = null,
+    Object? comparisonPeriod = null,
+  }) {
+    return _then(_value.copyWith(
+      percentageChange: null == percentageChange
+          ? _value.percentageChange
+          : percentageChange // ignore: cast_nullable_to_non_nullable
+              as double,
+      isPositive: null == isPositive
+          ? _value.isPositive
+          : isPositive // ignore: cast_nullable_to_non_nullable
+              as bool,
+      comparisonPeriod: null == comparisonPeriod
+          ? _value.comparisonPeriod
+          : comparisonPeriod // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$TrendDataModelImplCopyWith<$Res>
+    implements $TrendDataModelCopyWith<$Res> {
+  factory _$$TrendDataModelImplCopyWith(_$TrendDataModelImpl value,
+          $Res Function(_$TrendDataModelImpl) then) =
+      __$$TrendDataModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'percentage_change') double percentageChange,
+      @JsonKey(name: 'is_positive') bool isPositive,
+      @JsonKey(name: 'comparison_period') String comparisonPeriod});
+}
+
+/// @nodoc
+class __$$TrendDataModelImplCopyWithImpl<$Res>
+    extends _$TrendDataModelCopyWithImpl<$Res, _$TrendDataModelImpl>
+    implements _$$TrendDataModelImplCopyWith<$Res> {
+  __$$TrendDataModelImplCopyWithImpl(
+      _$TrendDataModelImpl _value, $Res Function(_$TrendDataModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? percentageChange = null,
+    Object? isPositive = null,
+    Object? comparisonPeriod = null,
+  }) {
+    return _then(_$TrendDataModelImpl(
+      percentageChange: null == percentageChange
+          ? _value.percentageChange
+          : percentageChange // ignore: cast_nullable_to_non_nullable
+              as double,
+      isPositive: null == isPositive
+          ? _value.isPositive
+          : isPositive // ignore: cast_nullable_to_non_nullable
+              as bool,
+      comparisonPeriod: null == comparisonPeriod
+          ? _value.comparisonPeriod
+          : comparisonPeriod // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TrendDataModelImpl implements _TrendDataModel {
+  const _$TrendDataModelImpl(
+      {@JsonKey(name: 'percentage_change') required this.percentageChange,
+      @JsonKey(name: 'is_positive') required this.isPositive,
+      @JsonKey(name: 'comparison_period') required this.comparisonPeriod});
+
+  factory _$TrendDataModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TrendDataModelImplFromJson(json);
+
+  @override
+  @JsonKey(name: 'percentage_change')
+  final double percentageChange;
+  @override
+  @JsonKey(name: 'is_positive')
+  final bool isPositive;
+  @override
+  @JsonKey(name: 'comparison_period')
+  final String comparisonPeriod;
+
+  @override
+  String toString() {
+    return 'TrendDataModel(percentageChange: $percentageChange, isPositive: $isPositive, comparisonPeriod: $comparisonPeriod)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TrendDataModelImpl &&
+            (identical(other.percentageChange, percentageChange) ||
+                other.percentageChange == percentageChange) &&
+            (identical(other.isPositive, isPositive) ||
+                other.isPositive == isPositive) &&
+            (identical(other.comparisonPeriod, comparisonPeriod) ||
+                other.comparisonPeriod == comparisonPeriod));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, percentageChange, isPositive, comparisonPeriod);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TrendDataModelImplCopyWith<_$TrendDataModelImpl> get copyWith =>
+      __$$TrendDataModelImplCopyWithImpl<_$TrendDataModelImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TrendDataModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _TrendDataModel implements TrendDataModel {
+  const factory _TrendDataModel(
+      {@JsonKey(name: 'percentage_change')
+      required final double percentageChange,
+      @JsonKey(name: 'is_positive') required final bool isPositive,
+      @JsonKey(name: 'comparison_period')
+      required final String comparisonPeriod}) = _$TrendDataModelImpl;
+
+  factory _TrendDataModel.fromJson(Map<String, dynamic> json) =
+      _$TrendDataModelImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'percentage_change')
+  double get percentageChange;
+  @override
+  @JsonKey(name: 'is_positive')
+  bool get isPositive;
+  @override
+  @JsonKey(name: 'comparison_period')
+  String get comparisonPeriod;
+  @override
+  @JsonKey(ignore: true)
+  _$$TrendDataModelImplCopyWith<_$TrendDataModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+RecentVerificationModel _$RecentVerificationModelFromJson(
+    Map<String, dynamic> json) {
+  return _RecentVerificationModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$RecentVerificationModel {
+  int get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'player_name')
+  String get playerName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'player_photo')
+  String? get playerPhoto => throw _privateConstructorUsedError;
+  @JsonKey(name: 'was_eligible')
+  bool get wasEligible => throw _privateConstructorUsedError;
+  @JsonKey(name: 'verified_at')
+  String get verifiedAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'match_info')
+  String? get matchInfo => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $RecentVerificationModelCopyWith<RecentVerificationModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $RecentVerificationModelCopyWith<$Res> {
+  factory $RecentVerificationModelCopyWith(RecentVerificationModel value,
+          $Res Function(RecentVerificationModel) then) =
+      _$RecentVerificationModelCopyWithImpl<$Res, RecentVerificationModel>;
+  @useResult
+  $Res call(
+      {int id,
+      @JsonKey(name: 'player_name') String playerName,
+      @JsonKey(name: 'player_photo') String? playerPhoto,
+      @JsonKey(name: 'was_eligible') bool wasEligible,
+      @JsonKey(name: 'verified_at') String verifiedAt,
+      @JsonKey(name: 'match_info') String? matchInfo});
+}
+
+/// @nodoc
+class _$RecentVerificationModelCopyWithImpl<$Res,
+        $Val extends RecentVerificationModel>
+    implements $RecentVerificationModelCopyWith<$Res> {
+  _$RecentVerificationModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? playerName = null,
+    Object? playerPhoto = freezed,
+    Object? wasEligible = null,
+    Object? verifiedAt = null,
+    Object? matchInfo = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      playerName: null == playerName
+          ? _value.playerName
+          : playerName // ignore: cast_nullable_to_non_nullable
+              as String,
+      playerPhoto: freezed == playerPhoto
+          ? _value.playerPhoto
+          : playerPhoto // ignore: cast_nullable_to_non_nullable
+              as String?,
+      wasEligible: null == wasEligible
+          ? _value.wasEligible
+          : wasEligible // ignore: cast_nullable_to_non_nullable
+              as bool,
+      verifiedAt: null == verifiedAt
+          ? _value.verifiedAt
+          : verifiedAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      matchInfo: freezed == matchInfo
+          ? _value.matchInfo
+          : matchInfo // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$RecentVerificationModelImplCopyWith<$Res>
+    implements $RecentVerificationModelCopyWith<$Res> {
+  factory _$$RecentVerificationModelImplCopyWith(
+          _$RecentVerificationModelImpl value,
+          $Res Function(_$RecentVerificationModelImpl) then) =
+      __$$RecentVerificationModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      @JsonKey(name: 'player_name') String playerName,
+      @JsonKey(name: 'player_photo') String? playerPhoto,
+      @JsonKey(name: 'was_eligible') bool wasEligible,
+      @JsonKey(name: 'verified_at') String verifiedAt,
+      @JsonKey(name: 'match_info') String? matchInfo});
+}
+
+/// @nodoc
+class __$$RecentVerificationModelImplCopyWithImpl<$Res>
+    extends _$RecentVerificationModelCopyWithImpl<$Res,
+        _$RecentVerificationModelImpl>
+    implements _$$RecentVerificationModelImplCopyWith<$Res> {
+  __$$RecentVerificationModelImplCopyWithImpl(
+      _$RecentVerificationModelImpl _value,
+      $Res Function(_$RecentVerificationModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? playerName = null,
+    Object? playerPhoto = freezed,
+    Object? wasEligible = null,
+    Object? verifiedAt = null,
+    Object? matchInfo = freezed,
+  }) {
+    return _then(_$RecentVerificationModelImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      playerName: null == playerName
+          ? _value.playerName
+          : playerName // ignore: cast_nullable_to_non_nullable
+              as String,
+      playerPhoto: freezed == playerPhoto
+          ? _value.playerPhoto
+          : playerPhoto // ignore: cast_nullable_to_non_nullable
+              as String?,
+      wasEligible: null == wasEligible
+          ? _value.wasEligible
+          : wasEligible // ignore: cast_nullable_to_non_nullable
+              as bool,
+      verifiedAt: null == verifiedAt
+          ? _value.verifiedAt
+          : verifiedAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      matchInfo: freezed == matchInfo
+          ? _value.matchInfo
+          : matchInfo // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$RecentVerificationModelImpl implements _RecentVerificationModel {
+  const _$RecentVerificationModelImpl(
+      {required this.id,
+      @JsonKey(name: 'player_name') required this.playerName,
+      @JsonKey(name: 'player_photo') this.playerPhoto,
+      @JsonKey(name: 'was_eligible') required this.wasEligible,
+      @JsonKey(name: 'verified_at') required this.verifiedAt,
+      @JsonKey(name: 'match_info') this.matchInfo});
+
+  factory _$RecentVerificationModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$RecentVerificationModelImplFromJson(json);
+
+  @override
+  final int id;
+  @override
+  @JsonKey(name: 'player_name')
+  final String playerName;
+  @override
+  @JsonKey(name: 'player_photo')
+  final String? playerPhoto;
+  @override
+  @JsonKey(name: 'was_eligible')
+  final bool wasEligible;
+  @override
+  @JsonKey(name: 'verified_at')
+  final String verifiedAt;
+  @override
+  @JsonKey(name: 'match_info')
+  final String? matchInfo;
+
+  @override
+  String toString() {
+    return 'RecentVerificationModel(id: $id, playerName: $playerName, playerPhoto: $playerPhoto, wasEligible: $wasEligible, verifiedAt: $verifiedAt, matchInfo: $matchInfo)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RecentVerificationModelImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.playerName, playerName) ||
+                other.playerName == playerName) &&
+            (identical(other.playerPhoto, playerPhoto) ||
+                other.playerPhoto == playerPhoto) &&
+            (identical(other.wasEligible, wasEligible) ||
+                other.wasEligible == wasEligible) &&
+            (identical(other.verifiedAt, verifiedAt) ||
+                other.verifiedAt == verifiedAt) &&
+            (identical(other.matchInfo, matchInfo) ||
+                other.matchInfo == matchInfo));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, playerName, playerPhoto,
+      wasEligible, verifiedAt, matchInfo);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RecentVerificationModelImplCopyWith<_$RecentVerificationModelImpl>
+      get copyWith => __$$RecentVerificationModelImplCopyWithImpl<
+          _$RecentVerificationModelImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$RecentVerificationModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _RecentVerificationModel implements RecentVerificationModel {
+  const factory _RecentVerificationModel(
+          {required final int id,
+          @JsonKey(name: 'player_name') required final String playerName,
+          @JsonKey(name: 'player_photo') final String? playerPhoto,
+          @JsonKey(name: 'was_eligible') required final bool wasEligible,
+          @JsonKey(name: 'verified_at') required final String verifiedAt,
+          @JsonKey(name: 'match_info') final String? matchInfo}) =
+      _$RecentVerificationModelImpl;
+
+  factory _RecentVerificationModel.fromJson(Map<String, dynamic> json) =
+      _$RecentVerificationModelImpl.fromJson;
+
+  @override
+  int get id;
+  @override
+  @JsonKey(name: 'player_name')
+  String get playerName;
+  @override
+  @JsonKey(name: 'player_photo')
+  String? get playerPhoto;
+  @override
+  @JsonKey(name: 'was_eligible')
+  bool get wasEligible;
+  @override
+  @JsonKey(name: 'verified_at')
+  String get verifiedAt;
+  @override
+  @JsonKey(name: 'match_info')
+  String? get matchInfo;
+  @override
+  @JsonKey(ignore: true)
+  _$$RecentVerificationModelImplCopyWith<_$RecentVerificationModelImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}

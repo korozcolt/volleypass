@@ -5,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/super_admin_dashboard.dart';
 import '../../domain/entities/club_dashboard.dart';
 import '../../domain/entities/league_dashboard.dart';
+import '../../domain/entities/verifier_dashboard.dart';
 import '../../domain/entities/dashboard_response.dart';
 
 part 'dashboard_response_model.freezed.dart';
@@ -49,6 +50,13 @@ extension DashboardResponseModelX on DashboardResponseModel {
       case 'ClubAdmin':
       case 'Coach':
         return ClubDashboardModel.fromJson({
+          'role': role,
+          'timestamp': timestamp,
+          ...data,
+        }).toEntity();
+
+      case 'Verifier':
+        return VerifierDashboardModel.fromJson({
           'role': role,
           'timestamp': timestamp,
           ...data,
@@ -611,4 +619,114 @@ extension LeagueDashboardModelX on LeagueDashboardModel {
       ),
     );
   }
+}
+
+// ============================================================================
+// VERIFIER DASHBOARD MODEL
+// ============================================================================
+
+@freezed
+class VerifierDashboardModel with _$VerifierDashboardModel {
+  const factory VerifierDashboardModel({
+    required String role,
+    required String timestamp,
+    @JsonKey(name: 'verifier_stats') required VerifierStatsModel verifierStats,
+    @JsonKey(name: 'recent_verifications')
+    List<RecentVerificationModel>? recentVerifications,
+  }) = _VerifierDashboardModel;
+
+  factory VerifierDashboardModel.fromJson(Map<String, dynamic> json) =>
+      _$VerifierDashboardModelFromJson(json);
+}
+
+extension VerifierDashboardModelX on VerifierDashboardModel {
+  VerifierDashboard toEntity() => VerifierDashboard(
+        role: role,
+        timestamp: DateTime.parse(timestamp),
+        verifierStats: verifierStats.toEntity(),
+        recentVerifications:
+            recentVerifications?.map((v) => v.toEntity()).toList(),
+      );
+}
+
+@freezed
+class VerifierStatsModel with _$VerifierStatsModel {
+  const factory VerifierStatsModel({
+    @JsonKey(name: 'total_verifications') required int totalVerifications,
+    @JsonKey(name: 'today_verifications') required int todayVerifications,
+    @JsonKey(name: 'this_week_verifications')
+    required int thisWeekVerifications,
+    @JsonKey(name: 'this_month_verifications')
+    required int thisMonthVerifications,
+    @JsonKey(name: 'average_per_session') required double averagePerSession,
+    @JsonKey(name: 'total_sessions') required int totalSessions,
+    @JsonKey(name: 'unique_players_verified')
+    required int uniquePlayersVerified,
+    @JsonKey(name: 'weekly_verifications')
+    Map<String, int>? weeklyVerifications,
+    TrendDataModel? trend,
+  }) = _VerifierStatsModel;
+
+  factory VerifierStatsModel.fromJson(Map<String, dynamic> json) =>
+      _$VerifierStatsModelFromJson(json);
+}
+
+extension VerifierStatsModelX on VerifierStatsModel {
+  VerifierStats toEntity() => VerifierStats(
+        totalVerifications: totalVerifications,
+        todayVerifications: todayVerifications,
+        thisWeekVerifications: thisWeekVerifications,
+        thisMonthVerifications: thisMonthVerifications,
+        averagePerSession: averagePerSession,
+        totalSessions: totalSessions,
+        uniquePlayersVerified: uniquePlayersVerified,
+        weeklyVerifications: weeklyVerifications,
+        trend: trend?.toEntity(),
+      );
+}
+
+@freezed
+class TrendDataModel with _$TrendDataModel {
+  const factory TrendDataModel({
+    @JsonKey(name: 'percentage_change') required double percentageChange,
+    @JsonKey(name: 'is_positive') required bool isPositive,
+    @JsonKey(name: 'comparison_period') required String comparisonPeriod,
+  }) = _TrendDataModel;
+
+  factory TrendDataModel.fromJson(Map<String, dynamic> json) =>
+      _$TrendDataModelFromJson(json);
+}
+
+extension TrendDataModelX on TrendDataModel {
+  TrendData toEntity() => TrendData(
+        percentageChange: percentageChange,
+        isPositive: isPositive,
+        comparisonPeriod: comparisonPeriod,
+      );
+}
+
+@freezed
+class RecentVerificationModel with _$RecentVerificationModel {
+  const factory RecentVerificationModel({
+    required int id,
+    @JsonKey(name: 'player_name') required String playerName,
+    @JsonKey(name: 'player_photo') String? playerPhoto,
+    @JsonKey(name: 'was_eligible') required bool wasEligible,
+    @JsonKey(name: 'verified_at') required String verifiedAt,
+    @JsonKey(name: 'match_info') String? matchInfo,
+  }) = _RecentVerificationModel;
+
+  factory RecentVerificationModel.fromJson(Map<String, dynamic> json) =>
+      _$RecentVerificationModelFromJson(json);
+}
+
+extension RecentVerificationModelX on RecentVerificationModel {
+  RecentVerification toEntity() => RecentVerification(
+        id: id,
+        playerName: playerName,
+        playerPhoto: playerPhoto,
+        wasEligible: wasEligible,
+        verifiedAt: DateTime.parse(verifiedAt),
+        matchInfo: matchInfo,
+      );
 }

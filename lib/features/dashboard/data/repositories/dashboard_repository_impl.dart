@@ -15,9 +15,11 @@ class DashboardRepositoryImpl implements DashboardRepository {
   DashboardRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, DashboardResponse>> getDashboard() async {
+  Future<Either<Failure, DashboardResponse>> getDashboard({
+    String? userRole,
+  }) async {
     try {
-      final model = await remoteDataSource.getDashboard();
+      final model = await remoteDataSource.getDashboard(userRole: userRole);
       final entity = model.toEntity();
       return Right(entity);
     } on ApiException catch (e) {
